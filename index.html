@@ -17,6 +17,7 @@
     --line:#c7c2b3;
     --accent:#6b7263;
     --accent-deep:#3f453d;
+    --fog-boost:1;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -82,29 +83,38 @@
        so every gradient fully fades to transparent well inside the box —
        no leftover rectangular fill, no hard oval clip needed */
     background:
-      radial-gradient(ellipse 30% 34% at 26% 40%, rgba(255,255,250,0.9) 0%, rgba(255,255,250,0.4) 55%, rgba(255,255,250,0) 100%),
-      radial-gradient(ellipse 26% 30% at 60% 28%, rgba(255,255,250,0.85) 0%, rgba(255,255,250,0.35) 55%, rgba(255,255,250,0) 100%),
-      radial-gradient(ellipse 24% 28% at 80% 55%, rgba(255,255,250,0.7) 0%, rgba(255,255,250,0.28) 55%, rgba(255,255,250,0) 100%),
-      radial-gradient(ellipse 28% 30% at 44% 66%, rgba(255,255,250,0.75) 0%, rgba(255,255,250,0.3) 55%, rgba(255,255,250,0) 100%),
-      radial-gradient(ellipse 22% 26% at 12% 60%, rgba(255,255,250,0.6) 0%, rgba(255,255,250,0.22) 55%, rgba(255,255,250,0) 100%);
+      radial-gradient(ellipse 30% 34% at 26% 40%, rgba(255,255,252,0.98) 0%, rgba(250,248,242,0.5) 50%, rgba(250,248,242,0) 100%),
+      radial-gradient(ellipse 26% 30% at 60% 28%, rgba(255,255,252,0.94) 0%, rgba(250,248,242,0.44) 50%, rgba(250,248,242,0) 100%),
+      radial-gradient(ellipse 24% 28% at 80% 55%, rgba(255,255,252,0.85) 0%, rgba(250,248,242,0.36) 50%, rgba(250,248,242,0) 100%),
+      radial-gradient(ellipse 28% 30% at 44% 66%, rgba(255,255,252,0.88) 0%, rgba(250,248,242,0.4) 50%, rgba(250,248,242,0) 100%),
+      radial-gradient(ellipse 22% 26% at 12% 60%, rgba(255,255,252,0.75) 0%, rgba(250,248,242,0.3) 50%, rgba(250,248,242,0) 100%);
+    opacity:calc(var(--fog-op) * var(--fog-boost, 1));
     will-change:transform;
     z-index:1;
     pointer-events:none;
   }
-  .fog-1{ width:75vw; min-width:280px; height:34vw; min-height:130px; top:8%; left:-20%; opacity:0.9; animation:driftRight 16s ease-in-out infinite; animation-delay:-2s; }
-  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; opacity:0.75; animation:driftLeft 19s ease-in-out infinite; animation-delay:-6s; }
-  .fog-3{ width:85vw; min-width:300px; height:36vw; min-height:140px; top:60%; left:-25%; opacity:0.75; animation:driftRight 22s ease-in-out infinite; animation-delay:-11s; }
-  .fog-4{ width:55vw; min-width:220px; height:26vw; min-height:100px; top:74%; left:52%; opacity:0.6; animation:driftLeft 14s ease-in-out infinite; animation-delay:-4s; }
-  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; opacity:0.55; animation:driftLeft 12.5s ease-in-out infinite; animation-delay:-8s; }
-  .fog-6{ width:48vw; min-width:200px; height:22vw; min-height:90px; top:52%; left:8%; opacity:0.5; animation:driftRight 17.5s ease-in-out infinite; animation-delay:-3s; }
+  .fog-1{ width:75vw; min-width:280px; height:34vw; min-height:130px; top:8%; left:-20%; --fog-op:0.9; animation:driftRight 16s ease-in-out infinite; animation-delay:-2s; }
+  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; --fog-op:0.78; animation:driftLeft 19s ease-in-out infinite; animation-delay:-6s; }
+  .fog-3{ width:85vw; min-width:300px; height:36vw; min-height:140px; top:60%; left:-25%; --fog-op:0.78; animation:driftRight 22s ease-in-out infinite; animation-delay:-11s; }
+  .fog-4{ width:55vw; min-width:220px; height:26vw; min-height:100px; top:74%; left:52%; --fog-op:0.65; animation:driftLeft 14s ease-in-out infinite; animation-delay:-4s; }
+  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; --fog-op:0.6; animation:driftLeft 12.5s ease-in-out infinite; animation-delay:-8s; }
+  .fog-6{ width:48vw; min-width:200px; height:22vw; min-height:90px; top:52%; left:8%; --fog-op:0.55; animation:driftRight 17.5s ease-in-out infinite; animation-delay:-3s; }
   /* extra low wisps drifting across the hands near the bottom of the screen */
-  .fog-7{ width:60vw; min-width:240px; height:26vw; min-height:100px; top:80%; left:18%; opacity:0.6; animation:driftRight 15s ease-in-out infinite; animation-delay:-9s; }
-  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; opacity:0.5; animation:driftLeft 20s ease-in-out infinite; animation-delay:-1s; }
-  /* thin diagonal streaks — read as moving air currents rather than round puffs */
-  .fog-9{ width:95vw; min-width:340px; height:9vw; min-height:34px; top:44%; left:-32%; opacity:0.4; animation:driftDiagonal1 26s ease-in-out infinite; animation-delay:-7s; }
-  .fog-10{ width:80vw; min-width:300px; height:7vw; min-height:28px; top:69%; left:8%; opacity:0.35; animation:driftDiagonal2 29s ease-in-out infinite; animation-delay:-14s; }
-  .fog-11{ width:70vw; min-width:260px; height:12vw; min-height:46px; top:16%; left:-10%; opacity:0.3; animation:driftDiagonal1 23s ease-in-out infinite; animation-delay:-3s; }
-  .fog-12{ width:58vw; min-width:230px; height:11vw; min-height:42px; top:86%; left:30%; opacity:0.32; animation:driftDiagonal2 20s ease-in-out infinite; animation-delay:-10s; }
+  .fog-7{ width:60vw; min-width:240px; height:26vw; min-height:100px; top:80%; left:18%; --fog-op:0.65; animation:driftRight 15s ease-in-out infinite; animation-delay:-9s; }
+  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; --fog-op:0.55; animation:driftLeft 20s ease-in-out infinite; animation-delay:-1s; }
+  /* more drifting mist, at the same proportions as fog-1..8 (not thin bars —
+     a thin, brightly-lit rotated bar reads as a light beam, not mist) */
+  .fog-9{ width:68vw; min-width:260px; height:30vw; min-height:115px; top:18%; left:-18%; --fog-op:0.55; animation:driftDiagonal1 26s ease-in-out infinite; animation-delay:-7s; }
+  .fog-10{ width:60vw; min-width:230px; height:27vw; min-height:105px; top:66%; left:44%; --fog-op:0.5; animation:driftDiagonal2 29s ease-in-out infinite; animation-delay:-14s; }
+  .fog-11{ width:58vw; min-width:220px; height:26vw; min-height:100px; top:14%; left:46%; --fog-op:0.5; animation:driftDiagonal1 23s ease-in-out infinite; animation-delay:-3s; }
+  .fog-12{ width:52vw; min-width:200px; height:24vw; min-height:92px; top:84%; left:4%; --fog-op:0.5; animation:driftDiagonal2 20s ease-in-out infinite; animation-delay:-10s; }
+
+  /* On phones the fixed backdrop is cropped narrower (cover crops the
+     sides harder at phone aspect), so each patch of fog covers less of
+     the frame — boost density so the effect still reads clearly. */
+  @media (max-width:600px){
+    :root{ --fog-boost:1.55; }
+  }
 
   /* The scene photo — real hands, real mountains — colour-graded to sit in
      the site's warm sage-paper palette instead of its native cool grey */
