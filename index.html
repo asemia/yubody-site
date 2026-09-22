@@ -21,7 +21,7 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--paper);
+    background:transparent;
     color:var(--ink);
     font-family:'Noto Serif TC', serif;
     line-height:1.8;
@@ -61,8 +61,10 @@
     overflow:hidden;
     padding:80px 24px 60px;
   }
-  .hero-bg{
-    position:absolute; inset:0; z-index:0; overflow:hidden;
+  /* Fixed full-viewport backdrop: stays pinned in place while the page
+     scrolls over it, so the misty mountain scene is always present */
+  .site-bg{
+    position:fixed; inset:0; z-index:0; overflow:hidden;
   }
 
   /* Drifting fog — softness comes from the gradient stops, not filter:blur,
@@ -93,12 +95,13 @@
     50%{ transform:translateX(-9vw) translateY(10px) scale(1.1); }
   }
 
-  /* Light beams */
+  /* Light beams — warm tone + drop-shadow glow so they read clearly
+     against the (now moodier) fog background on any screen size */
   .beam{
     position:absolute;
     top:-15%;
     height:150%;
-    background:linear-gradient(180deg, rgba(255,253,242,0.9), rgba(255,253,242,0.15) 55%, rgba(255,253,242,0) 80%);
+    background:linear-gradient(180deg, rgba(255,246,214,0.95), rgba(255,240,190,0.25) 55%, rgba(255,240,190,0) 82%);
     z-index:1;
     pointer-events:none;
     animation:beamPulse 6s ease-in-out infinite;
@@ -108,12 +111,8 @@
   .beam-3{ left:36%; width:9vw; min-width:50px; max-width:100px; transform:rotate(6deg); animation-delay:4s; }
 
   @keyframes beamPulse{
-    0%,100%{ opacity:0.2; }
-    50%{ opacity:1; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .fog-layer, .beam{ animation:none !important; }
+    0%,100%{ opacity:0.25; filter:drop-shadow(0 0 12px rgba(255,240,190,0.3)); }
+    50%{ opacity:1; filter:drop-shadow(0 0 34px rgba(255,240,190,0.75)); }
   }
 
   .hero-content{position:relative; z-index:2; max-width:640px;}
@@ -147,11 +146,18 @@
   }
   .tagline-zh p, .tagline-en p{margin:2px 0;}
 
-  /* Sections */
+  /* Sections — translucent frosted panels so the fixed misty backdrop
+     keeps showing through subtly while scrolling */
   section{
+    position:relative;
+    z-index:1;
     padding:64px 0;
     border-top:1px solid var(--line);
+    background:rgba(238,235,226,0.86);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
   }
+  .hero{ background:transparent; border-top:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
   .section-title{
     text-align:center;
     font-size:clamp(20px,3vw,24px);
@@ -172,7 +178,7 @@
   /* Promo */
   .promo-box{
     text-align:center;
-    background:var(--paper-soft);
+    background:rgba(246,244,238,0.75);
     border:1px solid var(--line);
     padding:44px 28px;
     max-width:460px;
@@ -258,7 +264,7 @@
   }
   .tag{
     border:1px solid var(--line);
-    background:var(--paper-soft);
+    background:rgba(246,244,238,0.75);
     padding:14px 22px;
     text-align:center;
     min-width:150px;
@@ -296,7 +302,7 @@
 
   /* CTA */
   .cta{
-    background:var(--accent-deep);
+    background:rgba(63,69,61,0.88);
     color:var(--paper-soft);
     padding:70px 0;
     border-top:none;
@@ -351,14 +357,17 @@
   }
 
   footer{
+    position:relative;
+    z-index:1;
     text-align:center;
     padding:32px 0;
     font-family:'Cormorant Garamond', serif;
     font-size:12px;
     letter-spacing:0.2em;
-    color:var(--ink-soft);
-    background:var(--accent-deep);
+    background:rgba(63,69,61,0.92);
     color:#a9b2a3;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
   }
 
   @media (max-width:520px){
@@ -370,29 +379,30 @@
 </head>
 <body>
 
+<div class="site-bg" aria-hidden="true">
+  <svg width="100%" height="100%" viewBox="0 0 800 900" preserveAspectRatio="xMidYMax slice" style="position:absolute; inset:0;">
+    <defs>
+      <radialGradient id="fog" cx="50%" cy="22%" r="75%">
+        <stop offset="0%" stop-color="#f3eee0" stop-opacity="1"/>
+        <stop offset="45%" stop-color="#dcd6c3" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#a9a691" stop-opacity="1"/>
+      </radialGradient>
+    </defs>
+    <rect width="800" height="900" fill="url(#fog)"/>
+    <polygon points="-50,760 180,540 320,660 480,480 650,650 900,560 900,900 -50,900" fill="#c3bda5" opacity="0.7"/>
+    <polygon points="-50,820 220,620 400,720 560,600 780,740 900,700 900,900 -50,900" fill="#a29c84" opacity="0.72"/>
+    <polygon points="-50,880 260,760 460,830 700,780 900,830 900,900 -50,900" fill="#7d7a63" opacity="0.75"/>
+  </svg>
+  <div class="beam beam-1"></div>
+  <div class="beam beam-2"></div>
+  <div class="beam beam-3"></div>
+  <div class="fog-layer fog-1"></div>
+  <div class="fog-layer fog-2"></div>
+  <div class="fog-layer fog-3"></div>
+  <div class="fog-layer fog-4"></div>
+</div>
+
 <section class="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <svg width="100%" height="100%" viewBox="0 0 800 900" preserveAspectRatio="xMidYMax slice" style="position:absolute; inset:0;">
-      <defs>
-        <radialGradient id="fog" cx="50%" cy="22%" r="75%">
-          <stop offset="0%" stop-color="#f3eee0" stop-opacity="1"/>
-          <stop offset="45%" stop-color="#dcd6c3" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#a9a691" stop-opacity="1"/>
-        </radialGradient>
-      </defs>
-      <rect width="800" height="900" fill="url(#fog)"/>
-      <polygon points="-50,760 180,540 320,660 480,480 650,650 900,560 900,900 -50,900" fill="#c3bda5" opacity="0.7"/>
-      <polygon points="-50,820 220,620 400,720 560,600 780,740 900,700 900,900 -50,900" fill="#a29c84" opacity="0.72"/>
-      <polygon points="-50,880 260,760 460,830 700,780 900,830 900,900 -50,900" fill="#7d7a63" opacity="0.75"/>
-    </svg>
-    <div class="beam beam-1"></div>
-    <div class="beam beam-2"></div>
-    <div class="beam beam-3"></div>
-    <div class="fog-layer fog-1"></div>
-    <div class="fog-layer fog-2"></div>
-    <div class="fog-layer fog-3"></div>
-    <div class="fog-layer fog-4"></div>
-  </div>
   <div class="hero-content">
     <div class="kicker">Muzha · Taipei</div>
     <div class="divider"></div>
