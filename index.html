@@ -91,18 +91,20 @@
     z-index:1;
     pointer-events:none;
   }
-  .fog-1{ width:75vw; min-width:280px; height:34vw; min-height:130px; top:8%; left:-20%; opacity:0.9; animation:driftRight 9s ease-in-out infinite; }
-  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; opacity:0.75; animation:driftLeft 11s ease-in-out infinite; }
-  .fog-3{ width:85vw; min-width:300px; height:36vw; min-height:140px; top:60%; left:-25%; opacity:0.75; animation:driftRight 13s ease-in-out infinite; }
-  .fog-4{ width:55vw; min-width:220px; height:26vw; min-height:100px; top:74%; left:52%; opacity:0.6; animation:driftLeft 8s ease-in-out infinite; }
-  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; opacity:0.55; animation:driftLeft 7s ease-in-out infinite; }
-  .fog-6{ width:48vw; min-width:200px; height:22vw; min-height:90px; top:52%; left:8%; opacity:0.5; animation:driftRight 10s ease-in-out infinite; }
+  .fog-1{ width:75vw; min-width:280px; height:34vw; min-height:130px; top:8%; left:-20%; opacity:0.9; animation:driftRight 16s ease-in-out infinite; animation-delay:-2s; }
+  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; opacity:0.75; animation:driftLeft 19s ease-in-out infinite; animation-delay:-6s; }
+  .fog-3{ width:85vw; min-width:300px; height:36vw; min-height:140px; top:60%; left:-25%; opacity:0.75; animation:driftRight 22s ease-in-out infinite; animation-delay:-11s; }
+  .fog-4{ width:55vw; min-width:220px; height:26vw; min-height:100px; top:74%; left:52%; opacity:0.6; animation:driftLeft 14s ease-in-out infinite; animation-delay:-4s; }
+  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; opacity:0.55; animation:driftLeft 12.5s ease-in-out infinite; animation-delay:-8s; }
+  .fog-6{ width:48vw; min-width:200px; height:22vw; min-height:90px; top:52%; left:8%; opacity:0.5; animation:driftRight 17.5s ease-in-out infinite; animation-delay:-3s; }
   /* extra low wisps drifting across the hands near the bottom of the screen */
-  .fog-7{ width:60vw; min-width:240px; height:26vw; min-height:100px; top:80%; left:18%; opacity:0.6; animation:driftRight 8.5s ease-in-out infinite; }
-  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; opacity:0.5; animation:driftLeft 11.5s ease-in-out infinite; }
+  .fog-7{ width:60vw; min-width:240px; height:26vw; min-height:100px; top:80%; left:18%; opacity:0.6; animation:driftRight 15s ease-in-out infinite; animation-delay:-9s; }
+  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; opacity:0.5; animation:driftLeft 20s ease-in-out infinite; animation-delay:-1s; }
   /* thin diagonal streaks — read as moving air currents rather than round puffs */
-  .fog-9{ width:95vw; min-width:340px; height:9vw; min-height:34px; top:44%; left:-32%; opacity:0.4; animation:driftDiagonal1 15s ease-in-out infinite; }
-  .fog-10{ width:80vw; min-width:300px; height:7vw; min-height:28px; top:69%; left:8%; opacity:0.35; animation:driftDiagonal2 17s ease-in-out infinite; }
+  .fog-9{ width:95vw; min-width:340px; height:9vw; min-height:34px; top:44%; left:-32%; opacity:0.4; animation:driftDiagonal1 26s ease-in-out infinite; animation-delay:-7s; }
+  .fog-10{ width:80vw; min-width:300px; height:7vw; min-height:28px; top:69%; left:8%; opacity:0.35; animation:driftDiagonal2 29s ease-in-out infinite; animation-delay:-14s; }
+  .fog-11{ width:70vw; min-width:260px; height:12vw; min-height:46px; top:16%; left:-10%; opacity:0.3; animation:driftDiagonal1 23s ease-in-out infinite; animation-delay:-3s; }
+  .fog-12{ width:58vw; min-width:230px; height:11vw; min-height:42px; top:86%; left:30%; opacity:0.32; animation:driftDiagonal2 20s ease-in-out infinite; animation-delay:-10s; }
 
   /* The scene photo — real hands, real mountains — colour-graded to sit in
      the site's warm sage-paper palette instead of its native cool grey */
@@ -127,41 +129,37 @@
     pointer-events:none;
   }
 
+  /* Each drift path has several uneven stops (not one ping-pong swing) so
+     the motion reads as air currents pushing the mist unevenly, rather
+     than a metronome. Scale breathes gently throughout, never snapping
+     back to exactly 1 at the loop point in a way that feels mechanical. */
   @keyframes driftRight{
-    0%,100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    50%{ transform:translateX(14vw) translateY(-20px) scale(1.18) rotate(2deg); }
+    0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
+    22%{ transform:translateX(5vw) translateY(-14px) scale(1.06) rotate(1deg); }
+    48%{ transform:translateX(15vw) translateY(-24px) scale(1.19) rotate(2.4deg); }
+    71%{ transform:translateX(10vw) translateY(-6px) scale(1.1) rotate(1.2deg); }
+    100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftLeft{
-    0%,100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    50%{ transform:translateX(-14vw) translateY(16px) scale(1.15) rotate(-2deg); }
+    0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
+    26%{ transform:translateX(-6vw) translateY(10px) scale(1.05) rotate(-1deg); }
+    55%{ transform:translateX(-15vw) translateY(19px) scale(1.16) rotate(-2.2deg); }
+    80%{ transform:translateX(-8vw) translateY(6px) scale(1.08) rotate(-1deg); }
+    100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftDiagonal1{
-    0%,100%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
-    50%{ transform:translateX(16vw) translateY(-14px) rotate(-4deg) scaleX(1.2); }
+    0%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
+    30%{ transform:translateX(7vw) translateY(-8px) rotate(-6deg) scaleX(1.08); }
+    58%{ transform:translateX(17vw) translateY(-16px) rotate(-3deg) scaleX(1.22); }
+    82%{ transform:translateX(11vw) translateY(-5px) rotate(-6deg) scaleX(1.1); }
+    100%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
   }
   @keyframes driftDiagonal2{
-    0%,100%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
-    50%{ transform:translateX(-14vw) translateY(10px) rotate(12deg) scaleX(1.12); }
-  }
-
-  /* Light beams — soft warm shafts breaking through the mist. Kept subtle
-     so they read as sunlight through fog rather than a stage spotlight. */
-  .beam{
-    position:absolute;
-    top:-15%;
-    height:150%;
-    background:linear-gradient(180deg, rgba(255,248,224,0.85), rgba(255,244,206,0.2) 55%, rgba(255,244,206,0) 82%);
-    z-index:1;
-    pointer-events:none;
-    animation:beamPulse 4s ease-in-out infinite;
-  }
-  .beam-1{ left:16%; width:14vw; min-width:80px; max-width:160px; transform:rotate(13deg); animation-delay:0s; }
-  .beam-2{ left:56%; width:11vw; min-width:60px; max-width:130px; transform:rotate(-10deg); animation-delay:1.3s; }
-  .beam-3{ left:36%; width:8vw; min-width:45px; max-width:90px; transform:rotate(6deg); animation-delay:2.6s; }
-
-  @keyframes beamPulse{
-    0%,100%{ opacity:0.16; filter:drop-shadow(0 0 10px rgba(255,244,206,0.2)); }
-    50%{ opacity:0.5; filter:drop-shadow(0 0 22px rgba(255,244,206,0.45)); }
+    0%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
+    32%{ transform:translateX(-7vw) translateY(6px) rotate(9deg) scaleX(1.06); }
+    60%{ transform:translateX(-15vw) translateY(12px) rotate(13deg) scaleX(1.14); }
+    85%{ transform:translateX(-9vw) translateY(4px) rotate(9deg) scaleX(1.05); }
+    100%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
   }
 
   .hero-content{
@@ -453,9 +451,6 @@
 <div class="site-bg" aria-hidden="true">
   <img class="scene-photo" src="hero-mountains.jpg" alt="">
   <div class="scene-tint"></div>
-  <div class="beam beam-1"></div>
-  <div class="beam beam-2"></div>
-  <div class="beam beam-3"></div>
   <div class="fog-layer fog-1"></div>
   <div class="fog-layer fog-2"></div>
   <div class="fog-layer fog-3"></div>
@@ -466,6 +461,8 @@
   <div class="fog-layer fog-8"></div>
   <div class="fog-layer fog-9"></div>
   <div class="fog-layer fog-10"></div>
+  <div class="fog-layer fog-11"></div>
+  <div class="fog-layer fog-12"></div>
 </div>
 <script>
   (function(){
