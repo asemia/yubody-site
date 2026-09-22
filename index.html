@@ -100,12 +100,13 @@
      a soft, ghostly presence rather than a literal photo. Breathes
      gently so it doesn't feel like a static watermark. */
   .hands-group{
-    opacity:0.16;
+    opacity:0.3;
+    filter:drop-shadow(0 0 22px rgba(246,239,224,0.55));
     animation:handsBreathe 6.5s ease-in-out infinite;
   }
   @keyframes handsBreathe{
-    0%,100%{ opacity:0.1; }
-    50%{ opacity:0.26; }
+    0%,100%{ opacity:0.22; filter:drop-shadow(0 0 14px rgba(246,239,224,0.4)); }
+    50%{ opacity:0.44; filter:drop-shadow(0 0 30px rgba(246,239,224,0.7)); }
   }
 
   @keyframes driftRight{
@@ -293,12 +294,27 @@
   .tag{
     border:1px solid var(--line);
     background:rgba(246,244,238,0.94);
-    padding:14px 22px;
+    padding:20px 18px 18px;
     text-align:center;
-    min-width:150px;
+    min-width:128px;
   }
+  .tag-icon{
+    width:46px; height:46px;
+    margin:0 auto 12px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--accent-deep);
+  }
+  .tag-icon svg{width:22px; height:22px;}
   .tag-zh{font-size:15px; font-weight:500;}
+  .tag-zh .check{color:var(--accent-deep); margin-right:2px;}
   .tag-en{font-family:'Cormorant Garamond', serif; font-size:12px; color:var(--ink-soft); letter-spacing:0.05em; margin-top:4px;}
+
+  /* Small descriptive line above the feature-icon grid */
+  .service-desc{ text-align:center; margin-bottom:30px; }
+  .service-desc .zh{ font-size:15px; font-weight:500; }
+  .service-desc .en{ font-family:'Cormorant Garamond', serif; font-size:13px; color:var(--ink-soft); letter-spacing:0.03em; margin-top:4px; font-style:italic; }
 
   /* Discount */
   .discount{
@@ -420,21 +436,23 @@
         <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/>
       </filter>
       <g id="handShape">
-        <ellipse cx="90" cy="210" rx="72" ry="90"/>
-        <g transform="translate(148,168) rotate(55)"><rect x="-11" y="-78" width="22" height="78" rx="11" ry="11"/></g>
-        <g transform="translate(122,128) rotate(14)"><rect x="-11" y="-118" width="22" height="118" rx="11" ry="11"/></g>
-        <g transform="translate(90,120) rotate(0)"><rect x="-11" y="-132" width="22" height="132" rx="11" ry="11"/></g>
-        <g transform="translate(58,128) rotate(-14)"><rect x="-11" y="-118" width="22" height="118" rx="11" ry="11"/></g>
-        <g transform="translate(30,150) rotate(-26)"><rect x="-10" y="-90" width="20" height="90" rx="10" ry="10"/></g>
+        <!-- palm: soft rounded trapezoid tapering from the wrist -->
+        <path d="M 20,300 C 10,270 8,230 16,195 C 22,175 30,160 42,150 C 55,145 70,142 88,140 C 106,142 122,146 134,155 C 148,165 158,182 162,205 C 166,235 164,270 156,300 C 130,308 50,308 20,300 Z"/>
+        <!-- each finger: tapered petal shape (wide at the base, rounded at the tip) reads far closer to a real hand than a uniform capsule -->
+        <g transform="translate(48,148) rotate(-26)"><path d="M -12,0 C -13,-25.5 -10,-52.7 -7,-73.1 C -5,-81.6 -3,-85 0,-85 C 3,-85 5,-81.6 7,-73.1 C 10,-52.7 13,-25.5 12,0 C 8,4 -8,4 -12,0 Z"/></g>
+        <g transform="translate(72,142) rotate(-12)"><path d="M -12,0 C -13,-34.5 -10,-71.3 -7,-98.9 C -5,-110.4 -3,-115 0,-115 C 3,-115 5,-110.4 7,-98.9 C 10,-71.3 13,-34.5 12,0 C 8,4 -8,4 -12,0 Z"/></g>
+        <g transform="translate(96,140) rotate(0)"><path d="M -12,0 C -13,-39 -10,-80.6 -7,-111.8 C -5,-124.8 -3,-130 0,-130 C 3,-130 5,-124.8 7,-111.8 C 10,-80.6 13,-39 12,0 C 8,4 -8,4 -12,0 Z"/></g>
+        <g transform="translate(120,144) rotate(13)"><path d="M -12,0 C -13,-33.6 -10,-69.4 -7,-96.3 C -5,-107.5 -3,-112 0,-112 C 3,-112 5,-107.5 7,-96.3 C 10,-69.4 13,-33.6 12,0 C 8,4 -8,4 -12,0 Z"/></g>
+        <g transform="translate(150,190) rotate(60)"><path d="M -15,0 C -16,-24 -13,-49.6 -9,-68.8 C -6,-76.8 -3,-80 0,-80 C 3,-80 6,-76.8 9,-68.8 C 13,-49.6 16,-24 15,0 C 10,4 -10,4 -15,0 Z"/></g>
       </g>
     </defs>
     <rect width="800" height="900" fill="url(#fog)"/>
     <path d="M -50,760 C 40,700 120,560 180,540 C 230,525 270,650 320,660 C 390,590 430,500 480,480 C 550,510 610,620 650,650 C 730,600 820,575 900,560 L 900,900 L -50,900 Z" fill="#c3bda5" opacity="0.7"/>
     <path d="M -50,820 C 60,760 150,640 220,620 C 290,660 340,700 400,720 C 460,690 500,620 560,600 C 640,650 710,715 780,740 C 830,720 870,705 900,700 L 900,900 L -50,900 Z" fill="#a29c84" opacity="0.72"/>
     <path d="M -50,880 C 60,830 190,780 260,760 C 340,790 400,815 460,830 C 540,810 630,790 700,780 C 770,800 840,815 900,830 L 900,900 L -50,900 Z" fill="#7d7a63" opacity="0.75"/>
-    <g class="hands-group" fill="#f6efe0">
-      <use href="#handShape" transform="translate(220,560)"/>
-      <use href="#handShape" transform="translate(580,560) scale(-1,1)"/>
+    <g class="hands-group" fill="#f6efe0" stroke="#f6efe0" stroke-width="1.5" stroke-opacity="0.5">
+      <use href="#handShape" transform="translate(165,550)"/>
+      <use href="#handShape" transform="translate(635,550) scale(-1,1)"/>
     </g>
     <rect width="800" height="900" filter="url(#grain)" opacity="0.5"/>
   </svg>
@@ -483,8 +501,8 @@
     <div class="brand-en">Massage &amp; Relaxation</div>
     <div class="tagline-zh">
       <p>為身體留白，為生活充電；</p>
-      <p>您留給身體的每一刻餘裕，</p>
-      <p>都會化作光，悄悄照亮往後的日子。</p>
+      <p>留給身體的每一刻餘裕，</p>
+      <p>都將化作光，悄悄照亮往後的日子。</p>
     </div>
     <div class="tagline-en">
       <p>Regardless of the length of your stay,</p>
@@ -538,18 +556,67 @@
 
 <section id="service">
   <div class="wrap">
+    <div class="section-title">服務特色</div>
+    <div class="section-title-en">Highlights</div>
+    <div class="service-desc">
+      <div class="zh">中式放鬆按摩</div>
+      <div class="en">Chinese-Style Relaxation</div>
+    </div>
     <div class="tags">
       <div class="tag">
-        <div class="tag-zh">預約制</div>
+        <div class="tag-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.5 6c0-1.7 1.6-2.8 3.3-2.2"/>
+            <rect x="6" y="6.2" width="12" height="5.6" rx="2.8"/>
+            <line x1="9" y1="15.2" x2="9" y2="18.6"/>
+            <line x1="12" y1="15.2" x2="12" y2="19.6"/>
+            <line x1="15" y1="15.2" x2="15" y2="18.6"/>
+          </svg>
+        </div>
+        <div class="tag-zh"><span class="check">✓</span>淋浴</div>
+        <div class="tag-en">Shower</div>
+      </div>
+      <div class="tag">
+        <div class="tag-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+            <circle cx="12" cy="12" r="9"/>
+            <text x="12" y="16" text-anchor="middle" font-size="10.5" font-family="'Cormorant Garamond', serif" fill="currentColor" stroke="none">P</text>
+          </svg>
+        </div>
+        <div class="tag-zh"><span class="check">✓</span>停車</div>
+        <div class="tag-en">Parking</div>
+      </div>
+      <div class="tag">
+        <div class="tag-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5" width="16" height="15" rx="2"/>
+            <line x1="4" y1="9.5" x2="20" y2="9.5"/>
+            <line x1="8" y1="3" x2="8" y2="7"/>
+            <line x1="16" y1="3" x2="16" y2="7"/>
+          </svg>
+        </div>
+        <div class="tag-zh"><span class="check">✓</span>預約制</div>
         <div class="tag-en">By Appointment</div>
       </div>
       <div class="tag">
-        <div class="tag-zh">中式放鬆按摩</div>
-        <div class="tag-en">Chinese-Style Relaxation</div>
+        <div class="tag-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7.6" r="3.2"/>
+            <path d="M5.5 20c0-4.2 3-6.8 6.5-6.8s6.5 2.6 6.5 6.8"/>
+          </svg>
+        </div>
+        <div class="tag-zh"><span class="check">✓</span>男師</div>
+        <div class="tag-en">Male Therapist</div>
       </div>
       <div class="tag">
-        <div class="tag-zh">男師</div>
-        <div class="tag-en">Male Therapist</div>
+        <div class="tag-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12.5 12.5 20 4 11.5V5c0-.6.4-1 1-1h6.5z"/>
+            <circle cx="8.2" cy="8.2" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div class="tag-zh"><span class="check">✓</span>政大師生優惠</div>
+        <div class="tag-en">NCCU Discount</div>
       </div>
     </div>
     <div class="divider"></div>
