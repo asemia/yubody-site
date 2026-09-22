@@ -394,11 +394,16 @@
         <stop offset="45%" stop-color="#dcd6c3" stop-opacity="1"/>
         <stop offset="100%" stop-color="#a9a691" stop-opacity="1"/>
       </radialGradient>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/>
+      </filter>
     </defs>
     <rect width="800" height="900" fill="url(#fog)"/>
-    <polygon points="-50,760 180,540 320,660 480,480 650,650 900,560 900,900 -50,900" fill="#c3bda5" opacity="0.7"/>
-    <polygon points="-50,820 220,620 400,720 560,600 780,740 900,700 900,900 -50,900" fill="#a29c84" opacity="0.72"/>
-    <polygon points="-50,880 260,760 460,830 700,780 900,830 900,900 -50,900" fill="#7d7a63" opacity="0.75"/>
+    <path d="M -50,760 C 40,700 120,560 180,540 C 230,525 270,650 320,660 C 390,590 430,500 480,480 C 550,510 610,620 650,650 C 730,600 820,575 900,560 L 900,900 L -50,900 Z" fill="#c3bda5" opacity="0.7"/>
+    <path d="M -50,820 C 60,760 150,640 220,620 C 290,660 340,700 400,720 C 460,690 500,620 560,600 C 640,650 710,715 780,740 C 830,720 870,705 900,700 L 900,900 L -50,900 Z" fill="#a29c84" opacity="0.72"/>
+    <path d="M -50,880 C 60,830 190,780 260,760 C 340,790 400,815 460,830 C 540,810 630,790 700,780 C 770,800 840,815 900,830 L 900,900 L -50,900 Z" fill="#7d7a63" opacity="0.75"/>
+    <rect width="800" height="900" filter="url(#grain)" opacity="0.5"/>
   </svg>
   <div class="beam beam-1"></div>
   <div class="beam beam-2"></div>
@@ -436,7 +441,7 @@
     <div class="brand-en">Massage &amp; Relaxation</div>
     <div class="tagline-zh">
       <p>為身體留白，為生活充電；</p>
-      <p>留給身體的每一刻餘裕，</p>
+      <p>您留給身體的每一刻餘裕，</p>
       <p>都會化作光，悄悄照亮往後的日子。</p>
     </div>
     <div class="tagline-en">
