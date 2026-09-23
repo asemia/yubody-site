@@ -595,12 +595,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .music-btn.is-playing .ripple{ animation:none; }
   }
 
-  /* Small bird silhouettes that occasionally cross the sky — spawned at
-     random intervals by the script below, never on a fixed loop, so they
-     don't read as a repeating pattern. Pure CSS handles the wing flap
-     (a crisp 2-frame swap, the way distant birds actually read — a soft
-     cross-fade looks like blur, not a wingbeat); JS handles the flight
-     path since each one needs its own random altitude, direction, speed. */
+  /* Small bird silhouettes that occasionally appear in the sky — spawned
+     at random intervals by the script below, never on a fixed loop, so
+     they don't read as a repeating pattern. Each bird flies a short,
+     drifting path while continuously shrinking and fading, as if
+     receding into the distance, rather than exiting off the screen edge.
+     The wing is a single shape that flexes via scaleY on an ease curve
+     (fast downstroke, slower recovery) instead of a hard two-frame swap,
+     which reads as a much more natural flap. */
   .birds-layer{
     position:absolute;
     inset:0;
@@ -613,15 +615,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     top:0;
     left:0;
     color:var(--ink);
-    will-change:transform;
+    will-change:transform,opacity;
   }
   .bird svg{ display:block; overflow:visible; }
-  .bird .wing-up{ fill:none; stroke:currentColor; stroke-width:1.4; stroke-linecap:round; }
-  .bird .wing-down{ fill:none; stroke:currentColor; stroke-width:1.4; stroke-linecap:round; opacity:0; }
-  .bird.flap .wing-up{ animation:birdWingUp var(--flap-speed, 0.5s) steps(1,end) infinite; }
-  .bird.flap .wing-down{ animation:birdWingDown var(--flap-speed, 0.5s) steps(1,end) infinite; }
-  @keyframes birdWingUp{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
-  @keyframes birdWingDown{ 0%,49%{ opacity:0; } 50%,100%{ opacity:1; } }
+  .bird path{
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.4;
+    stroke-linecap:round;
+    transform-box:fill-box;
+    transform-origin:50% 50%;
+  }
+  .bird.flap path{
+    animation:birdFlap var(--flap-speed, 0.75s) cubic-bezier(.45,0,.4,1) infinite;
+  }
+  @keyframes birdFlap{
+    0%{ transform:scaleY(1); }
+    38%{ transform:scaleY(0.2); }
+    58%{ transform:scaleY(0.1); }
+    100%{ transform:scaleY(1); }
+  }
 </style>
 </head>
 <body>
@@ -681,8 +694,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     var BIRD_SVG =
       '<svg viewBox="0 0 34 14" width="1em" height="0.41em">' +
-        '<path class="wing-up" d="M1 9 Q8 -2 17 6 Q26 -2 33 9"/>' +
-        '<path class="wing-down" d="M1 6 Q8 11 17 7 Q26 11 33 6"/>' +
+        '<path d="M1 9 Q8 -2 17 6 Q26 -2 33 9"/>' +
       '</svg>';
 
     var MAX_BIRDS = 3;
@@ -692,34 +704,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (active >= MAX_BIRDS){ scheduleNext(); return; }
       active++;
 
-      var dir = Math.random() < 0.5 ? 1 : -1; // 1: left->right, -1: right->left
-      var size = 12 + Math.random() * 10; // px, small & distant
-      var topPct = 6 + Math.random() * 30; // stay in the upper sky band
-      var duration = 26000 + Math.random() * 22000; // slow, unhurried
-      var flap = (0.42 + Math.random() * 0.22).toFixed(2) + 's';
-      var bob = 10 + Math.random() * 14; // gentle vertical drift, px
+      var dir = Math.random() < 0.5 ? 1 : -1; // faces/travels left->right or right->left
+      var size = 15 + Math.random() * 9; // px, starting size — small & distant already
+      var startLeftPct = 8 + Math.random() * 68; // where it first appears
+      var topPct = 6 + Math.random() * 26; // stays in the upper sky band
+      var duration = 12000 + Math.random() * 9000; // a short, unhurried drift, not a full crossing
+      var flap = (0.5 + Math.random() * 0.28).toFixed(2) + 's';
+
+      // Travel only a modest distance while it recedes — a real bird
+      // flying away shrinks toward a point, it doesn't slide off an edge.
+      var dxPx = dir * (window.innerWidth * (0.12 + Math.random() * 0.16));
+      var dyPx = -(window.innerHeight * (0.05 + Math.random() * 0.09)); // drifts gently upward
 
       var bird = document.createElement('div');
       bird.className = 'bird flap';
       bird.style.fontSize = size + 'px';
       bird.style.top = topPct + '%';
+      bird.style.left = startLeftPct + '%';
       bird.style.setProperty('--flap-speed', flap);
-      bird.style.opacity = '0';
       bird.innerHTML = BIRD_SVG;
-      if (dir < 0) bird.style.transform = 'scaleX(-1)';
       layer.appendChild(bird);
 
-      var vw = window.innerWidth;
-      var startX = dir > 0 ? -40 : vw + 40;
-      var endX = dir > 0 ? vw + 40 : -40;
+      function frame(t, scale, opacity){
+        var s = dir * scale;
+        return {
+          transform: 'translate(' + (dxPx * t) + 'px, ' + (dyPx * t) + 'px) scale(' + s + ', ' + scale + ')',
+          opacity: opacity
+        };
+      }
 
       var anim = bird.animate([
-        { transform: 'translate(' + startX + 'px, 0px)' + (dir < 0 ? ' scaleX(-1)' : ''), opacity: 0 },
-        { transform: 'translate(' + (startX + (endX - startX) * 0.08) + 'px, ' + (-bob) + 'px)' + (dir < 0 ? ' scaleX(-1)' : ''), opacity: 0.55, offset: 0.08 },
-        { transform: 'translate(' + (startX + (endX - startX) * 0.5) + 'px, ' + bob + 'px)' + (dir < 0 ? ' scaleX(-1)' : ''), opacity: 0.55, offset: 0.5 },
-        { transform: 'translate(' + (startX + (endX - startX) * 0.92) + 'px, ' + (-bob * 0.6) + 'px)' + (dir < 0 ? ' scaleX(-1)' : ''), opacity: 0.55, offset: 0.92 },
-        { transform: 'translate(' + endX + 'px, 0px)' + (dir < 0 ? ' scaleX(-1)' : ''), opacity: 0 }
-      ], { duration: duration, easing: 'linear', fill: 'forwards' });
+        Object.assign(frame(0, 0.6, 0), { offset: 0 }),
+        Object.assign(frame(0.12, 0.9, 0.6), { offset: 0.12 }),
+        Object.assign(frame(0.55, 0.6, 0.55), { offset: 0.55 }),
+        Object.assign(frame(0.85, 0.32, 0.3), { offset: 0.85 }),
+        Object.assign(frame(1, 0.14, 0), { offset: 1 })
+      ], { duration: duration, easing: 'ease-in', fill: 'forwards' });
 
       anim.onfinish = function(){
         bird.remove();
