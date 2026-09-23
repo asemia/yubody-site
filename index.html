@@ -15,6 +15,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="keywords" content="木柵按摩,貓空按摩,文山按摩,政大按摩,推拿,按摩推薦,中式按摩,景美按摩,男師按摩,舒壓按摩">
 <link rel="canonical" href="https://yubody.tw/">
 
+<!-- 提前預載首屏最大的視覺元素（LCP 圖片），不等字型下載完成再開始抓取 -->
+<link rel="preload" as="image" href="hero-mountains.jpg" fetchpriority="high">
+
 <!-- Open Graph — 分享到 LINE / FB / IG 時顯示的卡片內容 -->
 <meta property="og:type" content="business.business">
 <meta property="og:title" content="木柵按摩｜YU Body Studio — 中式推拿放鬆">
@@ -28,7 +31,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<!-- 字型改用非阻塞載入：先用 preload 抓取，抓完再切換成 stylesheet 套用，
+     瀏覽器不會為了等字型檔而卡住整頁的第一次算繪（這是拖慢 FCP/LCP 最大的
+     原因）。文字會先用系統字體顯示，字型一載入完成就會無縫換上，肉眼幾乎
+     感覺不到差異，但首次畫面出現的時間可以大幅提前。 -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"></noscript>
 
 <!-- 結構化資料：讓 Google 看懂這是一間在地按摩工作室，有機會出現在地圖/在地搜尋卡片 -->
 <script type="application/ld+json">
@@ -1166,7 +1174,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="cta-title">加入 LINE 好友預約</h2>
     <div class="cta-title-en">Book via LINE</div>
     <div class="qr-box">
-      <img src="https://qr-official.line.me/gs/M_291lycqc_GW.png?oat_content=qr" alt="LINE QR code">
+      <img src="line-qr.png" alt="LINE QR code" width="260" height="260" loading="lazy">
     </div>
     <div class="line-id">@yubody.studio</div>
     <a class="cta-btn en" href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener">ADD FRIEND · 加入好友</a>
