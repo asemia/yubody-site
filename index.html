@@ -139,19 +139,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     pointer-events:none;
   }
   .fog-1{ width:75vw; min-width:280px; height:34vw; min-height:130px; top:8%; left:3%; --fog-op:0.9; animation:driftRight 8.8s ease-in-out infinite; animation-delay:-1.1s; }
-  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; --fog-op:0.78; animation:driftLeft 10.5s ease-in-out infinite; animation-delay:-3.3s; }
+  .fog-2{ width:65vw; min-width:240px; height:30vw; min-height:110px; top:36%; left:48%; --fog-op:0.78; animation:driftBillow 10.5s ease-in-out infinite; animation-delay:-3.3s; }
   .fog-3{ width:85vw; min-width:300px; height:36vw; min-height:140px; top:60%; left:2%; --fog-op:0.78; animation:driftRight 12.1s ease-in-out infinite; animation-delay:-6.05s; }
   .fog-4{ width:55vw; min-width:220px; height:26vw; min-height:100px; top:74%; left:52%; --fog-op:0.65; animation:driftLeft 7.7s ease-in-out infinite; animation-delay:-2.2s; }
-  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; --fog-op:0.6; animation:driftLeft 6.9s ease-in-out infinite; animation-delay:-4.4s; }
+  .fog-5{ width:40vw; min-width:180px; height:20vw; min-height:80px; top:24%; left:20%; --fog-op:0.6; animation:driftBillow 6.9s ease-in-out infinite; animation-delay:-4.4s; }
   .fog-6{ width:48vw; min-width:200px; height:22vw; min-height:90px; top:52%; left:8%; --fog-op:0.55; animation:driftRight 9.6s ease-in-out infinite; animation-delay:-1.65s; }
   /* extra low wisps drifting across the hands near the bottom of the screen */
   .fog-7{ width:60vw; min-width:240px; height:26vw; min-height:100px; top:80%; left:18%; --fog-op:0.65; animation:driftRight 8.25s ease-in-out infinite; animation-delay:-4.95s; }
-  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; --fog-op:0.55; animation:driftLeft 11s ease-in-out infinite; animation-delay:-0.55s; }
+  .fog-8{ width:50vw; min-width:210px; height:24vw; min-height:95px; top:90%; left:38%; --fog-op:0.55; animation:driftBillow 11s ease-in-out infinite; animation-delay:-0.55s; }
   /* more drifting mist, at the same proportions as fog-1..8 (not thin bars —
      a thin, brightly-lit rotated bar reads as a light beam, not mist) */
   .fog-9{ width:68vw; min-width:260px; height:30vw; min-height:115px; top:18%; left:3%; --fog-op:0.55; animation:driftDiagonal1 14.3s ease-in-out infinite; animation-delay:-3.85s; }
   .fog-10{ width:60vw; min-width:230px; height:27vw; min-height:105px; top:66%; left:44%; --fog-op:0.5; animation:driftDiagonal2 16s ease-in-out infinite; animation-delay:-7.7s; }
-  .fog-11{ width:58vw; min-width:220px; height:26vw; min-height:100px; top:14%; left:46%; --fog-op:0.5; animation:driftDiagonal1 12.65s ease-in-out infinite; animation-delay:-1.65s; }
+  .fog-11{ width:58vw; min-width:220px; height:26vw; min-height:100px; top:14%; left:46%; --fog-op:0.5; animation:driftBillow 12.65s ease-in-out infinite; animation-delay:-1.65s; }
   .fog-12{ width:52vw; min-width:200px; height:24vw; min-height:92px; top:84%; left:4%; --fog-op:0.5; animation:driftDiagonal2 11s ease-in-out infinite; animation-delay:-5.5s; }
 
   /* On phones the fixed backdrop is cropped narrower (cover crops the
@@ -184,44 +184,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     pointer-events:none;
   }
 
-  /* Each drift path loops through space rather than swinging out-and-back
-     on one line: the X and Y motion peak at DIFFERENT stops (decoupled
-     phase), so the path traces a loose loop/arc instead of a straight
-     pendulum. That's what reads as air currents carrying mist around,
-     rather than a mechanical left-right (or right-left) back-and-forth. */
+  /* Horizontal slide was the dominant, most-noticeable component before
+     (up to 15-17vw of side-to-side travel) — even with the X/Y phases
+     decoupled, that much lateral throw still reads as "sliding right,
+     then sliding left" the moment the eye follows one patch. Real mist
+     billows and drifts more than it slides: horizontal travel is now
+     kept small (a few vw at most) and most of the "alive" feeling comes
+     from vertical bob, gentle scale breathing and slow rotation instead —
+     plus driftBillow below, a near-vertical path used on some patches so
+     the whole scene isn't moving on the same left-right axis at once. */
   @keyframes driftRight{
     0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    18%{ transform:translateX(6vw) translateY(-10px) scale(1.05) rotate(1deg); }
-    40%{ transform:translateX(15vw) translateY(-22px) scale(1.15) rotate(2.2deg); }
-    60%{ transform:translateX(13vw) translateY(6px) scale(1.19) rotate(1.6deg); }
-    80%{ transform:translateX(5vw) translateY(16px) scale(1.08) rotate(0.5deg); }
+    18%{ transform:translateX(2.5vw) translateY(-14px) scale(1.05) rotate(1deg); }
+    40%{ transform:translateX(6vw) translateY(-26px) scale(1.15) rotate(2.2deg); }
+    60%{ transform:translateX(5vw) translateY(8px) scale(1.19) rotate(1.6deg); }
+    80%{ transform:translateX(2vw) translateY(20px) scale(1.08) rotate(0.5deg); }
     100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftLeft{
     0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    20%{ transform:translateX(-5vw) translateY(12px) scale(1.04) rotate(-0.8deg); }
-    42%{ transform:translateX(-14vw) translateY(20px) scale(1.13) rotate(-2deg); }
-    63%{ transform:translateX(-15vw) translateY(-4px) scale(1.17) rotate(-1.8deg); }
-    82%{ transform:translateX(-6vw) translateY(-14px) scale(1.07) rotate(-0.4deg); }
+    20%{ transform:translateX(-2vw) translateY(14px) scale(1.04) rotate(-0.8deg); }
+    42%{ transform:translateX(-5.5vw) translateY(24px) scale(1.13) rotate(-2deg); }
+    63%{ transform:translateX(-6vw) translateY(-6px) scale(1.17) rotate(-1.8deg); }
+    82%{ transform:translateX(-2.5vw) translateY(-18px) scale(1.07) rotate(-0.4deg); }
     100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftDiagonal1{
     0%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
-    16%{ transform:translateX(4vw) translateY(-6px) rotate(-7.5deg) scaleX(1.04); }
-    38%{ transform:translateX(12vw) translateY(-14px) rotate(-4deg) scaleX(1.15); }
-    55%{ transform:translateX(17vw) translateY(-4px) rotate(-2deg) scaleX(1.22); }
-    75%{ transform:translateX(12vw) translateY(10px) rotate(-5deg) scaleX(1.12); }
-    90%{ transform:translateX(4vw) translateY(4px) rotate(-8deg) scaleX(1.02); }
+    16%{ transform:translateX(1.5vw) translateY(-8px) rotate(-7.5deg) scaleX(1.04); }
+    38%{ transform:translateX(4.5vw) translateY(-18px) rotate(-4deg) scaleX(1.15); }
+    55%{ transform:translateX(6.5vw) translateY(-4px) rotate(-2deg) scaleX(1.22); }
+    75%{ transform:translateX(4.5vw) translateY(14px) rotate(-5deg) scaleX(1.12); }
+    90%{ transform:translateX(1.5vw) translateY(6px) rotate(-8deg) scaleX(1.02); }
     100%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
   }
   @keyframes driftDiagonal2{
     0%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
-    18%{ transform:translateX(-4vw) translateY(5px) rotate(8.5deg) scaleX(1.03); }
-    40%{ transform:translateX(-12vw) translateY(12px) rotate(12deg) scaleX(1.1); }
-    58%{ transform:translateX(-15vw) translateY(3px) rotate(13.5deg) scaleX(1.14); }
-    78%{ transform:translateX(-10vw) translateY(-10px) rotate(9deg) scaleX(1.08); }
-    92%{ transform:translateX(-3vw) translateY(-3px) rotate(7.6deg) scaleX(1.02); }
+    18%{ transform:translateX(-1.5vw) translateY(7px) rotate(8.5deg) scaleX(1.03); }
+    40%{ transform:translateX(-4.5vw) translateY(16px) rotate(12deg) scaleX(1.1); }
+    58%{ transform:translateX(-6.5vw) translateY(4px) rotate(13.5deg) scaleX(1.14); }
+    78%{ transform:translateX(-4vw) translateY(-14px) rotate(9deg) scaleX(1.08); }
+    92%{ transform:translateX(-1vw) translateY(-4px) rotate(7.6deg) scaleX(1.02); }
     100%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
+  }
+  /* Mostly vertical billow — almost no side-to-side travel, so a few
+     patches on this path anchor the scene and break up the sense that
+     everything is sliding on the same horizontal track. */
+  @keyframes driftBillow{
+    0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
+    24%{ transform:translateX(1vw) translateY(-22px) scale(1.1) rotate(0.8deg); }
+    50%{ transform:translateX(-1.5vw) translateY(-34px) scale(1.2) rotate(-0.6deg); }
+    72%{ transform:translateX(1.5vw) translateY(-10px) scale(1.13) rotate(0.9deg); }
+    100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
 
   .hero-content{
