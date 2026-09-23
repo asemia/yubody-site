@@ -683,23 +683,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     overflow:hidden;
     pointer-events:none;
     opacity:0;
-    mix-blend-mode:soft-light;
     transition:opacity 2.2s ease;
+    /* Restrict the glow to the upper sky so it never tints the trees. */
+    -webkit-mask-image:linear-gradient(to bottom, black 0%, black 42%, transparent 72%);
+    mask-image:linear-gradient(to bottom, black 0%, black 42%, transparent 72%);
   }
   .rainbow-layer.is-glowing{ opacity:1; }
   .rainbow-glow{
     position:absolute;
     inset:-15% -25%;
+    /* Plain (non-blended) gradient — blend modes like soft-light nearly
+       vanish against this photo's very pale, brightened sky, but the
+       alpha here is kept low so it only ever reads as a faint tint. */
     background:linear-gradient(100deg,
-      rgba(255,130,130,0) 0%,
-      rgba(255,170,130,0.4) 14%,
-      rgba(255,230,150,0.36) 24%,
-      rgba(160,225,170,0.34) 34%,
-      rgba(140,195,255,0.36) 46%,
-      rgba(190,160,255,0.34) 58%,
+      rgba(255,90,110,0) 0%,
+      rgba(255,140,110,0.22) 14%,
+      rgba(255,215,120,0.2) 24%,
+      rgba(130,215,150,0.19) 34%,
+      rgba(100,180,255,0.2) 46%,
+      rgba(175,130,255,0.19) 58%,
       rgba(255,255,255,0) 70%);
     background-size:220% 100%;
-    filter:blur(22px);
+    filter:blur(24px);
   }
   .rainbow-layer.is-glowing .rainbow-glow{
     animation:rainbowSweep 55s linear infinite, rainbowFlicker 13s ease-in-out infinite;
@@ -709,13 +714,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     100%{ background-position:100% 50%; }
   }
   @keyframes rainbowFlicker{
-    0%,100%{ opacity:0.12; }
-    35%{ opacity:0.55; }
-    55%{ opacity:0.1; }
-    78%{ opacity:0.6; }
+    0%,100%{ opacity:0.06; }
+    35%{ opacity:0.3; }
+    55%{ opacity:0.05; }
+    78%{ opacity:0.32; }
   }
   @media (prefers-reduced-motion: reduce){
     .rainbow-layer{ display:none; }
+  }
+
+  /* Droplets that read as sitting on the screen/lens itself, rather than
+     falling within the scene — a highlight + shadow give each one volume,
+     and it slowly trickles a short way down before fading, the way a real
+     drop on glass creeps before it's gone. Fixed to the viewport (not the
+     scrolling background), tied to playback, spawned by the script below. */
+  .lens-rain{
+    position:fixed;
+    inset:0;
+    z-index:6;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .lens-drop{
+    position:absolute;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 26%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.18) 28%, rgba(255,255,255,0.05) 50%, rgba(90,100,100,0.02) 100%);
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.65),
+      inset 0 -2px 3px rgba(45,55,55,0.4),
+      0 1px 2px rgba(35,40,40,0.18);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .lens-rain{ display:none; }
   }
 </style>
 </head>
@@ -745,6 +776,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="birds-layer"></div>
   <div class="rain-layer"><div class="rain-drops"></div></div>
 </div>
+<div class="lens-rain" aria-hidden="true"></div>
 <script>
   (function(){
     var bg = document.querySelector('.site-bg');
@@ -892,6 +924,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       audio.addEventListener('pause', function(){ rainbowLayer.classList.remove('is-glowing'); });
       audio.addEventListener('ended', function(){ rainbowLayer.classList.remove('is-glowing'); });
       if (!audio.paused) rainbowLayer.classList.add('is-glowing');
+    }
+
+    // Droplets that look like they've landed on the screen/lens itself —
+    // a fixed viewport overlay, independent of the scrolling background,
+    // that spawns and trickles individual drops only while music plays.
+    var lensRain = document.querySelector('.lens-rain');
+    if (lensRain){
+      var MAX_LENS_DROPS = 9;
+      var lensActive = 0;
+      var lensScheduled = null;
+
+      function spawnLensDrop(){
+        if (lensActive >= MAX_LENS_DROPS){ return; }
+        lensActive++;
+
+        var size = 5 + Math.random() * 13; // px
+        var leftPct = Math.random() * 100;
+        var topPct = 4 + Math.random() * 70; // stays clear of the bottom edge
+        var travel = 18 + Math.random() * 46; // px it trickles down before it's gone
+        var duration = 3200 + Math.random() * 4200;
+
+        var drop = document.createElement('div');
+        drop.className = 'lens-drop';
+        drop.style.width = size + 'px';
+        drop.style.height = (size * (0.92 + Math.random() * 0.16)) + 'px';
+        drop.style.left = leftPct + '%';
+        drop.style.top = topPct + '%';
+        lensRain.appendChild(drop);
+
+        var anim = drop.animate([
+          { transform: 'translateY(0px)', opacity: 0 },
+          { transform: 'translateY(2px)', opacity: 0.9, offset: 0.12 },
+          { transform: 'translateY(' + (travel * 0.6) + 'px)', opacity: 0.85, offset: 0.7 },
+          { transform: 'translateY(' + travel + 'px)', opacity: 0, offset: 1 }
+        ], { duration: duration, easing: 'ease-in', fill: 'forwards' });
+
+        anim.onfinish = function(){
+          drop.remove();
+          lensActive--;
+        };
+      }
+
+      function scheduleLensNext(){
+        if (audio.paused){ lensScheduled = null; return; }
+        var gap = 350 + Math.random() * 700;
+        lensScheduled = setTimeout(function(){
+          spawnLensDrop();
+          scheduleLensNext();
+        }, gap);
+      }
+
+      function startLensRain(){
+        if (lensScheduled !== null) return;
+        scheduleLensNext();
+      }
+
+      function stopLensRain(){
+        if (lensScheduled !== null){ clearTimeout(lensScheduled); lensScheduled = null; }
+        // Drops already on screen finish trickling and fading naturally.
+      }
+
+      audio.addEventListener('play', startLensRain);
+      audio.addEventListener('pause', stopLensRain);
+      audio.addEventListener('ended', stopLensRain);
+      if (!audio.paused) startLensRain();
     }
   });
 </script>
