@@ -184,36 +184,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     pointer-events:none;
   }
 
-  /* Each drift path has several uneven stops (not one ping-pong swing) so
-     the motion reads as air currents pushing the mist unevenly, rather
-     than a metronome. Scale breathes gently throughout, never snapping
-     back to exactly 1 at the loop point in a way that feels mechanical. */
+  /* Each drift path loops through space rather than swinging out-and-back
+     on one line: the X and Y motion peak at DIFFERENT stops (decoupled
+     phase), so the path traces a loose loop/arc instead of a straight
+     pendulum. That's what reads as air currents carrying mist around,
+     rather than a mechanical left-right (or right-left) back-and-forth. */
   @keyframes driftRight{
     0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    22%{ transform:translateX(5vw) translateY(-14px) scale(1.06) rotate(1deg); }
-    48%{ transform:translateX(15vw) translateY(-24px) scale(1.19) rotate(2.4deg); }
-    71%{ transform:translateX(10vw) translateY(-6px) scale(1.1) rotate(1.2deg); }
+    18%{ transform:translateX(6vw) translateY(-10px) scale(1.05) rotate(1deg); }
+    40%{ transform:translateX(15vw) translateY(-22px) scale(1.15) rotate(2.2deg); }
+    60%{ transform:translateX(13vw) translateY(6px) scale(1.19) rotate(1.6deg); }
+    80%{ transform:translateX(5vw) translateY(16px) scale(1.08) rotate(0.5deg); }
     100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftLeft{
     0%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
-    26%{ transform:translateX(-6vw) translateY(10px) scale(1.05) rotate(-1deg); }
-    55%{ transform:translateX(-15vw) translateY(19px) scale(1.16) rotate(-2.2deg); }
-    80%{ transform:translateX(-8vw) translateY(6px) scale(1.08) rotate(-1deg); }
+    20%{ transform:translateX(-5vw) translateY(12px) scale(1.04) rotate(-0.8deg); }
+    42%{ transform:translateX(-14vw) translateY(20px) scale(1.13) rotate(-2deg); }
+    63%{ transform:translateX(-15vw) translateY(-4px) scale(1.17) rotate(-1.8deg); }
+    82%{ transform:translateX(-6vw) translateY(-14px) scale(1.07) rotate(-0.4deg); }
     100%{ transform:translateX(0) translateY(0) scale(1) rotate(0deg); }
   }
   @keyframes driftDiagonal1{
     0%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
-    30%{ transform:translateX(7vw) translateY(-8px) rotate(-6deg) scaleX(1.08); }
-    58%{ transform:translateX(17vw) translateY(-16px) rotate(-3deg) scaleX(1.22); }
-    82%{ transform:translateX(11vw) translateY(-5px) rotate(-6deg) scaleX(1.1); }
+    16%{ transform:translateX(4vw) translateY(-6px) rotate(-7.5deg) scaleX(1.04); }
+    38%{ transform:translateX(12vw) translateY(-14px) rotate(-4deg) scaleX(1.15); }
+    55%{ transform:translateX(17vw) translateY(-4px) rotate(-2deg) scaleX(1.22); }
+    75%{ transform:translateX(12vw) translateY(10px) rotate(-5deg) scaleX(1.12); }
+    90%{ transform:translateX(4vw) translateY(4px) rotate(-8deg) scaleX(1.02); }
     100%{ transform:translateX(0) translateY(0) rotate(-9deg) scaleX(1); }
   }
   @keyframes driftDiagonal2{
     0%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
-    32%{ transform:translateX(-7vw) translateY(6px) rotate(9deg) scaleX(1.06); }
-    60%{ transform:translateX(-15vw) translateY(12px) rotate(13deg) scaleX(1.14); }
-    85%{ transform:translateX(-9vw) translateY(4px) rotate(9deg) scaleX(1.05); }
+    18%{ transform:translateX(-4vw) translateY(5px) rotate(8.5deg) scaleX(1.03); }
+    40%{ transform:translateX(-12vw) translateY(12px) rotate(12deg) scaleX(1.1); }
+    58%{ transform:translateX(-15vw) translateY(3px) rotate(13.5deg) scaleX(1.14); }
+    78%{ transform:translateX(-10vw) translateY(-10px) rotate(9deg) scaleX(1.08); }
+    92%{ transform:translateX(-3vw) translateY(-3px) rotate(7.6deg) scaleX(1.02); }
     100%{ transform:translateX(0) translateY(0) rotate(7deg) scaleX(1); }
   }
 
