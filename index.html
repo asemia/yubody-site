@@ -626,7 +626,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   /* A very light drizzle that only falls while the background music is
      playing, fading in/out together with it. Kept deliberately faint —
      thin, low-opacity streaks, modest count — so it reads as a soft
-     ambience rather than a storm. */
+     ambience rather than a storm. Blown at a noticeable wind angle, and
+     its overall intensity breathes in gusts (an inner wrapper handles the
+     gust pulse so it never fights the outer show/hide fade). */
   .rain-layer{
     position:absolute;
     inset:0;
@@ -637,23 +639,83 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     transition:opacity 1.4s ease;
   }
   .rain-layer.is-raining{ opacity:1; }
+  .rain-drops{
+    position:absolute;
+    inset:0;
+  }
+  .rain-layer.is-raining .rain-drops{
+    animation:rainGust 9s ease-in-out infinite;
+  }
+  @keyframes rainGust{
+    0%{ opacity:0.45; transform:translateX(0); }
+    28%{ opacity:1; transform:translateX(10px); }
+    52%{ opacity:0.5; transform:translateX(-6px); }
+    78%{ opacity:0.85; transform:translateX(5px); }
+    100%{ opacity:0.45; transform:translateX(0); }
+  }
   .raindrop{
     position:absolute;
     top:-8%;
     width:1px;
-    height:16px;
+    height:17px;
     background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.55) 55%, rgba(150,163,168,0) 100%);
-    transform:rotate(8deg);
+    transform:rotate(18deg);
     animation-name:rainFall;
     animation-timing-function:linear;
     animation-iteration-count:infinite;
   }
   @keyframes rainFall{
-    0%{ transform:translate(0,0) rotate(8deg); }
-    100%{ transform:translate(9vh,118vh) rotate(8deg); }
+    0%{ transform:translate(0,0) rotate(18deg); }
+    100%{ transform:translate(34vh,118vh) rotate(18deg); }
   }
   @media (prefers-reduced-motion: reduce){
     .rain-layer{ display:none; }
+  }
+
+  /* A faint, drifting rainbow-tinted sheen in the sky, only while the
+     music plays — soft-light blended so it tints the mist rather than
+     painting flat color, and pulses in and out so it reads as glimpsed
+     rather than a fixed decoration. */
+  .rainbow-layer{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:hidden;
+    pointer-events:none;
+    opacity:0;
+    mix-blend-mode:soft-light;
+    transition:opacity 2.2s ease;
+  }
+  .rainbow-layer.is-glowing{ opacity:1; }
+  .rainbow-glow{
+    position:absolute;
+    inset:-15% -25%;
+    background:linear-gradient(100deg,
+      rgba(255,130,130,0) 0%,
+      rgba(255,170,130,0.4) 14%,
+      rgba(255,230,150,0.36) 24%,
+      rgba(160,225,170,0.34) 34%,
+      rgba(140,195,255,0.36) 46%,
+      rgba(190,160,255,0.34) 58%,
+      rgba(255,255,255,0) 70%);
+    background-size:220% 100%;
+    filter:blur(22px);
+  }
+  .rainbow-layer.is-glowing .rainbow-glow{
+    animation:rainbowSweep 55s linear infinite, rainbowFlicker 13s ease-in-out infinite;
+  }
+  @keyframes rainbowSweep{
+    0%{ background-position:0% 50%; }
+    100%{ background-position:100% 50%; }
+  }
+  @keyframes rainbowFlicker{
+    0%,100%{ opacity:0.12; }
+    35%{ opacity:0.55; }
+    55%{ opacity:0.1; }
+    78%{ opacity:0.6; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rainbow-layer{ display:none; }
   }
 </style>
 </head>
@@ -679,8 +741,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="fog-layer fog-10"></div>
   <div class="fog-layer fog-11"></div>
   <div class="fog-layer fog-12"></div>
+  <div class="rainbow-layer"><div class="rainbow-glow"></div></div>
   <div class="birds-layer"></div>
-  <div class="rain-layer"></div>
+  <div class="rain-layer"><div class="rain-drops"></div></div>
 </div>
 <script>
   (function(){
@@ -801,8 +864,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // A faint drizzle, built once and simply faded in/out with playback
     // (no per-drop spawning needed — rain reads naturally as a continuous,
     // even ambience rather than discrete random events like the birds).
+    // Its overall gust pulse is a separate CSS animation on the inner
+    // .rain-drops wrapper, so it doesn't fight this outer show/hide fade.
     var rainLayer = document.querySelector('.rain-layer');
-    if (rainLayer){
+    var rainDrops = rainLayer && rainLayer.querySelector('.rain-drops');
+    if (rainLayer && rainDrops){
       var DROP_COUNT = 46;
       for (var i = 0; i < DROP_COUNT; i++){
         var drop = document.createElement('div');
@@ -811,12 +877,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         drop.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
         drop.style.animationDuration = (0.8 + Math.random() * 0.6).toFixed(2) + 's';
         drop.style.animationDelay = (Math.random() * -2).toFixed(2) + 's';
-        rainLayer.appendChild(drop);
+        rainDrops.appendChild(drop);
       }
       audio.addEventListener('play', function(){ rainLayer.classList.add('is-raining'); });
       audio.addEventListener('pause', function(){ rainLayer.classList.remove('is-raining'); });
       audio.addEventListener('ended', function(){ rainLayer.classList.remove('is-raining'); });
       if (!audio.paused) rainLayer.classList.add('is-raining');
+    }
+
+    // A faint rainbow sheen in the sky, also tied to playback.
+    var rainbowLayer = document.querySelector('.rainbow-layer');
+    if (rainbowLayer){
+      audio.addEventListener('play', function(){ rainbowLayer.classList.add('is-glowing'); });
+      audio.addEventListener('pause', function(){ rainbowLayer.classList.remove('is-glowing'); });
+      audio.addEventListener('ended', function(){ rainbowLayer.classList.remove('is-glowing'); });
+      if (!audio.paused) rainbowLayer.classList.add('is-glowing');
     }
   });
 </script>
