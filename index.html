@@ -533,6 +533,66 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     section{padding:48px 0;}
     .feature-row{gap:12px;}
   }
+
+  /* Music toggle — a "breathing" circle rather than a stock speaker icon:
+     ripples breathe outward slowly while playing, echoing the site's calm/
+     breath-focused tone rather than announcing themselves as a widget. */
+  .music-btn{
+    position:fixed;
+    right:20px;
+    bottom:max(20px, env(safe-area-inset-bottom) + 12px);
+    z-index:5;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(246,244,238,0.82);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+    box-shadow:0 4px 18px rgba(43,48,43,0.12);
+  }
+  .music-btn .ripple{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:1px solid var(--accent-deep);
+    opacity:0;
+  }
+  .music-btn.is-playing .ripple{
+    animation:musicRipple 2.8s ease-out infinite;
+  }
+  .music-btn.is-playing .ripple.r2{ animation-delay:0.9s; }
+  .music-btn.is-playing .ripple.r3{ animation-delay:1.8s; }
+  @keyframes musicRipple{
+    0%{ transform:scale(1); opacity:0.55; }
+    100%{ transform:scale(1.7); opacity:0; }
+  }
+  .music-btn .icon{
+    position:relative;
+    z-index:1;
+    width:18px;
+    height:18px;
+    color:var(--accent-deep);
+  }
+  .music-btn .icon svg{ width:100%; height:100%; display:block; }
+  .music-btn .icon-play{ transition:opacity .35s ease, transform .35s ease; }
+  .music-btn .icon-pause{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transform:scale(0.7);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .music-btn.is-playing .icon-play{ opacity:0; transform:scale(0.7); }
+  .music-btn.is-playing .icon-pause{ opacity:1; transform:scale(1); }
+  @media (prefers-reduced-motion: reduce){
+    .music-btn.is-playing .ripple{ animation:none; }
+  }
 </style>
 </head>
 <body>
@@ -760,6 +820,59 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <footer>YU BODY STUDIO · MUZHA · TAIPEI</footer>
+
+<audio id="bgm" src="yu.mp3" loop preload="none"></audio>
+<button type="button" id="musicBtn" class="music-btn" aria-pressed="false" aria-label="播放背景音樂">
+  <span class="ripple r1"></span>
+  <span class="ripple r2"></span>
+  <span class="ripple r3"></span>
+  <span class="icon icon-play">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.5 4.8v14.4c0 .7.75 1.14 1.35.78l11.4-7.2c.58-.36.58-1.2 0-1.56l-11.4-7.2c-.6-.36-1.35.08-1.35.78Z"/>
+    </svg>
+  </span>
+  <span class="icon icon-pause">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="8" y1="5" x2="8" y2="19"/>
+      <line x1="16" y1="5" x2="16" y2="19"/>
+    </svg>
+  </span>
+</button>
+<script>
+  (function(){
+    var btn = document.getElementById('musicBtn');
+    var audio = document.getElementById('bgm');
+    if(!btn || !audio) return;
+    btn.addEventListener('click', function(){
+      if(audio.paused){
+        audio.play().then(function(){
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-pressed','true');
+          btn.setAttribute('aria-label','暫停背景音樂');
+        }).catch(function(){
+          // Autoplay/permission edge case — leave button in paused state.
+        });
+      } else {
+        audio.pause();
+        btn.classList.remove('is-playing');
+        btn.setAttribute('aria-pressed','false');
+        btn.setAttribute('aria-label','播放背景音樂');
+      }
+    });
+    // If playback stops for any other reason (e.g. the tab throttles
+    // audio), keep the button's visual state in sync.
+    audio.addEventListener('pause', function(){
+      btn.classList.remove('is-playing');
+      btn.setAttribute('aria-pressed','false');
+      btn.setAttribute('aria-label','播放背景音樂');
+    });
+    audio.addEventListener('play', function(){
+      btn.classList.add('is-playing');
+      btn.setAttribute('aria-pressed','true');
+      btn.setAttribute('aria-label','暫停背景音樂');
+    });
+  })();
+</script>
 
 </body>
 </html>
