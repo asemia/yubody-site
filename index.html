@@ -627,7 +627,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     transform-origin:50% 50%;
   }
   .bird.flap path{
-    animation:birdFlap var(--flap-speed, 0.75s) cubic-bezier(.45,0,.4,1) infinite;
+    animation:birdFlap var(--flap-speed, 1.5s) cubic-bezier(.45,0,.4,1) infinite;
   }
   @keyframes birdFlap{
     0%{ transform:scaleY(1); }
@@ -709,7 +709,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var startLeftPct = 8 + Math.random() * 68; // where it first appears
       var topPct = 6 + Math.random() * 26; // stays in the upper sky band
       var duration = 12000 + Math.random() * 9000; // a short, unhurried drift, not a full crossing
-      var flap = (0.5 + Math.random() * 0.28).toFixed(2) + 's';
+      var flap = (1.3 + Math.random() * 0.5).toFixed(2) + 's';
 
       // Travel only a modest distance while it recedes — a real bird
       // flying away shrinks toward a point, it doesn't slide off an edge.
