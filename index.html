@@ -595,14 +595,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .music-btn.is-playing .ripple{ animation:none; }
   }
 
-  /* Small bird silhouettes that occasionally appear in the sky — spawned
-     at random intervals by the script below, never on a fixed loop, so
-     they don't read as a repeating pattern. Each bird flies a short,
-     drifting path while continuously shrinking and fading, as if
-     receding into the distance, rather than exiting off the screen edge.
-     The wing is a single shape that flexes via scaleY on an ease curve
-     (fast downstroke, slower recovery) instead of a hard two-frame swap,
-     which reads as a much more natural flap. */
+  /* Small bird silhouettes that appear only while the background music is
+     playing — spawned at random intervals, never on a fixed loop, so they
+     don't read as a repeating pattern. Each bird glides a short, drifting
+     path while continuously shrinking, staying fully opaque throughout and
+     only fading transparent right at the very end, as it recedes into the
+     distance — no wing-flap animation, just a still silhouette in flight. */
   .birds-layer{
     position:absolute;
     inset:0;
@@ -623,17 +621,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     stroke:currentColor;
     stroke-width:1.4;
     stroke-linecap:round;
-    transform-box:fill-box;
-    transform-origin:50% 50%;
-  }
-  .bird.flap path{
-    animation:birdFlap var(--flap-speed, 2.8s) cubic-bezier(.45,0,.4,1) infinite;
-  }
-  @keyframes birdFlap{
-    0%{ transform:scaleY(1); }
-    38%{ transform:scaleY(0.2); }
-    58%{ transform:scaleY(0.1); }
-    100%{ transform:scaleY(1); }
   }
 </style>
 </head>
@@ -686,9 +673,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   })();
 </script>
 <script>
-  (function(){
+  document.addEventListener('DOMContentLoaded', function(){
     var layer = document.querySelector('.birds-layer');
-    if(!layer) return;
+    var audio = document.getElementById('bgm');
+    if(!layer || !audio) return;
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) return;
 
@@ -697,11 +685,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         '<path d="M1 9 Q8 -2 17 6 Q26 -2 33 9"/>' +
       '</svg>';
 
-    var MAX_BIRDS = 3;
+    var MAX_BIRDS = 6;
     var active = 0;
+    var scheduled = null; // pending setTimeout id, so it can be cancelled on pause
 
     function spawnBird(){
-      if (active >= MAX_BIRDS){ scheduleNext(); return; }
+      if (active >= MAX_BIRDS){ return; }
       active++;
 
       var dir = Math.random() < 0.5 ? 1 : -1; // faces/travels left->right or right->left
@@ -709,7 +698,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var startLeftPct = 8 + Math.random() * 68; // where it first appears
       var topPct = 6 + Math.random() * 26; // stays in the upper sky band
       var duration = 12000 + Math.random() * 9000; // a short, unhurried drift, not a full crossing
-      var flap = (2.4 + Math.random() * 0.8).toFixed(2) + 's';
 
       // Travel only a modest distance while it recedes — a real bird
       // flying away shrinks toward a point, it doesn't slide off an edge.
@@ -717,11 +705,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var dyPx = -(window.innerHeight * (0.05 + Math.random() * 0.09)); // drifts gently upward
 
       var bird = document.createElement('div');
-      bird.className = 'bird flap';
+      bird.className = 'bird';
       bird.style.fontSize = size + 'px';
       bird.style.top = topPct + '%';
       bird.style.left = startLeftPct + '%';
-      bird.style.setProperty('--flap-speed', flap);
       bird.innerHTML = BIRD_SVG;
       layer.appendChild(bird);
 
@@ -733,11 +720,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         };
       }
 
+      // Fully visible (opaque, no fade-in) for the flight itself; it only
+      // turns transparent right at the end, as it shrinks away into the distance.
       var anim = bird.animate([
-        Object.assign(frame(0, 0.7, 0), { offset: 0 }),
-        Object.assign(frame(0.06, 0.95, 1), { offset: 0.06 }),
-        Object.assign(frame(0.5, 0.9, 1), { offset: 0.5 }),
-        Object.assign(frame(0.8, 0.45, 0.5), { offset: 0.8 }),
+        Object.assign(frame(0, 0.7, 1), { offset: 0 }),
+        Object.assign(frame(0.7, 0.85, 1), { offset: 0.7 }),
+        Object.assign(frame(0.88, 0.5, 0.6), { offset: 0.88 }),
         Object.assign(frame(1, 0.14, 0), { offset: 1 })
       ], { duration: duration, easing: 'ease-in', fill: 'forwards' });
 
@@ -748,21 +736,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     function scheduleNext(){
+      if (audio.paused) { scheduled = null; return; }
       // Random gaps, sometimes a lone bird, sometimes a loose pair shortly after.
-      var gap = 9000 + Math.random() * 22000;
-      setTimeout(function(){
+      var gap = 2500 + Math.random() * 6000;
+      scheduled = setTimeout(function(){
         spawnBird();
-        if (Math.random() < 0.35){
-          setTimeout(spawnBird, 1200 + Math.random() * 2600);
+        if (Math.random() < 0.4){
+          setTimeout(function(){ if(!audio.paused) spawnBird(); }, 1000 + Math.random() * 2200);
         }
         scheduleNext();
       }, gap);
     }
 
-    // First bird arrives after a short, randomized pause rather than immediately on load.
-    setTimeout(spawnBird, 3000 + Math.random() * 6000);
-    scheduleNext();
-  })();
+    function startFlock(){
+      if (scheduled !== null) return; // already running
+      setTimeout(function(){ if(!audio.paused) spawnBird(); }, 400 + Math.random() * 1200);
+      scheduleNext();
+    }
+
+    function stopFlock(){
+      if (scheduled !== null){ clearTimeout(scheduled); scheduled = null; }
+      // Birds already in flight finish and fade out naturally; only new spawning stops.
+    }
+
+    audio.addEventListener('play', startFlock);
+    audio.addEventListener('pause', stopFlock);
+    audio.addEventListener('ended', stopFlock);
+    if (!audio.paused) startFlock();
+  });
 </script>
 
 <section class="hero">
