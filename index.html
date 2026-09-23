@@ -190,14 +190,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     -webkit-mask-image:linear-gradient(to bottom, transparent 0%, transparent 56%, black 70%, black 100%);
             mask-image:linear-gradient(to bottom, transparent 0%, transparent 56%, black 70%, black 100%);
     transform-origin:50% 100%;
-    animation:treeSway 6s ease-in-out infinite;
+    animation:treeSway 4.5s ease-in-out infinite;
   }
   @keyframes treeSway{
-    0%{ transform:skewX(0deg) rotate(0deg); }
-    25%{ transform:skewX(0.4deg) rotate(0.18deg); }
-    50%{ transform:skewX(0deg) rotate(0deg); }
-    75%{ transform:skewX(-0.4deg) rotate(-0.16deg); }
-    100%{ transform:skewX(0deg) rotate(0deg); }
+    0%{ transform:skewX(0deg) rotate(0deg) scaleY(1); }
+    25%{ transform:skewX(2.6deg) rotate(1.1deg) scaleY(1.006); }
+    50%{ transform:skewX(0.4deg) rotate(0.15deg) scaleY(1); }
+    75%{ transform:skewX(-2.4deg) rotate(-1deg) scaleY(1.006); }
+    100%{ transform:skewX(0deg) rotate(0deg) scaleY(1); }
   }
   @media (prefers-reduced-motion: reduce){
     .scene-photo-trees{ animation:none; }
