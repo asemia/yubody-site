@@ -63,6 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     --accent:#6b7263;
     --accent-deep:#3f453d;
     --fog-boost:1;
+    --sway-mult:1;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -194,10 +195,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   @keyframes treeSway{
     0%{ transform:skewX(0deg) rotate(0deg) scaleY(1); }
-    25%{ transform:skewX(2.6deg) rotate(1.1deg) scaleY(1.006); }
-    50%{ transform:skewX(0.4deg) rotate(0.15deg) scaleY(1); }
-    75%{ transform:skewX(-2.4deg) rotate(-1deg) scaleY(1.006); }
+    25%{ transform:skewX(calc(2.6deg * var(--sway-mult, 1))) rotate(calc(1.1deg * var(--sway-mult, 1))) scaleY(1.006); }
+    50%{ transform:skewX(calc(0.4deg * var(--sway-mult, 1))) rotate(calc(0.15deg * var(--sway-mult, 1))) scaleY(1); }
+    75%{ transform:skewX(calc(-2.4deg * var(--sway-mult, 1))) rotate(calc(-1deg * var(--sway-mult, 1))) scaleY(1.006); }
     100%{ transform:skewX(0deg) rotate(0deg) scaleY(1); }
+  }
+  /* The skew angle is fixed in degrees, but a narrower phone screen makes
+     the same angle read as a much bigger swing relative to the viewport —
+     scale the amplitude down on small screens so it stays proportional. */
+  @media (max-width:600px){
+    :root{ --sway-mult:0.4; }
   }
   @media (prefers-reduced-motion: reduce){
     .scene-photo-trees{ animation:none; }
