@@ -583,13 +583,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .music-btn .icon-play{ transition:opacity .35s ease, transform .35s ease; }
   .music-btn .icon-pause{
     position:absolute;
-    inset:0;
+    top:50%;
+    left:50%;
     opacity:0;
-    transform:scale(0.7);
+    transform:translate(-50%,-50%) scale(0.7);
     transition:opacity .35s ease, transform .35s ease;
   }
   .music-btn.is-playing .icon-play{ opacity:0; transform:scale(0.7); }
-  .music-btn.is-playing .icon-pause{ opacity:1; transform:scale(1); }
+  .music-btn.is-playing .icon-pause{ opacity:1; transform:translate(-50%,-50%) scale(1); }
   @media (prefers-reduced-motion: reduce){
     .music-btn.is-playing .ripple{ animation:none; }
   }
