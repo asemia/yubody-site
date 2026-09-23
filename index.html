@@ -172,6 +172,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     object-position:50% 72%;
     filter:sepia(0.1) saturate(1) hue-rotate(18deg) brightness(1.18) contrast(0.96);
   }
+  /* Faux wind-sway on the treeline. The photo is flat (no separate tree
+     layer to animate), so this is a second, identical copy of the same
+     image, masked down to just the bottom band where the pine trees sit,
+     pivoted from its base and given a very small skew/rotate wobble. At
+     rest it sits pixel-perfect over the static photo beneath (same image,
+     same position), so there's no visible seam — only the tiny skew
+     reads, as if a breeze were passing through the treetops. */
+  .scene-photo-trees{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:50% 72%;
+    filter:sepia(0.1) saturate(1) hue-rotate(18deg) brightness(1.18) contrast(0.96);
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0%, transparent 56%, black 70%, black 100%);
+            mask-image:linear-gradient(to bottom, transparent 0%, transparent 56%, black 70%, black 100%);
+    transform-origin:50% 100%;
+    animation:treeSway 6s ease-in-out infinite;
+  }
+  @keyframes treeSway{
+    0%{ transform:skewX(0deg) rotate(0deg); }
+    25%{ transform:skewX(0.4deg) rotate(0.18deg); }
+    50%{ transform:skewX(0deg) rotate(0deg); }
+    75%{ transform:skewX(-0.4deg) rotate(-0.16deg); }
+    100%{ transform:skewX(0deg) rotate(0deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scene-photo-trees{ animation:none; }
+  }
+
   /* Tint + fade: a light warm-paper wash (not a green multiply) so the hero
      text and section seams stay legible without darkening the photo */
   .scene-tint{
@@ -538,6 +569,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="site-bg" aria-hidden="true">
   <img class="scene-photo" src="hero-mountains.jpg" alt="" width="988" height="1960" fetchpriority="high">
+  <img class="scene-photo-trees" src="hero-mountains.jpg" alt="" width="988" height="1960" aria-hidden="true">
   <div class="scene-tint"></div>
   <div class="fog-layer fog-1"></div>
   <div class="fog-layer fog-2"></div>
