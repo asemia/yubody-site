@@ -622,6 +622,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     stroke-width:1.4;
     stroke-linecap:round;
   }
+
+  /* A very light drizzle that only falls while the background music is
+     playing, fading in/out together with it. Kept deliberately faint —
+     thin, low-opacity streaks, modest count — so it reads as a soft
+     ambience rather than a storm. */
+  .rain-layer{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    z-index:3;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 1.4s ease;
+  }
+  .rain-layer.is-raining{ opacity:1; }
+  .raindrop{
+    position:absolute;
+    top:-8%;
+    width:1px;
+    height:16px;
+    background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.55) 55%, rgba(150,163,168,0) 100%);
+    transform:rotate(8deg);
+    animation-name:rainFall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes rainFall{
+    0%{ transform:translate(0,0) rotate(8deg); }
+    100%{ transform:translate(9vh,118vh) rotate(8deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rain-layer{ display:none; }
+  }
 </style>
 </head>
 <body>
@@ -647,6 +680,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="fog-layer fog-11"></div>
   <div class="fog-layer fog-12"></div>
   <div class="birds-layer"></div>
+  <div class="rain-layer"></div>
 </div>
 <script>
   (function(){
@@ -763,6 +797,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     audio.addEventListener('pause', stopFlock);
     audio.addEventListener('ended', stopFlock);
     if (!audio.paused) startFlock();
+
+    // A faint drizzle, built once and simply faded in/out with playback
+    // (no per-drop spawning needed — rain reads naturally as a continuous,
+    // even ambience rather than discrete random events like the birds).
+    var rainLayer = document.querySelector('.rain-layer');
+    if (rainLayer){
+      var DROP_COUNT = 46;
+      for (var i = 0; i < DROP_COUNT; i++){
+        var drop = document.createElement('div');
+        drop.className = 'raindrop';
+        drop.style.left = (Math.random() * 100) + '%';
+        drop.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
+        drop.style.animationDuration = (0.8 + Math.random() * 0.6).toFixed(2) + 's';
+        drop.style.animationDelay = (Math.random() * -2).toFixed(2) + 's';
+        rainLayer.appendChild(drop);
+      }
+      audio.addEventListener('play', function(){ rainLayer.classList.add('is-raining'); });
+      audio.addEventListener('pause', function(){ rainLayer.classList.remove('is-raining'); });
+      audio.addEventListener('ended', function(){ rainLayer.classList.remove('is-raining'); });
+      if (!audio.paused) rainLayer.classList.add('is-raining');
+    }
   });
 </script>
 
