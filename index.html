@@ -794,7 +794,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .sun-glow{
     position:absolute;
     z-index:4;
-    top:2%;
+    top:13%;
     left:4%;
     width:22vw;
     height:22vw;
@@ -820,11 +820,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .sun-glow.is-glowing{
     opacity:1;
-    animation:sunGlowPulse 13s ease-in-out infinite;
+    animation:sunGlowPulse 6s ease-in-out infinite;
   }
   @keyframes sunGlowPulse{
-    0%,100%{ opacity:0.9; transform:scale(1); }
-    50%{ opacity:1; transform:scale(1.08); }
+    0%,100%{ opacity:0.78; transform:scale(0.94); }
+    50%{ opacity:1; transform:scale(1.1); }
   }
   @media (prefers-reduced-motion: reduce){
     .sun-glow.is-glowing{ animation:none; opacity:0.9; }
