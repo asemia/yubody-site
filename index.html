@@ -680,7 +680,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     opacity:0;
     transition:opacity 1.4s ease;
   }
-  .rain-layer.is-raining{ opacity:1; }
+  /* Falls in intermittent passing showers rather than a continuous
+     downpour: a quiet gap, a shower ramps in, holds briefly, ramps back
+     out, then another quiet gap — repeating for as long as music plays. */
+  .rain-layer.is-raining{
+    animation:rainShowers 19s ease-in-out infinite;
+  }
+  @keyframes rainShowers{
+    0%{ opacity:0; }
+    10%{ opacity:0; }
+    26%{ opacity:1; }
+    58%{ opacity:1; }
+    76%{ opacity:0; }
+    100%{ opacity:0; }
+  }
   .rain-drops{
     position:absolute;
     inset:0;
@@ -722,7 +735,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     /* Keep it visible (a still sheet of streaks) rather than hiding it
        outright — only the falling/gust motion is what reduced-motion
        needs to turn off. */
-    .rain-layer.is-raining{ opacity:0.7; }
+    .rain-layer.is-raining{ animation:none; opacity:0.7; }
     .rain-layer.is-raining .rain-drops{ animation:none; }
     .raindrop{ animation:none; opacity:0.4 !important; }
   }
