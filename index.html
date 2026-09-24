@@ -568,7 +568,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     position:absolute;
     inset:0;
     border-radius:50%;
-    border:1px solid var(--accent-deep);
+    border:2px solid var(--accent-deep);
     opacity:0;
   }
   .music-btn.is-playing .ripple{
@@ -577,8 +577,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .music-btn.is-playing .ripple.r2{ animation-delay:0.9s; }
   .music-btn.is-playing .ripple.r3{ animation-delay:1.8s; }
   @keyframes musicRipple{
-    0%{ transform:scale(1); opacity:0.55; }
-    100%{ transform:scale(1.7); opacity:0; }
+    0%{ transform:scale(1); opacity:0.75; }
+    100%{ transform:scale(2); opacity:0; }
   }
 
   /* Idle "breathing" hint — while music is NOT playing, the button quietly
