@@ -564,31 +564,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     padding:0;
     box-shadow:0 4px 18px rgba(43,48,43,0.12);
   }
-  /* Rainbow halo — a colorful rotating glow behind the button so the hint
-     reads instantly even at a glance, independent of the subtler ripple/
-     pulse effects above. Sits behind the button's own background (z-index
-     -1) and bleeds out past its circular edge as a soft ring of color. */
-  .music-btn::before{
-    content:'';
-    position:absolute;
-    inset:-6px;
-    z-index:-1;
-    border-radius:50%;
-    background:conic-gradient(from 0deg,
-      #ef9c9c, #f0c48a, #eee08a, #96e0a0, #86dccf, #8fc4ec, #b6a2ee, #ec9fdd, #ef9c9c);
-    filter:blur(6px);
-    opacity:0.55;
-    animation:musicRainbowSpin 7s linear infinite;
-  }
-  .music-btn.is-playing::before{
-    opacity:0.7;
-    filter:blur(7px);
-    animation-duration:4s;
-  }
-  @keyframes musicRainbowSpin{ to{ transform:rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce){
-    .music-btn::before{ animation:none; opacity:0.45; }
-  }
   .music-btn .ripple{
     position:absolute;
     inset:0;
@@ -607,23 +582,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   /* Idle "breathing" hint — while music is NOT playing, the button quietly
-     pulses so it doesn't get overlooked. Slower and much fainter than the
-     playing-state ripples so it reads as a gentle invitation, not noise,
-     and it automatically stops the moment playback starts. */
+     pulses so it doesn't get overlooked. The pulse ring cycles through soft
+     pastel hues (a low-key rainbow) instead of a flat color, so the hint is
+     easy to notice without being loud. Drawn as the button's own box-shadow
+     (not a separate layer), so there's nothing else that can cover it up.
+     Automatically stops the moment playback starts. */
   .music-btn:not(.is-playing){
-    animation:musicIdlePulse 4.4s ease-in-out infinite;
+    animation:musicIdlePulse 9s linear infinite;
   }
   .music-btn:not(.is-playing) .ripple.r1{
     animation:musicIdleRipple 4.4s ease-in-out infinite;
   }
   @keyframes musicIdlePulse{
-    0%,100%{ box-shadow:0 4px 18px rgba(43,48,43,0.12); }
-    50%{ box-shadow:0 4px 22px rgba(63,69,61,0.32), 0 0 0 4px rgba(63,69,61,0.06); }
+    0%{   box-shadow:0 4px 18px rgba(43,48,43,0.12), 0 0 0 4px rgba(239,156,156,0.4); }
+    16%{  box-shadow:0 4px 20px rgba(43,48,43,0.14), 0 0 0 4px rgba(240,196,138,0.4); }
+    33%{  box-shadow:0 4px 20px rgba(43,48,43,0.14), 0 0 0 4px rgba(238,224,138,0.4); }
+    50%{  box-shadow:0 4px 20px rgba(43,48,43,0.14), 0 0 0 4px rgba(150,224,160,0.4); }
+    66%{  box-shadow:0 4px 20px rgba(43,48,43,0.14), 0 0 0 4px rgba(143,196,236,0.4); }
+    83%{  box-shadow:0 4px 20px rgba(43,48,43,0.14), 0 0 0 4px rgba(182,162,238,0.4); }
+    100%{ box-shadow:0 4px 18px rgba(43,48,43,0.12), 0 0 0 4px rgba(239,156,156,0.4); }
   }
   @keyframes musicIdleRipple{
     0%{ transform:scale(1); opacity:0; }
     45%{ opacity:0.4; }
     100%{ transform:scale(1.45); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .music-btn:not(.is-playing){
+      animation:none;
+      box-shadow:0 4px 18px rgba(43,48,43,0.12), 0 0 0 4px rgba(200,190,230,0.35);
+    }
   }
   .music-btn .icon{
     position:relative;
@@ -646,7 +634,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .music-btn.is-playing .icon-pause{ opacity:1; transform:translate(-50%,-50%) scale(1); }
   @media (prefers-reduced-motion: reduce){
     .music-btn.is-playing .ripple{ animation:none; }
-    .music-btn:not(.is-playing){ animation:none; }
     .music-btn:not(.is-playing) .ripple.r1{ animation:none; }
   }
 
