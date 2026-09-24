@@ -689,22 +689,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     animation:rainGust 9s ease-in-out infinite;
   }
   @keyframes rainGust{
-    0%{ opacity:0.45; transform:translateX(0); }
-    28%{ opacity:1; transform:translateX(10px); }
-    52%{ opacity:0.5; transform:translateX(-6px); }
-    78%{ opacity:0.85; transform:translateX(5px); }
-    100%{ opacity:0.45; transform:translateX(0); }
+    0%{ opacity:0.62; transform:translateX(0); }
+    28%{ opacity:1; transform:translateX(12px); }
+    52%{ opacity:0.68; transform:translateX(-7px); }
+    78%{ opacity:0.92; transform:translateX(6px); }
+    100%{ opacity:0.62; transform:translateX(0); }
   }
   .raindrop{
     position:absolute;
     top:-8%;
-    width:1px;
-    height:17px;
-    background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.55) 55%, rgba(150,163,168,0) 100%);
+    width:1.5px;
+    height:26px;
+    background:linear-gradient(to bottom, rgba(140,155,162,0) 0%, rgba(140,155,162,0.85) 50%, rgba(220,230,232,0.35) 85%, rgba(220,230,232,0) 100%);
     transform:rotate(18deg);
     animation-name:rainFall;
     animation-timing-function:linear;
     animation-iteration-count:infinite;
+  }
+  .raindrop.near{
+    width:2px;
+    height:34px;
   }
   @keyframes rainFall{
     0%{ transform:translate(0,0) rotate(18deg); }
@@ -948,13 +952,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var rainLayer = document.querySelector('.rain-layer');
     var rainDrops = rainLayer && rainLayer.querySelector('.rain-drops');
     if (rainLayer && rainDrops){
-      var DROP_COUNT = 46;
+      var DROP_COUNT = 78;
       for (var i = 0; i < DROP_COUNT; i++){
         var drop = document.createElement('div');
-        drop.className = 'raindrop';
+        // ~1 in 3 drops reads as "closer" — thicker, longer, faster, more
+        // opaque — mixed in with the thinner ones for a sense of depth
+        // instead of one flat, uniform sheet of rain.
+        var isNear = Math.random() < 0.32;
+        drop.className = isNear ? 'raindrop near' : 'raindrop';
         drop.style.left = (Math.random() * 100) + '%';
-        drop.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
-        drop.style.animationDuration = (0.8 + Math.random() * 0.6).toFixed(2) + 's';
+        drop.style.opacity = (isNear ? 0.65 + Math.random() * 0.3 : 0.45 + Math.random() * 0.4).toFixed(2);
+        drop.style.animationDuration = (isNear ? 0.55 + Math.random() * 0.35 : 0.8 + Math.random() * 0.6).toFixed(2) + 's';
         drop.style.animationDelay = (Math.random() * -2).toFixed(2) + 's';
         rainDrops.appendChild(drop);
       }
