@@ -8,6 +8,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-NTN4S23Z');</script>
 <!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) — base snippet Google Ads requires before the
+     event snippet below can call gtag(); wasn't on the page yet (only GTM
+     was), so it's added here alongside it. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18472576684"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18472576684');
+</script>
+
+<!-- Event snippet for 訂閱 conversion page -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18472576684/IJPOCM7L5oMdEKzNtOhE',
+      'value': 1.0,
+      'currency': 'TWD',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>木柵按摩推薦｜YU Body Studio 中式推拿・文山・貓空・政大周邊</title>
@@ -1304,7 +1334,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <img src="line-qr.png" alt="LINE QR code" width="260" height="260" loading="lazy">
     </div>
     <div class="line-id">@yubody.studio</div>
-    <a class="cta-btn en" href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener">ADD FRIEND · 加入好友</a>
+    <a class="cta-btn en" href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener" onclick="gtag_report_conversion();">ADD FRIEND · 加入好友</a>
     <div class="cta-sub">掃描 QR Code 或點擊上方按鈕，立即預約</div>
   </div>
 </section>
@@ -1333,12 +1363,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var btn = document.getElementById('musicBtn');
     var audio = document.getElementById('bgm');
     if(!btn || !audio) return;
+    // GA4 tracking via the existing Google Tag Manager container (GTM-NTN4S23Z
+    // loaded at the top of the page) — push a dataLayer event on every click,
+    // tagged with which action it was, so a GTM trigger can pick it up.
+    window.dataLayer = window.dataLayer || [];
     btn.addEventListener('click', function(){
       if(audio.paused){
         audio.play().then(function(){
           btn.classList.add('is-playing');
           btn.setAttribute('aria-pressed','true');
           btn.setAttribute('aria-label','暫停背景音樂');
+          window.dataLayer.push({ event: 'music_toggle', music_action: 'play' });
         }).catch(function(){
           // Autoplay/permission edge case — leave button in paused state.
         });
@@ -1347,6 +1382,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         btn.classList.remove('is-playing');
         btn.setAttribute('aria-pressed','false');
         btn.setAttribute('aria-label','播放背景音樂');
+        window.dataLayer.push({ event: 'music_toggle', music_action: 'pause' });
       }
     });
     // If playback stops for any other reason (e.g. the tab throttles
