@@ -580,6 +580,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     0%{ transform:scale(1); opacity:0.55; }
     100%{ transform:scale(1.7); opacity:0; }
   }
+
+  /* Idle "breathing" hint — while music is NOT playing, the button quietly
+     pulses so it doesn't get overlooked. Slower and much fainter than the
+     playing-state ripples so it reads as a gentle invitation, not noise,
+     and it automatically stops the moment playback starts. */
+  .music-btn:not(.is-playing){
+    animation:musicIdlePulse 4.4s ease-in-out infinite;
+  }
+  .music-btn:not(.is-playing) .ripple.r1{
+    animation:musicIdleRipple 4.4s ease-in-out infinite;
+  }
+  @keyframes musicIdlePulse{
+    0%,100%{ box-shadow:0 4px 18px rgba(43,48,43,0.12); }
+    50%{ box-shadow:0 4px 22px rgba(63,69,61,0.32), 0 0 0 4px rgba(63,69,61,0.06); }
+  }
+  @keyframes musicIdleRipple{
+    0%{ transform:scale(1); opacity:0; }
+    45%{ opacity:0.4; }
+    100%{ transform:scale(1.45); opacity:0; }
+  }
   .music-btn .icon{
     position:relative;
     z-index:1;
@@ -601,6 +621,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .music-btn.is-playing .icon-pause{ opacity:1; transform:translate(-50%,-50%) scale(1); }
   @media (prefers-reduced-motion: reduce){
     .music-btn.is-playing .ripple{ animation:none; }
+    .music-btn:not(.is-playing){ animation:none; }
+    .music-btn:not(.is-playing) .ripple.r1{ animation:none; }
   }
 
   /* Small bird silhouettes that appear only while the background music is
