@@ -793,7 +793,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      cloud, not a cartoon sunburst. */
   .sun-glow{
     position:absolute;
-    z-index:4;
+    /* Same stacking level as the fog/rainbow layers; DOM order (this sits
+       before .rainbow-layer) puts it above the fog but behind the
+       rainbow tint, so the rainbow reads as glowing in front of it. */
+    z-index:1;
     top:13%;
     left:4%;
     width:22vw;
@@ -808,10 +811,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        before falling off is what reads as an actual disc/circle shape,
        rather than just a diffuse haze with no defined edge. */
     background:radial-gradient(circle at 50% 50%,
-      rgba(255,255,255,1) 0%,
-      rgba(255,255,255,1) 55%,
-      rgba(255,255,252,0.85) 72%,
-      rgba(255,250,235,0.3) 88%,
+      rgba(255,255,255,0.8) 0%,
+      rgba(255,255,255,0.8) 55%,
+      rgba(255,255,252,0.65) 72%,
+      rgba(255,250,235,0.22) 88%,
       rgba(255,250,235,0) 100%);
     filter:blur(0.5px);
     pointer-events:none;
@@ -820,14 +823,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .sun-glow.is-glowing{
     opacity:1;
-    animation:sunGlowPulse 6s ease-in-out infinite;
-  }
-  @keyframes sunGlowPulse{
-    0%,100%{ opacity:0.78; transform:scale(0.94); }
-    50%{ opacity:1; transform:scale(1.1); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .sun-glow.is-glowing{ animation:none; opacity:0.9; }
   }
 
   /* Droplets that read as sitting on the screen/lens itself, rather than
