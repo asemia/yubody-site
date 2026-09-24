@@ -700,7 +700,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     top:-8%;
     width:1px;
     height:17px;
-    background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.4) 55%, rgba(150,163,168,0) 100%);
+    background:linear-gradient(to bottom, rgba(90,105,112,0) 0%, rgba(90,105,112,0.75) 55%, rgba(90,105,112,0) 100%);
     transform-origin:top;
     animation-name:rainFall;
     animation-timing-function:linear;
@@ -711,12 +711,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     animation-name:rainFallNear;
   }
   @keyframes rainFall{
-    0%{ transform:translate(0,0) rotate(14deg) scaleX(0.6); }
-    100%{ transform:translate(27vh,118vh) rotate(14deg) scaleX(0.6); }
+    0%{ transform:translate(0,0) rotate(14deg) scaleX(0.75); }
+    100%{ transform:translate(27vh,118vh) rotate(14deg) scaleX(0.75); }
   }
   @keyframes rainFallNear{
-    0%{ transform:translate(0,0) rotate(14deg) scaleX(0.85); }
-    100%{ transform:translate(27vh,118vh) rotate(14deg) scaleX(0.85); }
+    0%{ transform:translate(0,0) rotate(14deg) scaleX(1); }
+    100%{ transform:translate(27vh,118vh) rotate(14deg) scaleX(1); }
   }
   @media (prefers-reduced-motion: reduce){
     /* Keep it visible (a still sheet of streaks) rather than hiding it
@@ -794,19 +794,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .sun-glow{
     position:absolute;
     z-index:1;
-    top:4%;
-    right:6%;
-    width:42vw;
-    height:42vw;
-    max-width:380px;
-    max-height:380px;
+    top:2%;
+    left:4%;
+    width:46vw;
+    height:46vw;
+    max-width:420px;
+    max-height:420px;
     border-radius:50%;
-    background:radial-gradient(circle at 38% 36%,
-      rgba(255,250,225,0.6) 0%,
-      rgba(255,240,190,0.32) 28%,
-      rgba(255,232,170,0.14) 52%,
-      rgba(255,232,170,0) 74%);
-    filter:blur(4px);
+    /* Placed over the darker, more shadowed upper-left corner of the
+       scene (rather than the already-bright area on the right) so it
+       reads as a distinct patch of light instead of blending into the
+       photo's own highlights. */
+    background:radial-gradient(circle at 40% 38%,
+      rgba(255,244,205,0.85) 0%,
+      rgba(255,228,155,0.5) 26%,
+      rgba(255,214,130,0.24) 50%,
+      rgba(255,214,130,0) 72%);
+    filter:blur(2px);
     pointer-events:none;
     opacity:0;
     transition:opacity 2.4s ease;
@@ -816,8 +820,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     animation:sunGlowPulse 13s ease-in-out infinite;
   }
   @keyframes sunGlowPulse{
-    0%,100%{ opacity:0.85; transform:scale(1); }
-    50%{ opacity:1; transform:scale(1.06); }
+    0%,100%{ opacity:0.9; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.08); }
   }
   @media (prefers-reduced-motion: reduce){
     .sun-glow.is-glowing{ animation:none; opacity:0.9; }
@@ -1018,7 +1022,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var isNear = Math.random() < 0.25;
         drop.className = isNear ? 'raindrop near' : 'raindrop';
         drop.style.left = (Math.random() * 100) + '%';
-        drop.style.opacity = (isNear ? 0.4 + Math.random() * 0.25 : 0.22 + Math.random() * 0.28).toFixed(2);
+        drop.style.opacity = (isNear ? 0.65 + Math.random() * 0.25 : 0.45 + Math.random() * 0.3).toFixed(2);
         drop.style.animationDuration = (isNear ? 0.9 + Math.random() * 0.4 : 1.1 + Math.random() * 0.7).toFixed(2) + 's';
         drop.style.animationDelay = (Math.random() * -2).toFixed(2) + 's';
         rainDrops.appendChild(drop);
