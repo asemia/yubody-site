@@ -796,21 +796,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     z-index:4;
     top:2%;
     left:4%;
-    width:46vw;
-    height:46vw;
-    max-width:420px;
-    max-height:420px;
+    width:22vw;
+    height:22vw;
+    max-width:170px;
+    max-height:170px;
     border-radius:50%;
     /* Placed over the darker, more shadowed upper-left corner of the
        scene (rather than the already-bright area on the right) so it
        reads as a distinct patch of light instead of blending into the
-       photo's own highlights. */
-    background:radial-gradient(circle at 40% 38%,
+       photo's own highlights. A tight, solid-white core out to ~70%
+       before falling off is what reads as an actual disc/circle shape,
+       rather than just a diffuse haze with no defined edge. */
+    background:radial-gradient(circle at 50% 50%,
       rgba(255,255,255,1) 0%,
-      rgba(255,255,250,0.9) 22%,
-      rgba(255,252,235,0.5) 46%,
-      rgba(255,248,220,0) 74%);
-    filter:blur(1px);
+      rgba(255,255,255,1) 55%,
+      rgba(255,255,252,0.85) 72%,
+      rgba(255,250,235,0.3) 88%,
+      rgba(255,250,235,0) 100%);
+    filter:blur(0.5px);
     pointer-events:none;
     opacity:0;
     transition:opacity 2.4s ease;
