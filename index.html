@@ -575,19 +575,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     z-index:-1;
     border-radius:50%;
     background:conic-gradient(from 0deg,
-      #f3b8b8, #f3d8b0, #f0edb0, #bce8bc, #b3e6dd, #b6d9f0, #cdc0ee, #f0c3e2, #f3b8b8);
-    filter:blur(9px);
-    opacity:0.28;
+      #ef9c9c, #f0c48a, #eee08a, #96e0a0, #86dccf, #8fc4ec, #b6a2ee, #ec9fdd, #ef9c9c);
+    filter:blur(6px);
+    opacity:0.55;
     animation:musicRainbowSpin 7s linear infinite;
   }
   .music-btn.is-playing::before{
-    opacity:0.4;
-    filter:blur(10px);
+    opacity:0.7;
+    filter:blur(7px);
     animation-duration:4s;
   }
   @keyframes musicRainbowSpin{ to{ transform:rotate(360deg); } }
   @media (prefers-reduced-motion: reduce){
-    .music-btn::before{ animation:none; opacity:0.22; }
+    .music-btn::before{ animation:none; opacity:0.45; }
   }
   .music-btn .ripple{
     position:absolute;
