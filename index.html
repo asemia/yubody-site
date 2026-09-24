@@ -698,17 +698,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .raindrop{
     position:absolute;
     top:-8%;
-    width:0.75px;
-    height:19px;
-    background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.5) 55%, rgba(150,163,168,0) 100%);
+    width:0.5px;
+    height:17px;
+    background:linear-gradient(to bottom, rgba(150,163,168,0) 0%, rgba(150,163,168,0.45) 55%, rgba(150,163,168,0) 100%);
     transform:rotate(14deg);
     animation-name:rainFall;
     animation-timing-function:linear;
     animation-iteration-count:infinite;
   }
   .raindrop.near{
-    width:1px;
-    height:22px;
+    width:0.75px;
+    height:20px;
   }
   @keyframes rainFall{
     0%{ transform:translate(0,0) rotate(14deg); }
@@ -774,6 +774,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .rainbow-layer{ display:none; }
   }
 
+  /* A patch of warm sunlight breaking through, tucked in the upper sky —
+     appears together with the rainbow so there's a visible "light source"
+     for it (a sun-shower look: rain + a gap of sun = a rainbow makes
+     sense), rather than the rainbow tinting the sky for no reason. Kept
+     soft and off to one side so it reads as a glimpse of sun through
+     cloud, not a cartoon sunburst. */
+  .sun-glow{
+    position:absolute;
+    top:4%;
+    right:6%;
+    width:42vw;
+    height:42vw;
+    max-width:380px;
+    max-height:380px;
+    border-radius:50%;
+    background:radial-gradient(circle at 38% 36%,
+      rgba(255,250,225,0.6) 0%,
+      rgba(255,240,190,0.32) 28%,
+      rgba(255,232,170,0.14) 52%,
+      rgba(255,232,170,0) 74%);
+    filter:blur(4px);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 2.4s ease;
+  }
+  .sun-glow.is-glowing{
+    opacity:1;
+    animation:sunGlowPulse 13s ease-in-out infinite;
+  }
+  @keyframes sunGlowPulse{
+    0%,100%{ opacity:0.85; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.06); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sun-glow.is-glowing{ animation:none; opacity:0.9; }
+  }
+
   /* Droplets that read as sitting on the screen/lens itself, rather than
      falling within the scene — a highlight + shadow give each one volume,
      and it slowly trickles a short way down before fading, the way a real
@@ -823,6 +860,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="fog-layer fog-10"></div>
   <div class="fog-layer fog-11"></div>
   <div class="fog-layer fog-12"></div>
+  <div class="sun-glow"></div>
   <div class="rainbow-layer"><div class="rainbow-glow"></div></div>
   <div class="birds-layer"></div>
   <div class="rain-layer"><div class="rain-drops"></div></div>
@@ -972,13 +1010,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!audio.paused) rainLayer.classList.add('is-raining');
     }
 
-    // A faint rainbow sheen in the sky, also tied to playback.
+    // A faint rainbow sheen in the sky, also tied to playback — paired
+    // with a patch of warm sun-glow so the rainbow has a visible light
+    // source (a sun-shower look), rather than appearing for no reason.
     var rainbowLayer = document.querySelector('.rainbow-layer');
+    var sunGlow = document.querySelector('.sun-glow');
     if (rainbowLayer){
       audio.addEventListener('play', function(){ rainbowLayer.classList.add('is-glowing'); });
       audio.addEventListener('pause', function(){ rainbowLayer.classList.remove('is-glowing'); });
       audio.addEventListener('ended', function(){ rainbowLayer.classList.remove('is-glowing'); });
       if (!audio.paused) rainbowLayer.classList.add('is-glowing');
+    }
+    if (sunGlow){
+      audio.addEventListener('play', function(){ sunGlow.classList.add('is-glowing'); });
+      audio.addEventListener('pause', function(){ sunGlow.classList.remove('is-glowing'); });
+      audio.addEventListener('ended', function(){ sunGlow.classList.remove('is-glowing'); });
+      if (!audio.paused) sunGlow.classList.add('is-glowing');
     }
 
     // Droplets that look like they've landed on the screen/lens itself —
