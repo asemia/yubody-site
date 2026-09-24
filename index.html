@@ -797,12 +797,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        before .rainbow-layer) puts it above the fog but behind the
        rainbow tint, so the rainbow reads as glowing in front of it. */
     z-index:1;
-    top:13%;
-    left:4%;
-    width:22vw;
-    height:22vw;
-    max-width:170px;
-    max-height:170px;
+    top:18%;
+    left:12%;
+    width:15vw;
+    height:15vw;
+    max-width:110px;
+    max-height:110px;
+    /* Clamped with a min so it doesn't shrink to nearly nothing on very
+       narrow phones, while vw keeps it proportionate on wider screens. */
+    min-width:70px;
+    min-height:70px;
     border-radius:50%;
     /* Placed over the darker, more shadowed upper-left corner of the
        scene (rather than the already-bright area on the right) so it
