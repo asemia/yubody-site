@@ -41,8 +41,8 @@ function gtag_report_conversion(url) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>木柵按摩推薦｜YU Body Studio 中式推拿・木柵動物園・文山・貓空・政大周邊</title>
-<meta name="description" content="木柵按摩、木柵動物園按摩推薦 YU Body Studio — 國家證照男師，預約制中式推拿放鬆，一日僅接待兩位貴賓。鄰近木柵動物園、政大、文山區、景美。Muzha Zoo area, Taipei by-appointment Chinese-style relaxation massage.">
-<meta name="keywords" content="木柵按摩,木柵動物園按摩,動物園按摩推薦,台北市立動物園附近按摩,貓空按摩,文山按摩,政大按摩,推拿,按摩推薦,中式按摩,景美按摩,男師按摩,舒壓按摩">
+<meta name="description" content="木柵按摩、木柵動物園按摩推薦 YU Body Studio — 國家證照男師，預約制中式推拿，肩頸、腰背、腿部放鬆，一日僅接待兩位貴賓。鄰近木柵動物園、政大、文山區、景美。Muzha Zoo area, Taipei by-appointment Chinese-style relaxation massage.">
+<meta name="keywords" content="木柵按摩,木柵動物園按摩,動物園按摩推薦,台北市立動物園附近按摩,貓空按摩,文山按摩,政大按摩,推拿,按摩推薦,中式按摩,景美按摩,男師按摩,舒壓按摩,肩頸按摩,背部按摩,腰部按摩,腿部按摩,萬芳按摩,附近按摩">
 <link rel="canonical" href="https://yubody.tw/">
 
 <!-- 提前預載首屏最大的視覺元素（LCP 圖片），不等字型下載完成再開始抓取 -->
@@ -80,7 +80,7 @@ function gtag_report_conversion(url) {
   "description": "國家證照男師，預約制中式放鬆推拿，一日僅接待兩位貴賓。鄰近木柵動物園。",
   "telephone": "+886-937-453-603",
   "priceRange": "NT$800",
-  "areaServed": ["木柵", "木柵動物園", "貓空", "文山區", "景美", "政大", "台北市"],
+  "areaServed": ["木柵", "木柵動物園", "貓空", "文山區", "景美", "萬芳", "政大", "台北市"],
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "秀明路二段110號",
@@ -541,8 +541,35 @@ function gtag_report_conversion(url) {
     font-size:13px;
     letter-spacing:0.1em;
     transition:opacity .2s;
+    /* same breathing glow + sweeping sheen as the LINE button, same timing;
+       the button sits on a light background, so the glow is the dark
+       accent green and the sheen is bright white */
+    position:relative;
+    overflow:hidden;
+    animation:mapGlow 2.5s ease-in-out infinite;
+  }
+  .map-link::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0; left:0;
+    width:35%;
+    background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0) 100%);
+    transform:translateX(-150%) skewX(-18deg);
+    animation:ctaSheen 3.5s ease-in-out infinite;
+    pointer-events:none;
   }
   .map-link:hover{opacity:0.7;}
+  @keyframes mapGlow{
+    0%,100%{ box-shadow:0 0 0 0 rgba(63,69,61,0), 0 0 6px rgba(63,69,61,0.18); }
+    50%{     box-shadow:0 0 0 3px rgba(63,69,61,0.10), 0 0 20px rgba(63,69,61,0.40); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .map-link{
+      animation:none;
+      box-shadow:0 0 0 2px rgba(63,69,61,0.10), 0 0 12px rgba(63,69,61,0.30);
+    }
+    .map-link::after{ animation:none; opacity:0; }
+  }
   /* Directions button sits right under the title so people who just want
      to navigate don't have to read the route list first */
   .access-map{text-align:center; margin:-14px 0 26px;}
@@ -1366,7 +1393,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">中式按摩放鬆</h2>
     <div class="section-title-en">Chinese Style Relaxation</div>
     <p class="service-intro">
-      座落木柵、鄰近貓空與政大的 YU Body Studio，提供道地中式推拿放鬆按摩，運用傳統推拿手法緩解肌肉緊繃、舒緩久坐久站帶來的痠脹與僵硬感，幫助身體卸下一整天的疲憊。無論你是文山區在地居民、政大師生，或假日上貓空走走後想找個地方放鬆，都歡迎預約屬於自己的舒壓時光——如果你正在找木柵按摩推薦、文山推拿服務，這裡是你在地的放鬆選擇。
+      座落木柵、鄰近貓空與政大的 YU Body Studio，提供道地的中式推拿放鬆按摩。以傳統推拿手法放鬆身體，從肩頸、腰背到腿部，久坐久站最容易緊繃的地方都會一併照顧到，讓你好好卸下一整天的疲憊。無論你住在木柵、景美、萬芳一帶，是政大師生，或是逛完動物園、上貓空走走後想在附近找個地方休息，都歡迎預約屬於自己的舒壓時光——如果你正在找木柵按摩推薦、文山推拿，這裡就是你在地的放鬆選擇。
     </p>
     <div class="feature-list">
       <div class="feature-row">
@@ -1493,7 +1520,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">交通方式</h2>
     <div class="section-title-en">Getting Here</div>
     <div class="access-map">
-      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E5%8F%B0%E5%8C%97%E5%B8%82%E6%96%87%E5%B1%B1%E5%8D%80%E7%A7%80%E6%98%8E%E8%B7%AF%E4%BA%8C%E6%AE%B5110%E8%99%9F" target="_blank" rel="noopener">Google 地圖導航 · Directions</a>
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E5%8F%B0%E5%8C%97%E5%B8%82%E6%96%87%E5%B1%B1%E5%8D%80%E7%A7%80%E6%98%8E%E8%B7%AF%E4%BA%8C%E6%AE%B5110%E8%99%9F" target="_blank" rel="noopener">Google 地圖・規劃路線 · Directions</a>
     </div>
     <div class="transit">
       <div class="transit-row">
@@ -1522,8 +1549,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </svg>
         </div>
         <div>
-          <div class="transit-zh"><b>公車</b>　282、66、棕6、棕15、<span class="nw">羅斯福路幹線</span><br><span class="nw">「萬興國小」站下車，</span><span class="nw">步行約 2 分鐘</span></div>
-          <div class="transit-en">Bus 282, 66, Brown 6, Brown 15 or Roosevelt Rd. Main Line to Wanxing Elementary School stop, then a 2-min walk</div>
+          <div class="transit-zh"><b>公車</b>　282、66、棕6、棕15、<span class="nw">羅斯福路幹線（236）</span><br><span class="nw">「萬興國小」站下車，</span><span class="nw">步行約 2 分鐘</span></div>
+          <div class="transit-en">Bus 282, 66, Brown 6, Brown 15 or Roosevelt Rd. Main Line (236) to Wanxing Elementary School stop, then a 2-min walk</div>
         </div>
       </div>
       <div class="transit-row">
