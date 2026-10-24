@@ -1627,6 +1627,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   })();
 </script>
+<script>
+  (function(){
+    // GA4 key events line_click / phone_click (marked as key events in GA4
+    // property 555327222). The GA4 tag G-6EM0KHESDS is loaded by GTM, and
+    // gtag() events with send_to reach it directly (verified 2026-10-24).
+    // A separate listener on purpose: the LINE links' onclick
+    // gtag_report_conversion() (Google Ads) stays untouched.
+    var GA4 = 'G-6EM0KHESDS';
+    document.addEventListener('click', function(e){
+      var a = e.target.closest ? e.target.closest('a[href]') : null;
+      if(!a || typeof gtag !== 'function') return;
+      var href = a.getAttribute('href');
+      if(href.indexOf('line.me/') !== -1){
+        // Which LINE entry was used: QR code, the @ID, or the button
+        var cta = a.classList.contains('qr-box') ? 'qr' : (a.closest('.line-id') ? 'line_id' : 'button');
+        gtag('event', 'line_click', { send_to: GA4, cta: cta });
+      } else if(href.indexOf('tel:') === 0){
+        gtag('event', 'phone_click', { send_to: GA4 });
+      }
+    });
+  })();
+</script>
 
 </body>
 </html>
