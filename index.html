@@ -599,7 +599,7 @@ function gtag_report_conversion(url) {
        sweeps across every few seconds — draws the eye to LINE first */
     position:relative;
     overflow:hidden;
-    animation:ctaGlow 3.2s ease-in-out infinite;
+    animation:ctaGlow 1.8s ease-in-out infinite;
   }
   .cta-btn::after{
     content:"";
@@ -608,7 +608,7 @@ function gtag_report_conversion(url) {
     width:35%;
     background:linear-gradient(100deg, rgba(246,244,238,0) 0%, rgba(246,244,238,0.32) 50%, rgba(246,244,238,0) 100%);
     transform:translateX(-150%) skewX(-18deg);
-    animation:ctaSheen 5s ease-in-out infinite;
+    animation:ctaSheen 2.4s ease-in-out infinite;
     pointer-events:none;
   }
   .cta-btn:hover{opacity:0.7;}
@@ -620,7 +620,7 @@ function gtag_report_conversion(url) {
      base rule's transform entirely */
   @keyframes ctaSheen{
     0%{   transform:translateX(-150%) skewX(-18deg); }
-    45%{  transform:translateX(420%) skewX(-18deg); }
+    50%{  transform:translateX(420%) skewX(-18deg); }
     100%{ transform:translateX(420%) skewX(-18deg); }
   }
   @media (prefers-reduced-motion: reduce){
@@ -1469,7 +1469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <path d="M4 8.5v-2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 5v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a2.5 2.5 0 0 0 0-5Z"/>
           <path d="M14.5 6.5v11" stroke-dasharray="1.6 1.8"/>
         </svg>
-        加入好友，不定期發送優惠券
+        加入好友，獲得優惠券訊息
       </span>
     </a>
     <div class="cta-sub">掃描 QR Code 或點擊上方按鈕，立即預約</div>
