@@ -533,7 +533,6 @@ function gtag_report_conversion(url) {
   }
   .map-link{
     display:inline-block;
-    margin-top:24px;
     padding:11px 28px;
     border:1px solid var(--accent-deep);
     background:rgba(246,244,238,0.72);
@@ -544,7 +543,9 @@ function gtag_report_conversion(url) {
     transition:opacity .2s;
   }
   .map-link:hover{opacity:0.7;}
-  .access-map{text-align:center;}
+  /* Directions button sits right under the title so people who just want
+     to navigate don't have to read the route list first */
+  .access-map{text-align:center; margin:-14px 0 26px;}
 
   /* CTA */
   .cta{
@@ -1409,6 +1410,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <h2 class="section-title">交通方式</h2>
     <div class="section-title-en">Getting Here</div>
+    <div class="access-map">
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E5%8F%B0%E5%8C%97%E5%B8%82%E6%96%87%E5%B1%B1%E5%8D%80%E7%A7%80%E6%98%8E%E8%B7%AF%E4%BA%8C%E6%AE%B5110%E8%99%9F" target="_blank" rel="noopener">Google 地圖導航 · Directions</a>
+    </div>
     <div class="transit">
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
@@ -1477,9 +1481,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="transit-en">Parking available</div>
         </div>
       </div>
-    </div>
-    <div class="access-map">
-      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E5%8F%B0%E5%8C%97%E5%B8%82%E6%96%87%E5%B1%B1%E5%8D%80%E7%A7%80%E6%98%8E%E8%B7%AF%E4%BA%8C%E6%AE%B5110%E8%99%9F" target="_blank" rel="noopener">Google 地圖導航 · Directions</a>
     </div>
   </div>
 </section>
