@@ -414,8 +414,9 @@ function gtag_report_conversion(url) {
   .promo-perks li{padding:3px 0; font-size:15px; color:var(--ink);}
   .promo-perks .check{margin-right:5px; color:var(--accent-deep);}
   .promo-perks li .en{display:block; font-size:13px; letter-spacing:0.04em; color:var(--ink-soft);}
-  .promo-perks-note{margin-top:10px; font-size:13px; color:var(--ink-soft);}
-
+  .promo-off{margin-left:8px; font-size:14px; color:var(--accent-deep); font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .promo-perks-note{margin-top:12px; font-size:13px; letter-spacing:0.04em; color:var(--accent-deep);}
+  .promo-perks-note .en{display:block; margin-top:2px; font-size:12px; letter-spacing:0.08em; color:var(--ink-soft);}
   /* Credentials */
   .cred-list{
     max-width:480px;
@@ -740,9 +741,10 @@ function gtag_report_conversion(url) {
     cursor:pointer;
   }
   .sched-send:hover{opacity:0.85;}
+  .sched-send svg{width:18px; height:18px; flex:0 0 auto;}
   /* dove glides up and down; its pitch follows the direction of travel
      (nose up while rising, level at the top, nose down while descending) */
-  .sched-send svg{width:18px; height:18px; flex:0 0 auto; transform-origin:55% 55%; animation:schedFly 2s ease-in-out infinite;}
+  .sched-dove svg{transform-origin:55% 55%; animation:schedFly 2s ease-in-out infinite;}
   @keyframes schedFly{
     0%,100%{ transform:translateY(0) rotate(0); }
     25%{     transform:translateY(-3px) rotate(-8deg); }
@@ -769,11 +771,23 @@ function gtag_report_conversion(url) {
     100%{ transform:translateX(-16px); opacity:0; }
   }
   @media (prefers-reduced-motion: reduce){
-    .sched-send svg{animation:none;}
+    .sched-dove svg{animation:none;}
     .sched-dove i{animation:none; opacity:0.5;}
   }
   .sched-status{margin-top:8px; font-size:13px; text-align:center; color:var(--accent-deep);}
   .sched-status:empty{display:none;}
+  /* Desktop only: QR code of the phone's LINE link, so the message can be
+     sent from a phone (the copied text only helps LINE for PC users) */
+  .sched-qr{display:flex; align-items:center; gap:14px; margin-top:12px; padding:12px; border:1px dashed var(--line); background:var(--paper-soft);}
+  .sched-qr[hidden]{display:none;}
+  .sched-qr-code{flex:0 0 auto; padding:6px; background:#fff;}
+  .sched-qr-code img, .sched-qr-code canvas{display:block; width:128px; height:128px;}
+  .sched-qr-text{font-size:13px; line-height:1.7; color:var(--accent-deep);}
+  .sched-qr-text .en{display:block; font-size:12px; letter-spacing:0.04em; color:var(--ink-soft);}
+  .sched-qr-text .nw{white-space:nowrap;}
+  @media (max-width:520px){
+    .sched-qr{flex-direction:column; text-align:center;}
+  }
   .sched-empty{padding:24px 0; text-align:center; font-size:14px; color:var(--ink-soft);}
   .sched-more{
     display:block;
@@ -1675,11 +1689,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="promo-perks">
         <div class="promo-perks-title">另有專屬優惠<span class="en">Special Offers</span></div>
         <ul>
-          <li><span class="check">✓</span>壽星優惠<span class="en">Birthday</span></li>
-          <li><span class="check">✓</span>軍警醫護優惠<span class="en">Military, Police &amp; Medical</span></li>
-          <li><span class="check">✓</span>政大師生教職員優惠<span class="en">NCCU Students, Faculty &amp; Staff</span></li>
+          <li><span class="check">✓</span>當月壽星優惠<span class="promo-off">折 NT$100</span><span class="en">Birthday month</span></li>
+          <li><span class="check">✓</span>軍警醫護優惠<span class="promo-off">折 NT$100</span><span class="en">Military, Police &amp; Medical</span></li>
+          <li><span class="check">✓</span>政大師生教職員優惠<span class="promo-off">折 NT$100</span><span class="en">NCCU Students, Faculty &amp; Staff</span></li>
         </ul>
-        <div class="promo-perks-note">優惠內容歡迎 LINE 詢問</div>
+        <div class="promo-perks-note">可疊加使用<span class="en">NT$100 off each · stackable</span></div>
       </div>
     </div>
   </div>
@@ -2077,13 +2091,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // License - https://fontawesome.com/license/free (Icons: CC BY 4.0)
     var DOVE_ICON = '<svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M160.8 96.5c14 17 31 30.9 49.5 42.2c25.9 15.8 53.7 25.9 77.7 31.6V138.8C265.8 108.5 250 71.5 248.6 28c-.4-11.3-7.5-21.5-18.4-24.4c-7.6-2-15.8-.2-21 5.8c-13.3 15.4-32.7 44.6-48.4 87.2zM320 144v30.6l0 0v1.3l0 0 0 32.1c-60.8-5.1-185-43.8-219.3-157.2C97.4 40 87.9 32 76.6 32c-7.9 0-15.3 3.9-18.8 11C46.8 65.9 32 112.1 32 176c0 116.9 80.1 180.5 118.4 202.8L11.8 416.6C6.7 418 2.6 421.8 .9 426.8s-.8 10.6 2.3 14.8C21.7 466.2 77.3 512 160 512c3.6 0 7.2-1.2 10-3.5L245.6 448H320c88.4 0 160-71.6 160-160V128l29.9-44.9c1.3-2 2.1-4.4 2.1-6.8c0-6.8-5.5-12.3-12.3-12.3H400c-44.2 0-80 35.8-80 80zm80-16a16 16 0 1 1 0 32 16 16 0 1 1 0-32z"/></svg>';
     var DOVE_FLYING = '<span class="sched-dove" aria-hidden="true">' + DOVE_ICON + '<i></i><i></i><i></i></span>';
+    var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>';
     // Shown under the table and again right above the send button
     var CONFIRM = '<div class="sched-confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>選好時段不代表已保留，以 LINE 回覆確認為準</div>';
-    // The 「用 LINE 傳送預約」 button always copies the text. On phones it also
-    // opens the LINE chat with the text pre-filled (line.me/R/oaMessage —
-    // tested on iPhone and Android 2026-10-27). LINE for PC doesn't support
-    // that link and a desktop browser lands on LINE's home page, so desktops
-    // open the add-friend page (it shows the QR code) instead.
+    // Phones: 「用 LINE 傳送預約」 copies the text and opens the LINE chat with
+    // it pre-filled (line.me/R/oaMessage — tested on iPhone and Android
+    // 2026-10-27). LINE for PC doesn't support that link and a desktop
+    // browser lands on LINE's home page, so desktops get 「複製預約訊息」 (for
+    // LINE for PC) plus a QR code of the same link to finish on a phone.
     var isPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
       (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
     var model, sel = null, dayEls = [], axisStart, axisEnd;
@@ -2264,11 +2279,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       for(var t = sel.a; t + sel.d <= sel.b; t += 0.5) html += chip('s', t, clock(t), t === sel.s);
       html += '</div>' + CONFIRM;
       html += '<div class="sched-compose"><div class="sched-text"><span class="sched-text-cap">將傳送的訊息</span>' + shown + '</div>';
-      var href = isPhone ? 'https://line.me/R/oaMessage/' + LINE_OA + '/?' + encodeURIComponent(text) : 'https://line.me/ti/p/@291lycqc';
-      html += '<a class="sched-send" data-cta="schedule" href="' + href + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>';
+      var lineUrl = 'https://line.me/R/oaMessage/' + LINE_OA + '/?' + encodeURIComponent(text);
+      html += isPhone
+        ? '<a class="sched-send" data-cta="schedule" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>'
+        : '<button type="button" class="sched-send">' + COPY_ICON + '複製預約訊息</button>';
       html += '</div><div class="sched-status" role="status">' + sel.status + '</div>';
+      if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">或用手機掃描，</span><span class="nw">直接在 LINE 帶入這段訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to send it on LINE</span></span></div></div>';
       el.pick.innerHTML = html;
       el.pick.hidden = false;
+      if(!isPhone) drawQR(el.pick.querySelector('.sched-qr'), lineUrl);
       // fade in only when a bar is first opened, not on every chip tap
       el.pick.classList.toggle('is-new', sel.fresh);
       sel.fresh = false;
@@ -2292,13 +2311,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var statusEl = el.pick.querySelector('.sched-status');
         copy(text, function(ok){
           sel.status = ok
-            ? (isPhone ? '已複製預約文字。LINE 輸入框如果沒有出現文字，長按貼上就可以了' : '已複製預約文字。請用手機掃描 QR Code 加入好友，或在電腦版 LINE 開啟聊天室，貼上傳送')
+            ? (isPhone ? '已複製預約文字。LINE 輸入框如果沒有出現文字，長按貼上就可以了' : '已複製。請到電腦版 LINE 開啟 YU Body 的聊天室，貼上傳送')
             : '無法自動複製，請手動選取上方文字';
           statusEl.textContent = sel.status;
         });
-        // Opens LINE either way: same Ads conversion as the other LINE entries
+        // Phones open LINE: same Ads conversion as the other LINE entries
         // (line_click comes from the listener below via data-cta)
-        if(typeof gtag_report_conversion === 'function') gtag_report_conversion();
+        if(isPhone){ if(typeof gtag_report_conversion === 'function') gtag_report_conversion(); }
+        else if(typeof gtag === 'function') gtag('event', 'booking_copy', { send_to:GA4 });
+      });
+    }
+
+    // The QR library is loaded only when a desktop visitor first opens the
+    // picker
+    var QR_LIB = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    var qrWaiting = [];
+    function withQR(fn){
+      if(window.QRCode) return fn();
+      qrWaiting.push(fn);
+      if(qrWaiting.length > 1) return;
+      var s = document.createElement('script');
+      s.src = QR_LIB;
+      s.onload = function(){ var w = qrWaiting; qrWaiting = []; w.forEach(function(f){ f(); }); };
+      s.onerror = function(){ qrWaiting = []; };
+      document.head.appendChild(s);
+    }
+    function drawQR(box, url){
+      withQR(function(){
+        if(!box.isConnected) return;
+        var code = box.querySelector('.sched-qr-code');
+        new QRCode(code, { text:url, width:128, height:128, colorDark:'#2b302b', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.L });
+        code.removeAttribute('title');
+        box.hidden = false;
       });
     }
 
