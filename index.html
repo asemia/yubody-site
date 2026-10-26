@@ -2072,6 +2072,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
     }
 
+    // GA4 booking funnel: schedule_view (the table comes on screen, once per
+    // page) → booking_pick (a free window opened) → booking_line_send
+    // (phones) / booking_copy (desktops). The last two are key events in
+    // GA4; booking_hours / booking_part / booking_day are custom dimensions.
+    // Scanning the desktop QR code opens LINE directly, so it can't be seen.
+    function track(name, params){
+      if(typeof gtag !== 'function') return;
+      params = params || {};
+      params.send_to = GA4;
+      gtag('event', name, params);
+    }
+    if('IntersectionObserver' in window){
+      var viewIo = new IntersectionObserver(function(entries){
+        if(!entries[0].isIntersecting) return;
+        viewIo.disconnect();
+        track('schedule_view');
+      }, { rootMargin:'0px 0px -30% 0px' });
+      viewIo.observe(section);
+    }
+
     var headEl = document.getElementById('schedHead');
     var rowsEl = document.getElementById('schedRows');
     var moreBtn = document.getElementById('schedMore');
@@ -2139,7 +2159,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if(b - a >= min) ws.push([a, b]);
         });
         var dt = new Date(date + 'T00:00:00Z');
-        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ws:ws });
+        // ahead: days from today, for GA4's booking_day
+        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ahead:Math.round((dt - new Date(today + 'T00:00:00Z')) / 86400000), ws:ws });
       });
       return { segs:segs, days:days, min:min, max:json.max || 3, nowH:nowH };
     }
@@ -2241,6 +2262,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var w = model.days[i].ws[j];
       sel = { i:i, j:j, a:w[0], b:w[1], d:model.min, s:w[0], status:'', fresh:true };
       renderPick();
+      track('booking_pick', { booking_part:segName(w[0]), booking_day:model.days[i].ahead });
     }
 
     function chip(key, value, label, on){
@@ -2281,7 +2303,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       html += '<div class="sched-compose"><div class="sched-text"><span class="sched-text-cap">將傳送的訊息</span>' + shown + '</div>';
       var lineUrl = 'https://line.me/R/oaMessage/' + LINE_OA + '/?' + encodeURIComponent(text);
       html += isPhone
-        ? '<a class="sched-send" data-cta="schedule" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>'
+        ? '<a class="sched-send" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>'
         : '<button type="button" class="sched-send">' + COPY_ICON + '複製預約訊息</button>';
       html += '</div><div class="sched-status" role="status">' + sel.status + '</div>';
       if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">或用手機掃描，</span><span class="nw">直接在 LINE 帶入這段訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to send it on LINE</span></span></div></div>';
@@ -2315,10 +2337,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             : '無法自動複製，請手動選取上方文字';
           statusEl.textContent = sel.status;
         });
-        // Phones open LINE: same Ads conversion as the other LINE entries
-        // (line_click comes from the listener below via data-cta)
-        if(isPhone){ if(typeof gtag_report_conversion === 'function') gtag_report_conversion(); }
-        else if(typeof gtag === 'function') gtag('event', 'booking_copy', { send_to:GA4 });
+        // Phones open LINE: same Ads conversion as the other LINE entries.
+        // GA4 gets its own booking event, not line_click (the listener below
+        // skips this link), so add-friend clicks and bookings stay apart.
+        var params = { booking_hours:sel.d, booking_part:segName(sel.s), booking_day:day.ahead };
+        if(isPhone){
+          if(typeof gtag_report_conversion === 'function') gtag_report_conversion();
+          track('booking_line_send', params);
+        } else {
+          track('booking_copy', params);
+        }
       });
     }
 
@@ -2434,9 +2462,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var a = e.target.closest ? e.target.closest('a[href]') : null;
       if(!a || typeof gtag !== 'function') return;
       var href = a.getAttribute('href');
+      // The schedule's send button reports booking_line_send itself
+      if(a.classList.contains('sched-send')) return;
       if(href.indexOf('line.me/') !== -1){
         // Which LINE entry was used: QR code, the @ID, the button, or a
-        // link that names itself with data-cta (the schedule's send button)
+        // link that names itself with data-cta
         var cta = a.getAttribute('data-cta') || (a.classList.contains('qr-box') ? 'qr' : (a.closest('.line-id') ? 'line_id' : 'button'));
         gtag('event', 'line_click', { send_to: GA4, cta: cta });
       } else if(href.indexOf('tel:') === 0){
