@@ -574,6 +574,118 @@ function gtag_report_conversion(url) {
      to navigate don't have to read the route list first */
   .access-map{text-align:center; margin:-14px 0 26px;}
 
+  /* Availability — one row per day, bars over a 上午／下午／晚上 time axis.
+     Data comes from the Apps Script endpoint (SCHEDULE_API below); tapping a
+     bar opens a picker that builds the booking text for LINE. */
+  .sched{
+    max-width:640px;
+    margin:0 auto;
+    background:rgba(246,244,238,0.94);
+    border:1px solid var(--line);
+    padding:22px 18px 18px;
+  }
+  .sched-hint{text-align:center; font-size:14px; color:var(--ink-soft); margin-bottom:16px;}
+  .sched-hint .en{display:block; font-size:13px; letter-spacing:0.04em;}
+  .sched-row{display:grid; grid-template-columns:52px minmax(0,1fr); column-gap:8px; align-items:center;}
+  .sched-head{padding-bottom:4px;}
+  .sched-head-label{font-size:12px; color:var(--ink-soft);}
+  .sched-track{position:relative; height:42px;}
+  .sched-head .sched-track{height:36px;}
+  .sched-seg{position:absolute; top:0; text-align:center; font-size:13px; letter-spacing:0.1em;}
+  .sched-tick{position:absolute; bottom:0; font-size:11px; line-height:1.2; color:var(--ink-soft);}
+  .sched-day{border-top:1px solid var(--line);}
+  .sched-date{font-size:14px; line-height:1.3; font-variant-numeric:tabular-nums;}
+  .sched-date small{display:block; font-size:11px; color:var(--ink-soft);}
+  .sched-div{position:absolute; top:0; bottom:0; border-left:1px dashed rgba(91,97,87,0.35);}
+  .sched-bar{
+    position:absolute;
+    top:6px; bottom:6px;
+    padding:0;
+    background:rgba(107,114,99,0.16);
+    border:1px solid var(--accent);
+    border-radius:6px;
+    color:var(--accent-deep);
+    font-family:inherit;
+    font-size:11px;
+    line-height:1.15;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    cursor:pointer;
+  }
+  .sched-bar.is-on{border:2px solid var(--accent-deep); color:transparent;}
+  .sched-sel{
+    position:absolute;
+    top:6px; bottom:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--accent-deep);
+    border-radius:6px;
+    color:var(--paper-soft);
+    font-size:11px;
+    line-height:1.15;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    text-align:center;
+    pointer-events:none;
+  }
+  .sched-out{position:absolute; top:50%; transform:translateY(-50%); font-size:11px; color:var(--accent-deep); white-space:nowrap; font-variant-numeric:tabular-nums; cursor:pointer;}
+  .sched-full{position:absolute; top:0; bottom:0; left:0; right:0; display:flex; align-items:center; justify-content:center; font-size:12px; letter-spacing:0.1em; color:var(--ink-soft);}
+  .sched-pick{margin:0 0 12px; padding:14px; border:1px solid var(--accent); background:var(--paper-soft); font-size:14px;}
+  .sched-pick-title{font-weight:500;}
+  .sched-pick-title .nw{white-space:nowrap;}
+  .sched-label{margin:10px 0 6px; font-size:12px; color:var(--ink-soft);}
+  .sched-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .sched-chip{
+    padding:4px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:transparent;
+    color:var(--ink);
+    font-family:inherit;
+    font-size:13px;
+    font-variant-numeric:tabular-nums;
+    cursor:pointer;
+  }
+  .sched-chip.is-on{background:var(--accent-deep); border-color:var(--accent-deep); color:var(--paper-soft);}
+  .sched-text{margin:14px 0 12px; padding:10px 12px; background:rgba(107,114,99,0.10); white-space:pre-line; font-size:13px; line-height:1.7;}
+  .sched-send{
+    display:block;
+    width:100%;
+    padding:12px;
+    border:0;
+    background:var(--accent-deep);
+    color:var(--paper-soft);
+    font-family:inherit;
+    font-size:15px;
+    letter-spacing:0.08em;
+    text-align:center;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .sched-send:hover{opacity:0.85;}
+  .sched-status{margin-top:8px; font-size:13px; text-align:center; color:var(--accent-deep);}
+  .sched-status:empty{display:none;}
+  .sched-empty{padding:24px 0; text-align:center; font-size:14px; color:var(--ink-soft);}
+  .sched-more{
+    display:block;
+    margin:14px auto 0;
+    padding:6px 18px;
+    border:1px solid var(--accent);
+    background:transparent;
+    color:var(--accent-deep);
+    font-family:inherit;
+    font-size:13px;
+    letter-spacing:0.08em;
+    cursor:pointer;
+  }
+  .sched-more[hidden]{display:none;}
+  .sched-note{margin-top:16px; font-size:12px; line-height:1.7; color:var(--ink-soft);}
+  @media (max-width:520px){
+    .sched{margin:0 -8px; padding:18px 12px 14px;}
+    .sched-row{grid-template-columns:44px minmax(0,1fr); column-gap:6px;}
+  }
+
   /* CTA */
   .cta{
     background:rgba(63,69,61,0.88);
@@ -1489,6 +1601,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<section id="schedule" hidden>
+  <div class="wrap">
+    <h2 class="section-title">可預約時段</h2>
+    <div class="section-title-en">Availability</div>
+    <div class="sched">
+      <p class="sched-hint">點選時段長條，選擇想預約的時間<span class="en">Tap a time bar to choose your booking</span></p>
+      <div class="sched-row sched-head">
+        <div class="sched-head-label">日期</div>
+        <div class="sched-track" id="schedHead"></div>
+      </div>
+      <div id="schedRows"></div>
+      <button type="button" class="sched-more" id="schedMore" hidden>看後 7 天</button>
+      <p class="sched-note" id="schedNote"></p>
+    </div>
+  </div>
+</section>
+
 <section class="cta" id="contact">
   <div class="wrap">
     <h2 class="cta-title">加入 LINE 好友預約</h2>
@@ -1656,6 +1785,300 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 <script>
   (function(){
+    // 可預約時段. SCHEDULE_API is the Apps Script web app that reads the
+    // booking sheet and returns only the free time windows (never calendar
+    // notes or booking records). Its source lives in the local project
+    // folder, not in this public repo. Empty URL = the section stays hidden.
+    // Link straight to it with https://yubody.tw/#schedule
+    var SCHEDULE_API = 'https://script.google.com/macros/s/AKfycbzuOJGY4r1Mmx3-QydkZNaje6O3yPb3SBRap5w7fGYuMggtPtUZ9lsP8ab-vzCHAv-F/exec';
+    var LINE_OA = '%40291lycqc';
+    var GA4 = 'G-6EM0KHESDS';
+    var section = document.getElementById('schedule');
+    if(!section || !SCHEDULE_API) return;
+    section.hidden = false;
+
+    var headEl = document.getElementById('schedHead');
+    var rowsEl = document.getElementById('schedRows');
+    var moreBtn = document.getElementById('schedMore');
+    var noteEl = document.getElementById('schedNote');
+    var WEEK = '日一二三四五六';
+    var SHOW_DAYS = 7;
+    // Phones get one button that copies the text and opens the LINE chat with
+    // it pre-filled (line.me/R/oaMessage — tested on iPhone and Android
+    // 2026-10-27). LINE for PC doesn't support that link and a desktop browser
+    // lands on LINE's home page, so desktops get a copy button instead.
+    var isPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+    var model, sel = null, dayEls = [], axisStart, axisEnd;
+
+    function hours(t){ var p = String(t).split(':'); return +p[0] + (+p[1] || 0) / 60; }
+    // 8:00, 12:00; past midnight 24:30 shows as 00:30
+    function clock(h){ var hh = Math.floor(h) % 24; return (hh === 0 ? '00' : hh) + ':' + (h % 1 ? '30' : '00'); }
+    function pct(h){ return (h - axisStart) / (axisEnd - axisStart) * 100; }
+    function each(list, fn){ Array.prototype.forEach.call(list, fn); }
+    function segName(h){
+      for(var i = 0; i < model.segs.length; i++) if(h >= model.segs[i].a && h < model.segs[i].b) return model.segs[i].name;
+      return '';
+    }
+
+    function prepare(json){
+      // Taiwan time, whatever the visitor's device timezone is
+      var tw = new Date(Date.now() + 8 * 3600000);
+      var today = tw.toISOString().slice(0, 10);
+      var nowH = tw.getUTCHours() + tw.getUTCMinutes() / 60;
+      var min = json.min || 1;
+      var segs = json.segments.map(function(s){
+        var a = hours(s[1]), b = hours(s[2]);
+        while(b <= a) b += 24;
+        return { name:s[0], a:a, b:b };
+      });
+      var days = [];
+      json.days.forEach(function(d){
+        var date = String(d.date).replace(/\//g, '-');
+        if(date < today) return;
+        var ws = [];
+        d.windows.forEach(function(w){
+          var a = hours(w[0]), b = hours(w[1]);
+          // past midnight may come as 00:30 instead of 24:30
+          if(a < segs[0].a) a += 24;
+          while(b <= a) b += 24;
+          // today: drop the hours that have already passed
+          if(date === today) a = Math.max(a, Math.ceil(nowH * 2) / 2);
+          if(b - a >= min) ws.push([a, b]);
+        });
+        var dt = new Date(date + 'T00:00:00Z');
+        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ws:ws });
+      });
+      return { segs:segs, days:days, min:min, max:json.max || 3 };
+    }
+
+    function renderHead(){
+      var html = '';
+      var ticks = model.segs.map(function(s){ return s.a; });
+      if(axisEnd > 24) ticks.push(24);
+      model.segs.forEach(function(s){
+        html += '<div class="sched-seg" style="left:' + pct(s.a) + '%;width:' + (pct(s.b) - pct(s.a)) + '%">' + s.name + '</div>';
+      });
+      ticks.forEach(function(h, i){
+        html += '<div class="sched-tick" style="left:' + pct(h) + '%;transform:translateX(' + (i ? '-50%' : '0') + ')">' + Math.floor(h) + '</div>';
+      });
+      headEl.innerHTML = html;
+    }
+
+    function renderDays(){
+      rowsEl.innerHTML = '';
+      dayEls = [];
+      model.days.forEach(function(d, i){
+        var day = document.createElement('div');
+        day.className = 'sched-day';
+        day.hidden = i >= SHOW_DAYS;
+        var row = document.createElement('div');
+        row.className = 'sched-row';
+        row.innerHTML = '<div class="sched-date">' + d.md + '<small>' + (d.today ? '今天' : '週' + d.wd) + '</small></div>';
+        var track = document.createElement('div');
+        track.className = 'sched-track';
+        model.segs.slice(1).forEach(function(s){
+          var v = document.createElement('div');
+          v.className = 'sched-div';
+          v.style.left = pct(s.a) + '%';
+          track.appendChild(v);
+        });
+        if(!d.ws.length) track.insertAdjacentHTML('beforeend', '<div class="sched-full">暫無空檔</div>');
+        var bars = d.ws.map(function(w, j){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'sched-bar';
+          b.style.left = 'calc(' + pct(w[0]) + '% + 1px)';
+          b.style.width = 'calc(' + (pct(w[1]) - pct(w[0])) + '% - 2px)';
+          b.setAttribute('aria-label', d.md + ' ' + segName(w[0]) + ' ' + clock(w[0]) + ' 到 ' + clock(w[1]) + ' 可預約');
+          b.setAttribute('aria-expanded', 'false');
+          b.addEventListener('click', function(){ pick(i, j); });
+          track.appendChild(b);
+          return b;
+        });
+        row.appendChild(track);
+        var pickEl = document.createElement('div');
+        pickEl.className = 'sched-pick';
+        pickEl.hidden = true;
+        day.appendChild(row);
+        day.appendChild(pickEl);
+        rowsEl.appendChild(day);
+        dayEls.push({ el:day, track:track, pick:pickEl, bars:bars, ws:d.ws });
+      });
+      moreBtn.hidden = model.days.length <= SHOW_DAYS;
+      fitLabels();
+    }
+
+    // Time text goes inside the bar on one line, else on two lines, else
+    // next to the bar where there's empty room (short bars on phones). With
+    // no room either side it stays inside on two lines and may spill a little.
+    function fitLabels(){
+      dayEls.forEach(function(d){
+        if(d.el.hidden) return;
+        each(d.track.querySelectorAll('.sched-out'), function(o){ o.parentNode.removeChild(o); });
+        var trackW = d.track.clientWidth;
+        function px(h){ return pct(h) / 100 * trackW; }
+        d.bars.forEach(function(b, j){
+          var w = d.ws[j], t = clock(w[0]) + '–' + clock(w[1]), two = clock(w[0]) + '<br>' + clock(w[1]);
+          b.textContent = t;
+          if(b.scrollWidth <= b.clientWidth) return;
+          b.innerHTML = two;
+          if(b.scrollWidth <= b.clientWidth) return;
+          var o = document.createElement('span');
+          o.className = 'sched-out';
+          o.textContent = t;
+          o.setAttribute('aria-hidden', 'true');
+          d.track.appendChild(o);
+          var roomR = (j < d.ws.length - 1 ? px(d.ws[j + 1][0]) : trackW) - px(w[1]) - 6;
+          var roomL = px(w[0]) - (j ? px(d.ws[j - 1][1]) : 0) - 6;
+          if(o.offsetWidth <= roomR) o.style.left = 'calc(' + pct(w[1]) + '% + 4px)';
+          else if(o.offsetWidth <= roomL) o.style.right = 'calc(' + (100 - pct(w[0])) + '% + 4px)';
+          else { d.track.removeChild(o); return; }
+          b.textContent = '';
+          o.addEventListener('click', function(){ b.click(); });
+        });
+      });
+    }
+
+    function pick(i, j){
+      var w = model.days[i].ws[j];
+      sel = { i:i, j:j, a:w[0], b:w[1], d:model.min, s:w[0], status:'' };
+      renderPick();
+    }
+
+    function chip(key, value, label, on){
+      return '<button type="button" class="sched-chip' + (on ? ' is-on' : '') + '" data-' + key + '="' + value + '" aria-pressed="' + on + '">' + label + '</button>';
+    }
+
+    function renderPick(){
+      dayEls.forEach(function(d){
+        d.pick.hidden = true;
+        d.pick.innerHTML = '';
+        each(d.track.querySelectorAll('.sched-sel'), function(x){ x.parentNode.removeChild(x); });
+        d.bars.forEach(function(b){ b.classList.remove('is-on'); b.setAttribute('aria-expanded', 'false'); });
+      });
+      if(!sel) return;
+      var day = model.days[sel.i], el = dayEls[sel.i], bar = el.bars[sel.j];
+      bar.classList.add('is-on');
+      bar.setAttribute('aria-expanded', 'true');
+      var hl = document.createElement('div');
+      hl.className = 'sched-sel';
+      hl.style.left = 'calc(' + pct(sel.s) + '% + 1px)';
+      hl.style.width = 'calc(' + (pct(sel.s + sel.d) - pct(sel.s)) + '% - 2px)';
+      el.track.appendChild(hl);
+      // Chosen time on the dark block if it fits; the text below has it anyway
+      hl.textContent = clock(sel.s) + '–' + clock(sel.s + sel.d);
+      if(hl.scrollWidth > hl.clientWidth) hl.innerHTML = clock(sel.s) + '<br>' + clock(sel.s + sel.d);
+      if(hl.scrollWidth > hl.clientWidth) hl.textContent = '';
+
+      var text = '你好，我想預約按摩\n日期：' + day.md + '（' + day.wd + '）\n時間：' + clock(sel.s) + '–' + clock(sel.s + sel.d) + '（' + sel.d + ' 小時）';
+      var html = '<div class="sched-pick-title">' + day.md + '（' + day.wd + '）' + segName(sel.a) + '・<span class="nw">可預約 ' + clock(sel.a) + '–' + clock(sel.b) + '</span></div>';
+      html += '<div class="sched-label">時長</div><div class="sched-chips">';
+      for(var h = model.min; h <= model.max && h <= sel.b - sel.a; h++) html += chip('d', h, h + ' 小時', h === sel.d);
+      html += '</div><div class="sched-label">開始時間</div><div class="sched-chips">';
+      for(var t = sel.a; t + sel.d <= sel.b; t += 0.5) html += chip('s', t, clock(t), t === sel.s);
+      html += '</div><div class="sched-text">' + text + '</div>';
+      html += isPhone
+        ? '<a class="sched-send" data-cta="schedule" href="https://line.me/R/oaMessage/' + LINE_OA + '/?' + encodeURIComponent(text) + '" target="_blank" rel="noopener">用 LINE 傳送預約</a>'
+        : '<button type="button" class="sched-send">複製預約文字</button>';
+      html += '<div class="sched-status" role="status">' + sel.status + '</div>';
+      el.pick.innerHTML = html;
+      el.pick.hidden = false;
+
+      each(el.pick.querySelectorAll('[data-d]'), function(c){
+        c.addEventListener('click', function(){
+          sel.d = +c.getAttribute('data-d');
+          if(sel.s + sel.d > sel.b) sel.s = sel.b - sel.d;
+          sel.status = '';
+          renderPick();
+        });
+      });
+      each(el.pick.querySelectorAll('[data-s]'), function(c){
+        c.addEventListener('click', function(){
+          sel.s = +c.getAttribute('data-s');
+          sel.status = '';
+          renderPick();
+        });
+      });
+      el.pick.querySelector('.sched-send').addEventListener('click', function(){
+        var statusEl = el.pick.querySelector('.sched-status');
+        copy(text, function(ok){
+          sel.status = ok
+            ? (isPhone ? '已複製預約文字。LINE 輸入框如果沒有出現文字，長按貼上就可以了' : '已複製。請用手機掃描下方 QR Code 加入好友，再把文字貼上傳給我')
+            : '無法自動複製，請手動選取上方文字';
+          statusEl.textContent = sel.status;
+        });
+        // Phone: the link opens LINE, same Ads conversion as the other LINE
+        // entries (line_click comes from the listener below via data-cta)
+        if(isPhone){ if(typeof gtag_report_conversion === 'function') gtag_report_conversion(); }
+        else if(typeof gtag === 'function') gtag('event', 'booking_copy', { send_to:GA4, hours:sel.d });
+      });
+    }
+
+    function copy(text, done){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(legacyCopy(text)); });
+      } else {
+        done(legacyCopy(text));
+      }
+    }
+    function legacyCopy(text){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try{ ok = document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    moreBtn.addEventListener('click', function(){
+      dayEls.forEach(function(d){ d.el.hidden = false; });
+      moreBtn.hidden = true;
+      fitLabels();
+    });
+    var lastWidth = window.innerWidth;
+    window.addEventListener('resize', function(){
+      if(!model || window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      fitLabels();
+    });
+
+    var settled = false;
+    function fail(){
+      if(settled) return;
+      settled = true;
+      rowsEl.innerHTML = '<div class="sched-empty">目前無法載入時段，請直接透過 LINE 詢問</div>';
+    }
+    rowsEl.innerHTML = '<div class="sched-empty">時段載入中…</div>';
+    if(!window.fetch){ fail(); return; }
+    setTimeout(fail, 12000);
+    fetch(SCHEDULE_API).then(function(r){
+      if(!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(function(json){
+      if(settled) return;
+      settled = true;
+      model = prepare(json);
+      axisStart = model.segs[0].a;
+      axisEnd = model.segs[model.segs.length - 1].b;
+      noteEl.innerHTML = '每次 ' + model.min + '–' + model.max + ' 小時。選好時段不代表已保留，以 LINE 回覆確認為準。' +
+        (json.updated ? '<br>更新時間 ' + String(json.updated).slice(5).replace('-', '/') : '');
+      if(!model.days.length){ rowsEl.innerHTML = '<div class="sched-empty">目前沒有開放的時段，請直接透過 LINE 詢問</div>'; return; }
+      renderHead();
+      renderDays();
+      // The section is only drawn after the data arrives, so a shared
+      // yubody.tw/#schedule link has to be scrolled to here
+      if(location.hash === '#schedule') section.scrollIntoView();
+    }).catch(fail);
+  })();
+</script>
+<script>
+  (function(){
     // GA4 key events line_click / phone_click (marked as key events in GA4
     // property 555327222). The GA4 tag G-6EM0KHESDS is loaded by GTM, and
     // gtag() events with send_to reach it directly (verified 2026-10-24).
@@ -1667,8 +2090,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if(!a || typeof gtag !== 'function') return;
       var href = a.getAttribute('href');
       if(href.indexOf('line.me/') !== -1){
-        // Which LINE entry was used: QR code, the @ID, or the button
-        var cta = a.classList.contains('qr-box') ? 'qr' : (a.closest('.line-id') ? 'line_id' : 'button');
+        // Which LINE entry was used: QR code, the @ID, the button, or a
+        // link that names itself with data-cta (the schedule's send button)
+        var cta = a.getAttribute('data-cta') || (a.classList.contains('qr-box') ? 'qr' : (a.closest('.line-id') ? 'line_id' : 'button'));
         gtag('event', 'line_click', { send_to: GA4, cta: cta });
       } else if(href.indexOf('tel:') === 0){
         gtag('event', 'phone_click', { send_to: GA4 });
