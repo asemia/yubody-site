@@ -689,7 +689,6 @@ function gtag_report_conversion(url) {
     pointer-events:none;
   }
   .sched-out{position:absolute; top:50%; transform:translateY(-50%); font-size:11px; color:var(--accent-deep); white-space:nowrap; font-variant-numeric:tabular-nums; cursor:pointer;}
-  .sched-full{position:absolute; top:0; bottom:0; left:0; right:0; display:flex; align-items:center; justify-content:center; font-size:12px; letter-spacing:0.1em; color:var(--ink-soft);}
   .sched-pick{
     margin:2px 0 12px;
     padding:14px;
@@ -2201,7 +2200,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if(d.today && model.nowH > axisStart && model.nowH < axisEnd){
           track.insertAdjacentHTML('beforeend', '<div class="sched-now" style="left:' + pct(model.nowH) + '%" title="現在"></div>');
         }
-        if(!d.ws.length) track.insertAdjacentHTML('beforeend', '<div class="sched-full">暫無空檔</div>');
         var bars = d.ws.map(function(w, j){
           var b = document.createElement('button');
           b.type = 'button';
@@ -2223,7 +2221,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         rowsEl.appendChild(day);
         dayEls.push({ el:day, track:track, pick:pickEl, bars:bars, ws:d.ws });
       });
-      moreBtn.hidden = model.days.length <= SHOW_DAYS;
+      updateMore();
       fitLabels();
     }
 
@@ -2395,9 +2393,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return ok;
     }
 
+    // "看後 7 天" reveals one more week per tap until every day is shown
+    function updateMore(){
+      var left = dayEls.filter(function(d){ return d.el.hidden; }).length;
+      moreBtn.hidden = !left;
+      moreBtn.textContent = '看後 ' + Math.min(left, SHOW_DAYS) + ' 天';
+    }
     moreBtn.addEventListener('click', function(){
-      dayEls.forEach(function(d){ d.el.hidden = false; });
-      moreBtn.hidden = true;
+      dayEls.filter(function(d){ return d.el.hidden; }).slice(0, SHOW_DAYS)
+        .forEach(function(d){ d.el.hidden = false; });
+      updateMore();
       fitLabels();
     });
     var lastWidth = window.innerWidth;
