@@ -2306,7 +2306,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         ? '<a class="sched-send" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>'
         : '<button type="button" class="sched-send">' + COPY_ICON + '複製預約訊息</button>';
       html += '</div><div class="sched-status" role="status">' + sel.status + '</div>';
-      if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">或用手機掃描，</span><span class="nw">直接在 LINE 帶入這段訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to send it on LINE</span></span></div></div>';
+      if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">手機掃 QR Code</span> <span class="nw">自動帶入預約訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to auto-fill it in LINE</span></span></div></div>';
       el.pick.innerHTML = html;
       el.pick.hidden = false;
       if(!isPhone) drawQR(el.pick.querySelector('.sched-qr'), lineUrl);
