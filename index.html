@@ -695,6 +695,28 @@ function gtag_report_conversion(url) {
     pointer-events:none;
   }
   .sched-out{position:absolute; top:50%; transform:translateY(-50%); font-size:11px; color:var(--accent-deep); white-space:nowrap; font-variant-numeric:tabular-nums; cursor:pointer;}
+  /* 按摩研習: shown like a bar but plainly not one — dashed outline, faint
+     hatching, no hover, not clickable. The two halves wrap onto two lines
+     (按摩／研習) when the block is too narrow for one. */
+  .sched-study{
+    position:absolute;
+    top:6px; bottom:6px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    align-content:center;
+    justify-content:center;
+    overflow:hidden;
+    border:1px dashed rgba(107,114,99,0.6);
+    border-radius:6px;
+    background:repeating-linear-gradient(135deg, rgba(107,114,99,0.13) 0 1.5px, rgba(107,114,99,0) 1.5px 6px);
+    color:var(--accent);
+    font-size:11px;
+    line-height:1.15;
+    letter-spacing:0.1em;
+    white-space:nowrap;
+    cursor:default;
+  }
   .sched-pick{
     margin:2px 0 12px;
     padding:14px;
@@ -838,20 +860,24 @@ function gtag_report_conversion(url) {
   .sched-day.is-today .sched-row{background:rgba(107,114,99,0.07);}
   .sched-day.has-now .sched-track{height:70px;}
   .sched-day.has-now .sched-bar,
-  .sched-day.has-now .sched-sel{bottom:34px;}
+  .sched-day.has-now .sched-sel,
+  .sched-day.has-now .sched-study{bottom:34px;}
   .sched-day.has-now .sched-out{top:21px;}
-  .sched-cone{position:absolute; bottom:1px; width:13px; height:13px; margin-left:-6.5px; color:var(--accent-deep); pointer-events:none;}
+  /* same green as the bars' outline and the 上午／下午／晚上 icons */
+  .sched-cone{position:absolute; bottom:1px; width:13px; height:13px; margin-left:-6.5px; color:var(--accent); pointer-events:none;}
   .sched-cone svg{display:block; width:100%; height:100%;}
-  .sched-squirrel{position:absolute; bottom:1px; width:18px; height:18px; margin-left:-9px; color:var(--accent-deep); pointer-events:none;}
+  .sched-squirrel{position:absolute; bottom:1px; width:18px; height:18px; margin-left:-9px; color:var(--accent); pointer-events:none;}
   .sched-squirrel span,
   .sched-squirrel svg{display:block; width:100%; height:100%;}
   .sched-squirrel svg{transform-origin:50% 100%;}
   /* Bars wash in row by row the first time the table scrolls into view
      (JS adds .will-animate only when motion is allowed, and --d per row) */
   .sched.will-animate .sched-bar,
-  .sched.will-animate .sched-out{clip-path:inset(0 100% 0 0);}
+  .sched.will-animate .sched-out,
+  .sched.will-animate .sched-study{clip-path:inset(0 100% 0 0);}
   .sched.will-animate.is-in .sched-bar,
-  .sched.will-animate.is-in .sched-out{animation:schedWash .9s cubic-bezier(.2,.7,.2,1) var(--d, 0s) both;}
+  .sched.will-animate.is-in .sched-out,
+  .sched.will-animate.is-in .sched-study{animation:schedWash .9s cubic-bezier(.2,.7,.2,1) var(--d, 0s) both;}
   @keyframes schedWash{
     from{ clip-path:inset(0 100% 0 0); opacity:0.3; }
     to{   clip-path:inset(0 0 0 0);    opacity:1; }
@@ -1922,7 +1948,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">交通方式</h2>
     <div class="section-title-en">Getting Here</div>
     <div class="access-map">
-      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E5%8F%B0%E5%8C%97%E5%B8%82%E6%96%87%E5%B1%B1%E5%8D%80%E7%A7%80%E6%98%8E%E8%B7%AF%E4%BA%8C%E6%AE%B5110%E8%99%9F" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google 地圖・規劃路線 · Directions</a>
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9C%A8%E6%9F%B5%E6%8C%89%E6%91%A9%EF%BD%9CYU%20Body%20Studio&amp;destination_place_id=ChIJ40BlnL2rQjQRe56yrwmgKEg" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google 地圖・規劃路線 · Directions</a>
     </div>
     <div class="transit">
       <div class="transit-row">
@@ -2146,6 +2172,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var noteEl = document.getElementById('schedNote');
     var WEEK = '日一二三四五六';
     var SHOW_DAYS = 7;
+    // 按摩研習: the therapist's own weekly training, shown on the table but
+    // never bookable. dow as getUTCDay() counts it: 0 = Sunday, 5 = Friday.
+    var STUDY = [ { dow:5, a:11, b:17 }, { dow:0, a:13, b:15 } ];
     // 上午／下午／晚上: sunrise, sun, moon (thin line icons like the rest of the site)
     var SEG_ICONS = [
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 17h18M7 17a5 5 0 0 1 10 0M12 6v3M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg>',
@@ -2161,7 +2190,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // The squirrel that potters about the pinecone.
     // Lucide "squirrel" (lucide-static 0.460.0) - https://lucide.dev
     // License - ISC, https://lucide.dev/license
-    var SQUIRREL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.236 22a3 3 0 0 0-2.2-5"/><path d="M16 20a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2v-2a4 4 0 0 0-4-4V4"/><path d="M18 13h.01"/><path d="M18 6a4 4 0 0 0-4 4 7 7 0 0 0-7 7c0-5 4-5 4-10.5a4.5 4.5 0 1 0-9 0 2.5 2.5 0 0 0 5 0C7 10 3 11 3 17c0 2.8 2.2 5 5 5h10"/></svg>';
+    var SQUIRREL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.236 22a3 3 0 0 0-2.2-5"/><path d="M16 20a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2v-2a4 4 0 0 0-4-4V4"/><path d="M18 13h.01"/><path d="M18 6a4 4 0 0 0-4 4 7 7 0 0 0-7 7c0-5 4-5 4-10.5a4.5 4.5 0 1 0-9 0 2.5 2.5 0 0 0 5 0C7 10 3 11 3 17c0 2.8 2.2 5 5 5h10"/></svg>';
     // Dove on the send button — the message "takes off".
     // Font Awesome Free 6.5.2 "dove" by @fontawesome - https://fontawesome.com
     // License - https://fontawesome.com/license/free (Icons: CC BY 4.0)
@@ -2189,6 +2218,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return '';
     }
 
+    // the parts of window w that none of the blocks cover
+    function cut(w, blocks){
+      var parts = [w];
+      blocks.forEach(function(s){
+        parts = parts.reduce(function(out, p){
+          if(s[1] <= p[0] || s[0] >= p[1]) out.push(p);
+          else {
+            if(s[0] > p[0]) out.push([p[0], s[0]]);
+            if(s[1] < p[1]) out.push([s[1], p[1]]);
+          }
+          return out;
+        }, []);
+      });
+      return parts;
+    }
+
     function prepare(json){
       // Taiwan time, whatever the visitor's device timezone is
       var tw = new Date(Date.now() + 8 * 3600000);
@@ -2204,6 +2249,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       json.days.forEach(function(d){
         var date = String(d.date).replace(/\//g, '-');
         if(date < today) return;
+        var dt = new Date(date + 'T00:00:00Z');
+        // 按摩研習 on this weekday (today: only what hasn't passed yet)
+        var study = [];
+        STUDY.forEach(function(s){
+          if(s.dow !== dt.getUTCDay()) return;
+          var a = date === today ? Math.max(s.a, nowH) : s.a;
+          if(s.b > a) study.push([a, s.b]);
+        });
         var ws = [];
         d.windows.forEach(function(w){
           var a = hours(w[0]), b = hours(w[1]);
@@ -2212,11 +2265,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           while(b <= a) b += 24;
           // today: drop the hours that have already passed
           if(date === today) a = Math.max(a, Math.ceil(nowH * 2) / 2);
-          if(b - a >= min) ws.push([a, b]);
+          // study hours are never bookable, even if the calendar left them free
+          cut([a, b], study).forEach(function(p){ if(p[1] - p[0] >= min) ws.push(p); });
         });
-        var dt = new Date(date + 'T00:00:00Z');
         // ahead: days from today, for GA4's booking_day
-        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ahead:Math.round((dt - new Date(today + 'T00:00:00Z')) / 86400000), ws:ws });
+        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ahead:Math.round((dt - new Date(today + 'T00:00:00Z')) / 86400000), ws:ws, study:study });
       });
       return { segs:segs, days:days, min:min, max:json.max || 3, nowH:nowH };
     }
@@ -2259,6 +2312,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           var nowAt = pct(model.nowH);
           track.insertAdjacentHTML('beforeend', '<div class="sched-cone" style="left:' + nowAt + '%">' + CONE_ICON + '</div><div class="sched-squirrel" style="left:' + nowAt + '%"><span><span>' + SQUIRREL_ICON + '</span></span></div>');
         }
+        d.study.forEach(function(s){
+          track.insertAdjacentHTML('beforeend', '<div class="sched-study" style="left:calc(' + pct(s[0]) + '% + 1px);width:calc(' + (pct(s[1]) - pct(s[0])) + '% - 2px)" title="按摩研習（不開放預約）"><span>按摩</span><span>研習</span></div>');
+        });
         var bars = d.ws.map(function(w, j){
           var b = document.createElement('button');
           b.type = 'button';
@@ -2278,7 +2334,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         day.appendChild(row);
         day.appendChild(pickEl);
         rowsEl.appendChild(day);
-        dayEls.push({ el:day, track:track, pick:pickEl, bars:bars, ws:d.ws });
+        dayEls.push({ el:day, track:track, pick:pickEl, bars:bars, ws:d.ws, study:d.study });
       });
       updateMore();
       fitLabels();
@@ -2432,6 +2488,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         each(d.track.querySelectorAll('.sched-out'), function(o){ o.parentNode.removeChild(o); });
         var trackW = d.track.clientWidth;
         function px(h){ return pct(h) / 100 * trackW; }
+        // an outside label may sit beside its bar up to the next bar or study block
+        var taken = d.ws.concat(d.study);
         d.bars.forEach(function(b, j){
           var w = d.ws[j], t = clock(w[0]) + '–' + clock(w[1]), two = clock(w[0]) + '<br>' + clock(w[1]);
           b.textContent = t;
@@ -2443,8 +2501,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           o.textContent = t;
           o.setAttribute('aria-hidden', 'true');
           d.track.appendChild(o);
-          var roomR = (j < d.ws.length - 1 ? px(d.ws[j + 1][0]) : trackW) - px(w[1]) - 6;
-          var roomL = px(w[0]) - (j ? px(d.ws[j - 1][1]) : 0) - 6;
+          var nextA = trackW, prevB = 0;
+          taken.forEach(function(p){
+            if(p[0] >= w[1]) nextA = Math.min(nextA, px(p[0]));
+            if(p[1] <= w[0]) prevB = Math.max(prevB, px(p[1]));
+          });
+          var roomR = nextA - px(w[1]) - 6;
+          var roomL = px(w[0]) - prevB - 6;
           if(o.offsetWidth <= roomR) o.style.left = 'calc(' + pct(w[1]) + '% + 4px)';
           else if(o.offsetWidth <= roomL) o.style.right = 'calc(' + (100 - pct(w[0])) + '% + 4px)';
           else { d.track.removeChild(o); return; }
