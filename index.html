@@ -825,29 +825,18 @@ function gtag_report_conversion(url) {
   }
   /* 上午／下午／晚上 icons: sunrise, sun, moon */
   .sched-seg svg{width:13px; height:13px; margin-right:3px; vertical-align:-2px; color:var(--accent);}
-  /* Today: faint tint, plus a squirrel perched on a line at the current time.
-     The row gets headroom above its bars (.has-now) so the squirrel and its
-     「現在」 label never sit on a bar. */
+  /* Today: faint tint, plus a squirrel pottering about on the ground at the
+     current time. The row gets a strip under its bars (.has-now) so the
+     squirrel never walks over a bar; its moves are picked at random in JS. */
   .sched-day.is-today .sched-row{background:rgba(107,114,99,0.07);}
   .sched-day.has-now .sched-track{height:62px;}
   .sched-day.has-now .sched-bar,
-  .sched-day.has-now .sched-sel{top:26px;}
-  .sched-day.has-now .sched-out{top:calc(50% + 10px);}
-  .sched-now{position:absolute; top:22px; bottom:3px; border-left:1.5px solid var(--accent-deep); pointer-events:none;}
-  .sched-now-mark{position:absolute; bottom:100%; left:-11px; width:20px; height:20px; color:var(--accent-deep);}
-  .sched-now-mark svg{display:block; width:100%; height:100%; transform-origin:50% 100%; animation:schedHop 3.6s ease-in-out infinite;}
-  .sched-now-text{position:absolute; bottom:calc(100% + 3px); left:11px; font-size:10px; line-height:1; letter-spacing:0.12em; color:var(--accent-deep); white-space:nowrap;}
-  /* late in the day the label goes on the squirrel's tail side */
-  .sched-now.is-late .sched-now-text{left:auto; right:13px;}
-  /* crouch, hop, land, a little bounce, then rest */
-  @keyframes schedHop{
-    0%,62%,100%{ transform:translateY(0) scale(1,1); }
-    68%{ transform:translateY(0) scale(1.06,0.92); }
-    76%{ transform:translateY(-4px) scale(0.96,1.05); }
-    84%{ transform:translateY(0) scale(1.04,0.95); }
-    90%{ transform:translateY(-1.5px) scale(1,1); }
-    95%{ transform:translateY(0) scale(1,1); }
-  }
+  .sched-day.has-now .sched-sel{bottom:26px;}
+  .sched-day.has-now .sched-out{top:21px;}
+  .sched-squirrel{position:absolute; bottom:1px; width:20px; height:20px; margin-left:-10px; color:var(--accent-deep); pointer-events:none;}
+  .sched-squirrel span,
+  .sched-squirrel svg{display:block; width:100%; height:100%;}
+  .sched-squirrel svg{transform-origin:50% 100%;}
   /* Bars wash in row by row the first time the table scrolls into view
      (JS adds .will-animate only when motion is allowed, and --d per row) */
   .sched.will-animate .sched-bar,
@@ -871,7 +860,6 @@ function gtag_report_conversion(url) {
       box-shadow:0 0 0 1px rgba(63,69,61,0.40), 0 0 0 3px rgba(255,255,255,0.85), 0 0 14px 2px rgba(255,255,255,0.9);
     }
     .sched-bar.is-on::after, .sched-send::after{animation:none; opacity:0;}
-    .sched-now-mark svg{animation:none;}
   }
 
   /* Floating shortcut to the schedule. Bottom-left because the music button
@@ -2157,7 +2145,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     ];
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var tableEl = section.querySelector('.sched');
-    // Squirrel perched on today's current-time line.
+    // Squirrel on the ground of today's row, at the current time.
     // Lucide "squirrel" (lucide-static 0.460.0) - https://lucide.dev
     // License - ISC, https://lucide.dev/license
     var SQUIRREL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.236 22a3 3 0 0 0-2.2-5"/><path d="M16 20a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2v-2a4 4 0 0 0-4-4V4"/><path d="M18 13h.01"/><path d="M18 6a4 4 0 0 0-4 4 7 7 0 0 0-7 7c0-5 4-5 4-10.5a4.5 4.5 0 1 0-9 0 2.5 2.5 0 0 0 5 0C7 10 3 11 3 17c0 2.8 2.2 5 5 5h10"/></svg>';
@@ -2255,8 +2243,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           track.appendChild(v);
         });
         if(showNow){
-          var nowAt = pct(model.nowH);
-          track.insertAdjacentHTML('beforeend', '<div class="sched-now' + (nowAt > 85 ? ' is-late' : '') + '" style="left:' + nowAt + '%"><span class="sched-now-mark">' + SQUIRREL_ICON + '</span><span class="sched-now-text">現在</span></div>');
+          track.insertAdjacentHTML('beforeend', '<div class="sched-squirrel" style="left:' + pct(model.nowH) + '%"><span><span>' + SQUIRREL_ICON + '</span></span></div>');
         }
         var bars = d.ws.map(function(w, j){
           var b = document.createElement('button');
@@ -2281,6 +2268,95 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       updateMore();
       fitLabels();
+      var sq = rowsEl.querySelector('.sched-squirrel');
+      if(sq && !reduceMotion) squirrelLife(sq);
+    }
+
+    // Today's squirrel potters about at random: after a pause it hops,
+    // scampers a few steps, looks back over its shoulder, nibbles or sits
+    // up. It stays on a short leash around the current time and inside the
+    // row. Three layers so the moves don't fight over one transform:
+    // outer span walks (translateX), inner span faces (scaleX), svg moves.
+    function squirrelLife(el){
+      var walk = el.firstChild, face = walk.firstChild, body = face.firstChild;
+      if(!body.animate || !window.Promise) return;
+      var x = 0, dir = 1;
+      function rnd(a, b){ return a + Math.random() * (b - a); }
+      function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+      function bounds(){
+        var e = el.offsetLeft, w = el.parentNode.clientWidth;
+        var lo = Math.max(-24, -e), hi = Math.min(24, w - el.offsetWidth - e);
+        return lo > hi ? [0, 0] : [lo, hi];
+      }
+      function hop(h, ms){
+        return body.animate([
+          { transform:'translateY(0) scale(1,1)' },
+          { transform:'translateY(0) scale(1.06,0.92)', offset:0.15 },
+          { transform:'translateY(-' + h + 'px) scale(0.96,1.05)', offset:0.45 },
+          { transform:'translateY(0) scale(1.04,0.95)', offset:0.75 },
+          { transform:'translateY(0) scale(1,1)' }
+        ], { duration:ms, easing:'ease-in-out' }).finished;
+      }
+      function turn(d){
+        if(d === dir) return Promise.resolve();
+        var from = dir < 0 ? 'scaleX(-1)' : 'scaleX(1)', to = d < 0 ? 'scaleX(-1)' : 'scaleX(1)';
+        dir = d;
+        face.style.transform = to;
+        return face.animate([{ transform:from }, { transform:to }], { duration:200, easing:'ease-in-out' }).finished;
+      }
+      function scamper(){
+        var b = bounds(), steps = 1 + Math.floor(Math.random() * 3);
+        // wandered off a bit: more likely to head back
+        var back = Math.abs(x) > 12 && Math.random() < 0.65;
+        var sign = back ? (x > 0 ? -1 : 1) : (Math.random() < 0.5 ? -1 : 1);
+        var to = Math.max(b[0], Math.min(b[1], x + sign * rnd(8, 18)));
+        if(Math.abs(to - x) < 3) return hop(4, 650);
+        var step = (to - x) / steps;
+        return turn(to > x ? 1 : -1).then(function stepOnce(){
+          var from = x;
+          x += step;
+          walk.style.transform = 'translateX(' + x + 'px)';
+          var p = Promise.all([
+            walk.animate([{ transform:'translateX(' + from + 'px)' }, { transform:'translateX(' + x + 'px)' }], { duration:380, easing:'ease-in-out' }).finished,
+            hop(3, 380)
+          ]);
+          return --steps ? p.then(stepOnce) : p;
+        });
+      }
+      function lookBack(){
+        var d = dir;
+        return turn(-d).then(function(){ return wait(rnd(700, 1600)); }).then(function(){ return turn(d); });
+      }
+      function nibble(){
+        return body.animate([
+          { transform:'translateY(0) rotate(0)' },
+          { transform:'translateY(-1px) rotate(-5deg)' },
+          { transform:'translateY(0) rotate(0)' }
+        ], { duration:170, iterations:Math.round(rnd(4, 8)) }).finished;
+      }
+      function sitUp(){
+        return body.animate([
+          { transform:'scale(1,1)' },
+          { transform:'scale(0.94,1.12)', offset:0.25 },
+          { transform:'scale(0.94,1.12)', offset:0.8 },
+          { transform:'scale(1,1)' }
+        ], { duration:rnd(1200, 2000), easing:'ease-in-out' }).finished;
+      }
+      var moves = [
+        function(){ return hop(rnd(3, 6), 650); },
+        scamper, scamper, lookBack, nibble, sitUp,
+        // facing away for a while: turn back towards the free time
+        function(){ return dir < 0 ? turn(1) : nibble(); }
+      ];
+      function live(){
+        if(!document.documentElement.contains(el)) return;
+        var p = document.hidden ? Promise.resolve() : moves[Math.floor(Math.random() * moves.length)]();
+        p.then(function(){ setTimeout(live, rnd(1500, 4200)); }, function(){});
+      }
+      var b = bounds();
+      x = Math.max(b[0], Math.min(b[1], 0));
+      walk.style.transform = 'translateX(' + x + 'px)';
+      setTimeout(live, rnd(800, 2000));
     }
 
     // Time text goes inside the bar on one line, else on two lines, else
