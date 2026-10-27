@@ -623,6 +623,7 @@ function gtag_report_conversion(url) {
     margin:0 auto;
     background:rgba(246,244,238,0.94);
     border:1px solid var(--line);
+    border-radius:14px;
     padding:22px 18px 18px;
   }
   .sched-hint{text-align:center; font-size:14px; color:var(--ink-soft); margin-bottom:16px;}
@@ -721,6 +722,7 @@ function gtag_report_conversion(url) {
     margin:2px 0 12px;
     padding:14px;
     border:1.5px solid var(--lit);
+    border-radius:10px;
     background:var(--paper-soft);
     font-size:14px;
     animation:schedLit 2.2s ease-in-out infinite;
@@ -742,7 +744,7 @@ function gtag_report_conversion(url) {
   }
   .sched-chip.is-on{background:var(--accent-deep); border-color:var(--accent-deep); color:var(--paper-soft);}  /* The booking text and the send button share one dark block, so it's
      obvious the button sends exactly that text */
-  .sched-compose{margin-top:10px; background:var(--accent-deep); color:var(--paper-soft);}
+  .sched-compose{margin-top:10px; border-radius:8px; overflow:hidden; background:var(--accent-deep); color:var(--paper-soft);}
   .sched-text{padding:12px 14px 10px; white-space:pre-line; font-size:13px; line-height:1.7;}
   .sched-text-cap{display:block; margin-bottom:4px; font-size:11px; letter-spacing:0.12em; color:#c9d0c4;}
   .sched-text .nw{white-space:nowrap;}
@@ -805,7 +807,7 @@ function gtag_report_conversion(url) {
   .sched-status:empty{display:none;}
   /* Desktop only: QR code of the phone's LINE link, so the message can be
      sent from a phone (the copied text only helps LINE for PC users) */
-  .sched-qr{display:flex; align-items:center; gap:14px; margin-top:12px; padding:12px; border:1px dashed var(--line); background:var(--paper-soft);}
+  .sched-qr{display:flex; align-items:center; gap:14px; margin-top:12px; padding:12px; border:1px dashed var(--line); border-radius:8px; background:var(--paper-soft);}
   .sched-qr[hidden]{display:none;}
   .sched-qr-code{flex:0 0 auto; padding:6px; background:#fff;}
   .sched-qr-code img, .sched-qr-code canvas{display:block; width:128px; height:128px;}
@@ -821,6 +823,7 @@ function gtag_report_conversion(url) {
     margin:14px auto 0;
     padding:6px 18px;
     border:1px solid var(--accent);
+    border-radius:6px;
     background:transparent;
     color:var(--accent-deep);
     font-family:inherit;
@@ -839,6 +842,7 @@ function gtag_report_conversion(url) {
     gap:6px;
     padding:7px 10px;
     border-left:2px solid var(--accent);
+    border-radius:0 6px 6px 0;
     background:rgba(107,114,99,0.10);
     color:var(--accent-deep);
     font-size:12.5px;
@@ -857,7 +861,7 @@ function gtag_report_conversion(url) {
      a squirrel pottering about it. The row gets a strip under its bars
      (.has-now), tall enough for the squirrel standing on the cone, so neither
      ever touches a bar; the squirrel's moves are picked at random in JS. */
-  .sched-day.is-today .sched-row{background:rgba(107,114,99,0.07);}
+  .sched-day.is-today .sched-row{background:rgba(107,114,99,0.07); border-radius:8px;}
   .sched-day.has-now .sched-track{height:70px;}
   .sched-day.has-now .sched-bar,
   .sched-day.has-now .sched-sel,
