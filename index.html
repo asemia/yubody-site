@@ -830,9 +830,9 @@ function gtag_report_conversion(url) {
      (.has-now), tall enough for the squirrel standing on the cone, so neither
      ever touches a bar; the squirrel's moves are picked at random in JS. */
   .sched-day.is-today .sched-row{background:rgba(107,114,99,0.07);}
-  .sched-day.has-now .sched-track{height:68px;}
+  .sched-day.has-now .sched-track{height:70px;}
   .sched-day.has-now .sched-bar,
-  .sched-day.has-now .sched-sel{bottom:32px;}
+  .sched-day.has-now .sched-sel{bottom:34px;}
   .sched-day.has-now .sched-out{top:21px;}
   .sched-cone{position:absolute; bottom:1px; width:13px; height:13px; margin-left:-6.5px; color:var(--accent-deep); pointer-events:none;}
   .sched-cone svg{display:block; width:100%; height:100%;}
@@ -2282,10 +2282,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     // Today's squirrel and its pinecone (which sits at the current time).
     // The squirrel starts beside the cone, facing it; then, after a random
-    // pause each time, it nibbles the cone, hops up onto it and down again,
-    // leaps over it to the other side, wanders a few steps off and comes
-    // back, looks round or sits up. Spots that would leave the row are
-    // skipped. Three layers so the moves don't fight over one transform:
+    // pause each time: on the ground it nibbles the cone (only when facing
+    // it), hops up onto it, leaps over it to the other side, or wanders a few
+    // steps off and comes back; up on the cone it bounces about, spins round
+    // in mid-air or hops down; anywhere it may look round or sit up. Spots
+    // that would leave the row are skipped. Three layers so the moves don't
+    // fight over one transform:
     // outer span walks (translate), inner span faces (scaleX), svg moves.
     // With reduced motion it just sits beside the cone.
     function squirrelLife(el, animate){
@@ -2345,7 +2347,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           .then(function(){ spot = s; return jump(p[0], p[1], h, 560); })
           .then(function(){ return turn(towardCone()); });
       }
-      function hopInPlace(){ return jump(x, y, spot === 'top' ? 2.5 : rnd(3, 5), 500); }
+      function hopInPlace(){ return jump(x, y, rnd(3, 5), 500); }
+      // up on the cone: a run of little hops
+      function bounce(){
+        var n = 2 + Math.floor(Math.random() * 3);
+        return (function again(){
+          return jump(x, y, rnd(2.5, 3.5), 360).then(function(){ return --n ? again() : null; });
+        })();
+      }
+      // up on the cone: hop and turn round in mid-air
+      function spin(){
+        return Promise.all([jump(x, y, 3.5, 520), wait(150).then(function(){ return turn(-dir); })]);
+      }
       function nibble(){
         return body.animate([
           { transform:'translateY(0) rotate(0)' },
@@ -2377,13 +2390,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           .then(function(){ return goTo(from, 3); });
       }
       function move(){
-        var options = [nibble, nibble, sitUp, lookAround, hopInPlace];
+        var options = [sitUp, lookAround];
         if(spot === 'top'){
+          options.push(bounce, bounce, spin);
           var downs = ['left', 'right'].filter(function(s){ return fits(SPOTS[s][0]); });
           if(downs.length) options.push(function(){ return goTo(pick(downs), 2); }, function(){ return goTo(pick(downs), 2); });
         } else {
           var other = spot === 'left' ? 'right' : 'left';
-          options.push(function(){ return goTo('top', 3); }, wander);
+          // eats only when it is beside the cone and facing it
+          if(dir === towardCone()) options.push(nibble, nibble);
+          options.push(hopInPlace, wander, function(){
+            // sometimes it starts bouncing as soon as it lands on top
+            return goTo('top', 3).then(function(){ return Math.random() < 0.5 ? bounce() : null; });
+          });
           // leap clean over the cone to the other side
           if(fits(SPOTS[other][0])) options.push(function(){ return goTo(other, 13); });
         }
@@ -2392,7 +2411,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       function live(){
         if(!document.documentElement.contains(el)) return;
         var p = document.hidden ? Promise.resolve() : move();
-        p.then(function(){ setTimeout(live, rnd(1500, 4200)); }, function(){});
+        // livelier up on the cone
+        p.then(function(){ setTimeout(live, spot === 'top' ? rnd(900, 2600) : rnd(1500, 4200)); }, function(){});
       }
       setTimeout(live, rnd(800, 2000));
     }
