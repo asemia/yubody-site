@@ -2208,9 +2208,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var noteEl = document.getElementById('schedNote');
     var WEEK = '日一二三四五六';
     var SHOW_DAYS = 7;
-    // 按摩研習: the therapist's own weekly training, shown on the table but
-    // never bookable. dow as getUTCDay() counts it: 0 = Sunday, 5 = Friday.
-    var STUDY = [ { dow:5, a:11, b:17 }, { dow:0, a:13, b:15 } ];
     // 上午／下午／晚上: sunrise, sun, moon (thin line icons like the rest of the site)
     var SEG_ICONS = [
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 17h18M7 17a5 5 0 0 1 10 0M12 6v3M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg>',
@@ -2288,12 +2285,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var date = String(d.date).replace(/\//g, '-');
         if(date < today) return;
         var dt = new Date(date + 'T00:00:00Z');
-        // 按摩研習 on this weekday (today: only what hasn't passed yet)
+        // 按摩研習: the therapist's own classes, shown on the table but never
+        // bookable. The times come from the calendar, so a moved class moves
+        // here too (today: only what hasn't passed yet).
         var study = [];
-        STUDY.forEach(function(s){
-          if(s.dow !== dt.getUTCDay()) return;
-          var a = date === today ? Math.max(s.a, nowH) : s.a;
-          if(s.b > a) study.push([a, s.b]);
+        (d.study || []).forEach(function(s){
+          var a = hours(s[0]), b = hours(s[1]);
+          if(a < segs[0].a) a += 24;
+          while(b <= a) b += 24;
+          if(date === today) a = Math.max(a, nowH);
+          if(b > a) study.push([a, b]);
         });
         var ws = [];
         d.windows.forEach(function(w){
@@ -2303,7 +2304,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           while(b <= a) b += 24;
           // today: drop the hours that have already passed
           if(date === today) a = Math.max(a, Math.ceil(nowH * 2) / 2);
-          // study hours are never bookable, even if the calendar left them free
+          // study hours are never bookable
           cut([a, b], study).forEach(function(p){ if(p[1] - p[0] >= min) ws.push(p); });
         });
         // ahead: days from today, for GA4's booking_day
