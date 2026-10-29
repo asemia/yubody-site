@@ -2654,8 +2654,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     // The QR library is loaded only when a desktop visitor first opens the
-    // picker
+    // picker. QR_SRI is cdnjs's published hash of that exact file, so the
+    // browser refuses it if the file on the CDN is ever altered.
     var QR_LIB = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    var QR_SRI = 'sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==';
     var qrWaiting = [];
     function withQR(fn){
       if(window.QRCode) return fn();
@@ -2663,6 +2665,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if(qrWaiting.length > 1) return;
       var s = document.createElement('script');
       s.src = QR_LIB;
+      s.integrity = QR_SRI;
+      s.crossOrigin = 'anonymous';
       s.onload = function(){ var w = qrWaiting; qrWaiting = []; w.forEach(function(f){ f(); }); };
       s.onerror = function(){ qrWaiting = []; };
       document.head.appendChild(s);
