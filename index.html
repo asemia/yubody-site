@@ -601,9 +601,11 @@ function gtag_report_conversion(url) {
   .map-link:hover{opacity:0.7;}
   /* same pin as the 工作室位置 heading, in front of the label */
   .map-pin{width:15px; height:15px; margin-right:6px; vertical-align:-3px;}
-  /* keeps pin + label on one line on narrow phones */
+  /* magnifier after the label: "look it up on the map" */
+  .map-search{width:14px; height:14px; margin-left:6px; vertical-align:-2px;}
+  /* keeps pin + label + magnifier on one line on narrow phones (360px) */
   @media (max-width:400px){
-    .map-link{padding:11px 16px; letter-spacing:0.06em;}
+    .map-link{padding:11px 14px; letter-spacing:0.06em;}
   }
   @keyframes mapGlow{
     0%,100%{ box-shadow:0 0 0 0 rgba(63,69,61,0), 0 0 6px rgba(63,69,61,0.18); }
@@ -1994,7 +1996,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">交通方式</h2>
     <div class="section-title-en">Getting Here</div>
     <div class="access-map">
-      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9C%A8%E6%9F%B5%E6%8C%89%E6%91%A9%EF%BD%9CYU%20Body%20Studio&amp;destination_place_id=ChIJ40BlnL2rQjQRe56yrwmgKEg" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google 地圖・規劃路線 · Directions</a>
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9C%A8%E6%9F%B5%E6%8C%89%E6%91%A9%EF%BD%9CYU%20Body%20Studio&amp;destination_place_id=ChIJ40BlnL2rQjQRe56yrwmgKEg" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google 地圖・規劃路線 · Directions<!-- Lucide "search" (lucide-static 0.460.0), ISC, https://lucide.dev/license --><svg class="map-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></a>
     </div>
     <div class="transit">
       <div class="transit-row">
