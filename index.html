@@ -803,9 +803,36 @@ function gtag_report_conversion(url) {
     25%{  opacity:1; }
     100%{ transform:translateX(-16px); opacity:0; }
   }
+  /* index finger at the end of the LINE send button: presses down, a ring
+     spreads from the fingertip, then it lifts again */
+  .sched-tap{position:relative; display:inline-flex; flex:0 0 auto;}
+  .sched-tap svg{transform-origin:33% 10%; animation:schedTap 1.6s ease-in-out infinite;}
+  @keyframes schedTap{
+    0%,55%,100%{ transform:translate(0,0) scale(1); }
+    25%{         transform:translate(-1px,2px) scale(0.9); }
+  }
+  /* fingertip sits at (8,2) of the 24px icon = (6px,1.5px) at 18px */
+  .sched-tap i{
+    position:absolute;
+    left:0; top:-4.5px;
+    width:12px; height:12px;
+    border:1.5px solid rgba(255,255,255,0.9);
+    border-radius:50%;
+    box-sizing:border-box;
+    opacity:0;
+    animation:schedTapRing 1.6s ease-out infinite;
+  }
+  @keyframes schedTapRing{
+    0%,20%{ transform:scale(0.3); opacity:0; }
+    28%{    opacity:0.9; }
+    60%{    transform:scale(1.5); opacity:0; }
+    100%{   transform:scale(1.5); opacity:0; }
+  }
   @media (prefers-reduced-motion: reduce){
     .sched-dove svg{animation:none;}
     .sched-dove i{animation:none; opacity:0.5;}
+    .sched-tap svg{animation:none;}
+    .sched-tap i{animation:none; opacity:0;}
   }
   .sched-status{margin-top:8px; font-size:13px; text-align:center; color:var(--accent-deep);}
   .sched-status:empty{display:none;}
@@ -2234,6 +2261,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // License - https://fontawesome.com/license/free (Icons: CC BY 4.0)
     var DOVE_ICON = '<svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M160.8 96.5c14 17 31 30.9 49.5 42.2c25.9 15.8 53.7 25.9 77.7 31.6V138.8C265.8 108.5 250 71.5 248.6 28c-.4-11.3-7.5-21.5-18.4-24.4c-7.6-2-15.8-.2-21 5.8c-13.3 15.4-32.7 44.6-48.4 87.2zM320 144v30.6l0 0v1.3l0 0 0 32.1c-60.8-5.1-185-43.8-219.3-157.2C97.4 40 87.9 32 76.6 32c-7.9 0-15.3 3.9-18.8 11C46.8 65.9 32 112.1 32 176c0 116.9 80.1 180.5 118.4 202.8L11.8 416.6C6.7 418 2.6 421.8 .9 426.8s-.8 10.6 2.3 14.8C21.7 466.2 77.3 512 160 512c3.6 0 7.2-1.2 10-3.5L245.6 448H320c88.4 0 160-71.6 160-160V128l29.9-44.9c1.3-2 2.1-4.4 2.1-6.8c0-6.8-5.5-12.3-12.3-12.3H400c-44.2 0-80 35.8-80 80zm80-16a16 16 0 1 1 0 32 16 16 0 1 1 0-32z"/></svg>';
     var DOVE_FLYING = '<span class="sched-dove" aria-hidden="true">' + DOVE_ICON + '<i></i><i></i><i></i></span>';
+    // Index finger tapping after 「用 LINE 傳送預約」, a nudge to press it.
+    // Lucide "pointer" (lucide-static 0.460.0) - https://lucide.dev
+    // License - ISC, https://lucide.dev/license
+    var TAP_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>';
+    var TAP_HINT = '<span class="sched-tap" aria-hidden="true">' + TAP_ICON + '<i></i></span>';
     var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>';
     // Shown under the table and again right above the send button
     var CONFIRM = '<div class="sched-confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>選好時段不代表已保留，以 LINE 回覆確認為準</div>';
@@ -2609,7 +2641,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       html += '<div class="sched-compose"><div class="sched-text"><span class="sched-text-cap">將傳送的訊息</span>' + shown + '</div>';
       var lineUrl = 'https://line.me/R/oaMessage/' + LINE_OA + '/?' + encodeURIComponent(text);
       html += isPhone
-        ? '<a class="sched-send" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約</a>'
+        ? '<a class="sched-send" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約' + TAP_HINT + '</a>'
         : '<button type="button" class="sched-send">' + COPY_ICON + '複製預約訊息</button>';
       html += '</div><div class="sched-status" role="status">' + sel.status + '</div>';
       if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">手機掃 QR Code</span> <span class="nw">自動帶入預約訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to auto-fill it in LINE</span></span></div></div>';
