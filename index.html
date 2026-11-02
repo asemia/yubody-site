@@ -98,7 +98,7 @@ function gtag_report_conversion(url) {
     --paper:#eeebe2;
     --paper-soft:#f6f4ee;
     --ink:#2b302b;
-    --ink-soft:#5b6157;
+    --ink-soft:#3e443b;
     --line:#c7c2b3;
     --accent:#6b7263;
     --accent-deep:#3f453d;
@@ -127,6 +127,7 @@ function gtag_report_conversion(url) {
     letter-spacing:0.32em;
     text-transform:uppercase;
     font-size:12px;
+    font-weight:500;
     color:var(--ink-soft);
   }
   .divider{
@@ -249,12 +250,15 @@ function gtag_report_conversion(url) {
   }
 
   /* Tint + fade: a light warm-paper wash (not a green multiply) so the hero
-     text and section seams stay legible without darkening the photo */
+     text and section seams stay legible without darkening the photo. The
+     lower half is thicker: the hand and the dark treeline sit there, and
+     text scrolling over them dropped to ~1.2:1. Sits under the fog, birds
+     and rain, so those stay crisp. */
   .scene-tint{
     position:absolute;
     inset:0;
     background:
-      linear-gradient(180deg, rgba(238,235,226,0.55) 0%, rgba(238,235,226,0.04) 26%, rgba(238,235,226,0.04) 68%, rgba(238,235,226,0.38) 100%),
+      linear-gradient(180deg, rgba(238,235,226,0.55) 0%, rgba(238,235,226,0.04) 26%, rgba(238,235,226,0.04) 30%, rgba(238,235,226,0.57) 55%, rgba(238,235,226,0.65) 68%, rgba(238,235,226,0.91) 100%),
       linear-gradient(180deg, rgba(238,235,226,0.14), rgba(217,213,199,0.16));
     mix-blend-mode:normal;
     pointer-events:none;
@@ -448,7 +452,7 @@ function gtag_report_conversion(url) {
     border-radius:50%;
   }
   .cred-zh{font-size:16px; font-weight:500; text-shadow:0 1px 12px rgba(238,235,226,0.9);}
-  .cred-en{font-family:'Cormorant Garamond', serif; font-size:13px; color:var(--ink-soft); letter-spacing:0.03em; margin-top:2px; text-shadow:0 1px 10px rgba(238,235,226,0.9);}
+  .cred-en{font-family:'Cormorant Garamond', serif; font-size:13px; font-weight:500; color:var(--ink-soft); letter-spacing:0.03em; margin-top:2px; text-shadow:0 1px 10px rgba(238,235,226,0.9);}
 
   /* Policy */
   .policy{
@@ -499,7 +503,7 @@ function gtag_report_conversion(url) {
   }
   .feature-zh{font-size:16px; font-weight:500;}
   .feature-zh .check{color:var(--accent-deep); margin-right:3px;}
-  .feature-en{font-family:'Cormorant Garamond', serif; font-size:13px; color:var(--ink-soft); letter-spacing:0.04em;}
+  .feature-en{font-family:'Cormorant Garamond', serif; font-size:13px; font-weight:500; color:var(--ink-soft); letter-spacing:0.04em;}
 
   /* Small descriptive line above the feature-icon grid */
   .service-desc{ text-align:center; margin-bottom:30px; }
