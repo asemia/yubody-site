@@ -42,14 +42,14 @@ function gtag_report_conversion(url) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>木柵按摩推薦｜YU Body Studio 中式推拿・木柵動物園・文山・貓空・政大周邊</title>
 <meta name="description" content="木柵按摩、木柵動物園按摩推薦 YU Body Studio — 國家證照男師，預約制中式推拿，肩頸、腰背、腿部放鬆，一日僅接待兩位貴賓。鄰近木柵動物園、政大、文山區、景美。Muzha Zoo area, Taipei by-appointment Chinese-style relaxation massage.">
-<meta name="keywords" content="木柵按摩,木柵動物園按摩,動物園按摩推薦,台北市立動物園附近按摩,貓空按摩,文山按摩,政大按摩,推拿,按摩推薦,中式按摩,景美按摩,男師按摩,舒壓按摩,肩頸按摩,背部按摩,腰部按摩,腿部按摩,萬芳按摩,附近按摩">
 <link rel="canonical" href="https://yubody.tw/">
 
 <!-- 提前預載首屏最大的視覺元素（LCP 圖片），不等字型下載完成再開始抓取 -->
 <link rel="preload" as="image" href="hero-mountains.jpg" fetchpriority="high">
 
 <!-- Open Graph — 分享到 LINE / FB / IG 時顯示的卡片內容 -->
-<meta property="og:type" content="business.business">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="YU Body Studio">
 <meta property="og:title" content="木柵按摩｜YU Body Studio — 中式推拿放鬆・鄰近木柵動物園">
 <meta property="og:description" content="國家證照男師，預約制中式放鬆推拿，一日僅接待兩位貴賓。鄰近木柵動物園、政大、萬興國小，文山區按摩推薦。">
 <meta property="og:image" content="https://yubody.tw/hero-mountains.jpg">
@@ -75,6 +75,7 @@ function gtag_report_conversion(url) {
 {
   "@context": "https://schema.org",
   "@type": "HealthAndBeautyBusiness",
+  "@id": "https://yubody.tw/#business",
   "name": "YU Body Studio 木柵按摩",
   "alternateName": "YU Body Studio",
   "url": "https://yubody.tw/",
@@ -88,8 +89,15 @@ function gtag_report_conversion(url) {
     "streetAddress": "秀明路二段110號",
     "addressLocality": "文山區",
     "addressRegion": "台北市",
+    "postalCode": "116",
     "addressCountry": "TW"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 24.9906412,
+    "longitude": 121.5766044
+  },
+  "hasMap": "https://www.google.com/maps?cid=5199581733262106235",
   "sameAs": ["https://line.me/ti/p/@291lycqc"]
 }
 </script>
@@ -369,6 +377,7 @@ function gtag_report_conversion(url) {
     margin:0 auto;
   }
   .promo-label{
+    font-weight:inherit;
     font-size:13px;
     letter-spacing:0.2em;
     color:var(--ink-soft);
@@ -1775,18 +1784,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 </script>
 
+<main>
 <section class="hero">
   <div class="hero-content">
     <div class="kicker">Muzha · Taipei</div>
     <div class="divider"></div>
     <h1 class="brand-zh">木柵按摩｜YU Body Studio</h1>
-    <div class="brand-en">Massage &amp; Relaxation</div>
+    <div class="brand-en" lang="en">Massage &amp; Relaxation</div>
     <div class="tagline-zh">
       <p>為身體留白，為生活充電；</p>
       <p>留給身體的每一刻餘裕，</p>
       <p>都將化作光，悄悄照亮往後的日子。</p>
     </div>
-    <div class="tagline-en">
+    <div class="tagline-en" lang="en">
       <p>Every moment of ease you gift your body</p>
       <p>turns into light, quietly brightening the days ahead.</p>
     </div>
@@ -1796,23 +1806,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="promo">
   <div class="wrap">
     <div class="promo-box">
-      <div class="promo-label">試營運優惠　OPENING SPECIAL</div>
+      <h2 class="promo-label">試營運優惠　OPENING SPECIAL</h2>
       <div class="promo-price"><sup>NT$</sup>800</div>
       <div class="promo-old">原價 NT$1,200</div>
       <div class="promo-unit">／ 1 小時　per hour</div>
       <ul class="promo-list">
-        <li><span>1 小時 <span class="en">1 hr</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$800</span></li>
-        <li><span>2 小時 <span class="en">2 hrs</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$1,400</span></li>
-        <li><span>3 小時 <span class="en">3 hrs</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$2,100</span></li>
+        <li><span>1 小時 <span class="en" lang="en">1 hr</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$800</span></li>
+        <li><span>2 小時 <span class="en" lang="en">2 hrs</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$1,400</span></li>
+        <li><span>3 小時 <span class="en" lang="en">3 hrs</span></span><span class="promo-dots" aria-hidden="true"></span><span>NT$2,100</span></li>
       </ul>
       <div class="promo-perks">
-        <div class="promo-perks-title">另有專屬優惠<span class="en">Special Offers</span></div>
+        <div class="promo-perks-title">另有專屬優惠<span class="en" lang="en">Special Offers</span></div>
         <ul>
-          <li><span class="check">✓</span>當月壽星優惠<span class="promo-off">折 NT$100</span><span class="en">Birthday month</span></li>
-          <li><span class="check">✓</span>軍警醫護優惠<span class="promo-off">折 NT$100</span><span class="en">Military, Police &amp; Medical</span></li>
-          <li><span class="check">✓</span>政大師生教職員優惠<span class="promo-off">折 NT$100</span><span class="en">NCCU Students, Faculty &amp; Staff</span></li>
+          <li><span class="check">✓</span>當月壽星優惠<span class="promo-off">折 NT$100</span><span class="en" lang="en">Birthday month</span></li>
+          <li><span class="check">✓</span>軍警醫護優惠<span class="promo-off">折 NT$100</span><span class="en" lang="en">Military, Police &amp; Medical</span></li>
+          <li><span class="check">✓</span>政大師生教職員優惠<span class="promo-off">折 NT$100</span><span class="en" lang="en">NCCU Students, Faculty &amp; Staff</span></li>
         </ul>
-        <div class="promo-perks-note">可疊加使用<span class="en">NT$100 off each · stackable</span></div>
+        <div class="promo-perks-note">可疊加使用<span class="en" lang="en">NT$100 off each · stackable</span></div>
       </div>
     </div>
   </div>
@@ -1821,20 +1831,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="about">
   <div class="wrap">
     <h2 class="section-title">國家證照</h2>
-    <div class="section-title-en">Credentials</div>
+    <div class="section-title-en" lang="en">Credentials</div>
     <div class="cred-list">
       <div class="cred-item">
         <span class="cred-mark"></span>
         <div>
           <div class="cred-zh">國家傳統整復推拿技術士</div>
-          <div class="cred-en">Certified Traditional Massage &amp; Manipulation Technician</div>
+          <div class="cred-en" lang="en">Certified Traditional Massage &amp; Manipulation Technician</div>
         </div>
       </div>
       <div class="cred-item">
         <span class="cred-mark"></span>
         <div>
           <div class="cred-zh">國家經絡調理技術士</div>
-          <div class="cred-en">Certified Meridian Conditioning Technician</div>
+          <div class="cred-en" lang="en">Certified Meridian Conditioning Technician</div>
         </div>
       </div>
     </div>
@@ -1844,21 +1854,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="policy">
   <div class="wrap policy">
     <div class="policy-zh">不論時長，一日僅接待兩位貴賓。</div>
-    <div class="policy-en">By appointment only — two guests welcomed each day, regardless of session length.</div>
+    <div class="policy-en" lang="en">By appointment only — two guests welcomed each day, regardless of session length.</div>
   </div>
 </section>
 
 <section id="service">
   <div class="wrap">
     <h2 class="section-title">中式按摩放鬆</h2>
-    <div class="section-title-en">Chinese Style Relaxation</div>
+    <div class="section-title-en" lang="en">Chinese Style Relaxation</div>
     <p class="service-intro">
       座落木柵、鄰近貓空與政大的 YU Body Studio，提供道地的中式推拿放鬆按摩。以傳統推拿手法放鬆身體，從肩頸、腰背到腿部，久坐久站最容易緊繃的地方都會一併照顧到，讓你好好卸下一整天的疲憊。無論你住在木柵、景美、萬芳一帶，是政大師生，或是逛完動物園、上貓空走走後想在附近找個地方休息，都歡迎預約屬於自己的舒壓時光——如果你正在找木柵按摩推薦、文山推拿，這裡就是你在地的放鬆選擇。
     </p>
     <div class="feature-list">
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <rect x="4" y="5" width="16" height="15" rx="2"/>
             <line x1="4" y1="9.5" x2="20" y2="9.5"/>
             <line x1="8" y1="3" x2="8" y2="7"/>
@@ -1867,60 +1877,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>預約制</div>
-          <div class="feature-en">By Appointment</div>
+          <div class="feature-en" lang="en">By Appointment</div>
         </div>
       </div>
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="7.6" r="3.2"/>
             <path d="M5.5 20c0-4.2 3-6.8 6.5-6.8s6.5 2.6 6.5 6.8"/>
           </svg>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>男師</div>
-          <div class="feature-en">Male Therapist</div>
+          <div class="feature-en" lang="en">Male Therapist</div>
         </div>
       </div>
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 12.5 12.5 20 4 11.5V5c0-.6.4-1 1-1h6.5z"/>
             <circle cx="8.2" cy="8.2" r="1.1" fill="currentColor" stroke="none"/>
           </svg>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>政大師生教職員優惠</div>
-          <div class="feature-en">NCCU Students, Faculty &amp; Staff Discount</div>
+          <div class="feature-en" lang="en">NCCU Students, Faculty &amp; Staff Discount</div>
         </div>
       </div>
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3.2 18.5 6v5.3c0 4.6-2.9 7.9-6.5 9.5-3.6-1.6-6.5-4.9-6.5-9.5V6L12 3.2Z"/>
             <path d="M9.2 12.2 11.3 14.3 15 10"/>
           </svg>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>軍警醫護優惠</div>
-          <div class="feature-en">Military, Police &amp; Medical Discount</div>
+          <div class="feature-en" lang="en">Military, Police &amp; Medical Discount</div>
         </div>
       </div>
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
             <circle cx="12" cy="12" r="9"/>
             <text x="12" y="16" text-anchor="middle" font-size="10.5" font-family="'Cormorant Garamond', serif" fill="currentColor" stroke="none">P</text>
           </svg>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>停車</div>
-          <div class="feature-en">Parking</div>
+          <div class="feature-en" lang="en">Parking</div>
         </div>
       </div>
       <div class="feature-row">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5.5 6c0-1.7 1.6-2.8 3.3-2.2"/>
             <rect x="6" y="6.2" width="12" height="5.6" rx="2.8"/>
             <line x1="9" y1="15.2" x2="9" y2="18.6"/>
@@ -1930,7 +1940,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div class="feature-text">
           <div class="feature-zh"><span class="check">✓</span>淋浴</div>
-          <div class="feature-en">Shower</div>
+          <div class="feature-en" lang="en">Shower</div>
         </div>
       </div>
     </div>
@@ -1939,22 +1949,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section id="location">
   <div class="wrap location">
-    <svg class="pin" viewBox="0 0 24 24" fill="none" stroke="#3f453d" stroke-width="1.3">
+    <svg aria-hidden="true" class="pin" viewBox="0 0 24 24" fill="none" stroke="#3f453d" stroke-width="1.3">
       <path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/>
       <circle cx="12" cy="10" r="2.3"/>
     </svg>
     <h2 class="section-title" style="margin-bottom:14px;">工作室位置</h2>
     <div class="loc-zh">台北市文山區秀明路二段110號<br>（萬興國小大門口對面・木柵・鄰近木柵動物園、貓空、政大）</div>
-    <div class="loc-en">No. 110, Sec. 2, Xiuming Rd., Wenshan Dist., Taipei — across from Wanxing Elementary School, Muzha, near Taipei Zoo, Maokong &amp; NCCU</div>
+    <div class="loc-en" lang="en">No. 110, Sec. 2, Xiuming Rd., Wenshan Dist., Taipei — across from Wanxing Elementary School, Muzha, near Taipei Zoo, Maokong &amp; NCCU</div>
   </div>
 </section>
 
 <section id="schedule" hidden>
   <div class="wrap">
     <h2 class="section-title">可預約時段</h2>
-    <div class="section-title-en">Availability</div>
+    <div class="section-title-en" lang="en">Availability</div>
     <div class="sched">
-      <p class="sched-hint">點選時段長條，選擇想預約的時間<span class="en">Tap a time bar to choose your booking</span></p>      <div class="sched-row sched-head">
+      <p class="sched-hint">點選時段長條，選擇想預約的時間<span class="en" lang="en">Tap a time bar to choose your booking</span></p>      <div class="sched-row sched-head">
         <div class="sched-head-label">日期</div>
         <div class="sched-track" id="schedHead"></div>
       </div>
@@ -1968,13 +1978,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="cta" id="contact">
   <div class="wrap">
     <h2 class="cta-title">加入 LINE 好友預約</h2>
-    <div class="cta-title-en">Book via LINE</div>
+    <div class="cta-title-en" lang="en">Book via LINE</div>
     <a class="qr-box" href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener" onclick="gtag_report_conversion();">
       <img src="line-qr.png" alt="LINE QR code：加入 YU Body Studio 好友" width="260" height="260" loading="lazy">
     </a>
     <div class="line-id"><a href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener" onclick="gtag_report_conversion();">@yubody.studio</a></div>
     <a class="cta-btn" href="https://line.me/ti/p/@291lycqc" target="_blank" rel="noopener" onclick="gtag_report_conversion();">
-      <span class="cta-btn-en en">Add me on LINE</span>
+      <span class="cta-btn-en en" lang="en">Add me on LINE</span>
       <span class="cta-btn-zh">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 8.5v-2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 5v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a2.5 2.5 0 0 0 0-5Z"/>
@@ -1986,7 +1996,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="cta-sub">掃描 QR Code 或點擊上方按鈕，立即預約</div>
     <div class="cta-phone">
       <div class="cta-phone-num"><a class="en" href="tel:+886937453603">0937 453 603</a><span class="cta-phone-tag">（預約制）</span></div>
-      <div class="cta-phone-note-en en">By appointment only — no walk-ins</div>
+      <div class="cta-phone-note-en en" lang="en">By appointment only — no walk-ins</div>
     </div>
   </div>
 </section>
@@ -1994,14 +2004,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="access">
   <div class="wrap">
     <h2 class="section-title">交通方式</h2>
-    <div class="section-title-en">Getting Here</div>
+    <div class="section-title-en" lang="en">Getting Here</div>
     <div class="access-map">
       <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9C%A8%E6%9F%B5%E6%8C%89%E6%91%A9%EF%BD%9CYU%20Body%20Studio&amp;destination_place_id=ChIJ40BlnL2rQjQRe56yrwmgKEg" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google 地圖・規劃路線 · Directions<!-- Lucide "search" (lucide-static 0.460.0), ISC, https://lucide.dev/license --><svg class="map-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></a>
     </div>
     <div class="transit">
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <rect x="6" y="3.5" width="12" height="13" rx="3"/>
             <line x1="6" y1="10" x2="18" y2="10"/>
             <circle cx="9.2" cy="13.3" r="0.8" fill="currentColor" stroke="none"/>
@@ -2011,12 +2021,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div>
           <div class="transit-zh"><b>捷運動物園站・貓空纜車動物園站</b><br><span class="nw">公車約 6 分鐘・</span><span class="nw">YouBike 約 5 分鐘</span></div>
-          <div class="transit-en">Taipei Zoo MRT / Maokong Gondola Taipei Zoo Station — 6 min by bus or 5 min by YouBike</div>
+          <div class="transit-en" lang="en">Taipei Zoo MRT / Maokong Gondola Taipei Zoo Station — 6 min by bus or 5 min by YouBike</div>
         </div>
       </div>
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="3.5" width="14" height="13.5" rx="2.5"/>
             <line x1="5" y1="11" x2="19" y2="11"/>
             <line x1="9" y1="7.2" x2="15" y2="7.2"/>
@@ -2026,12 +2036,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div>
           <div class="transit-zh"><b>公車</b>　282、66、棕6、棕15、<span class="nw">羅斯福路幹線（236）</span><br><span class="nw">「萬興國小」站下車，</span><span class="nw">步行約 2 分鐘</span></div>
-          <div class="transit-en">Bus 282, 66, Brown 6, Brown 15 or Roosevelt Rd. Main Line (236) to Wanxing Elementary School stop, then a 2-min walk</div>
+          <div class="transit-en" lang="en">Bus 282, 66, Brown 6, Brown 15 or Roosevelt Rd. Main Line (236) to Wanxing Elementary School stop, then a 2-min walk</div>
         </div>
       </div>
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6" cy="15.5" r="3.5"/>
             <circle cx="18" cy="15.5" r="3.5"/>
             <path d="M6 15.5 9.5 8.5h5.5L18 15.5M9.5 8.5l3 7H6M13.8 6h2.4"/>
@@ -2039,36 +2049,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div>
           <div class="transit-zh"><b>YouBike 2.0</b>　<span class="nw">「萬興國小」站，</span><span class="nw">步行約 2 分鐘</span></div>
-          <div class="transit-en">YouBike 2.0 Wanxing Elementary School station, a 2-min walk</div>
+          <div class="transit-en" lang="en">YouBike 2.0 Wanxing Elementary School station, a 2-min walk</div>
         </div>
       </div>
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="13" cy="4.5" r="1.6"/>
             <path d="M11.8 8.3 9.3 14l3 2.2 1 4.8M11.8 8.3l3 3.4 3 1.1M9.3 14l-2.3 6.5M11.8 8.3 8.5 10.2 7 13"/>
           </svg>
         </div>
         <div>
           <div class="transit-zh"><b>政大</b>　<span class="nw">國立政治大學正門，</span><span class="nw">步行約 6 分鐘</span></div>
-          <div class="transit-en">A 6-min walk from the NCCU main gate</div>
+          <div class="transit-en" lang="en">A 6-min walk from the NCCU main gate</div>
         </div>
       </div>
       <div class="transit-row">
         <div class="transit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
             <circle cx="12" cy="12" r="9"/>
             <text x="12" y="16" text-anchor="middle" font-size="10.5" font-family="'Cormorant Garamond', serif" fill="currentColor" stroke="none">P</text>
           </svg>
         </div>
         <div>
           <div class="transit-zh"><b>開車</b>　可停車</div>
-          <div class="transit-en">Parking available</div>
+          <div class="transit-en" lang="en">Parking available</div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>YU BODY STUDIO · MUZHA · TAIPEI</footer>
 
@@ -2078,12 +2090,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <span class="ripple r2"></span>
   <span class="ripple r3"></span>
   <span class="icon icon-play">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6.5 4.8v14.4c0 .7.75 1.14 1.35.78l11.4-7.2c.58-.36.58-1.2 0-1.56l-11.4-7.2c-.6-.36-1.35.08-1.35.78Z"/>
     </svg>
   </span>
   <span class="icon icon-pause">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
       <line x1="8" y1="5" x2="8" y2="19"/>
       <line x1="16" y1="5" x2="16" y2="19"/>
     </svg>
