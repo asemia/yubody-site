@@ -712,7 +712,17 @@ function gtag_report_conversion(url) {
     letter-spacing:0.02em;
     color:var(--ink-soft);
   }
-  .faq details[open] p{animation:faqIn .35s ease;}
+  .faq details p a{color:var(--accent-deep); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px;}
+  /* an answer can be a lead-in line followed by a short list */
+  .faq details ul{
+    padding:0 16px 14px 38px;
+    font-size:15px;
+    letter-spacing:0.02em;
+    color:var(--ink-soft);
+  }
+  .faq details li::marker{color:var(--accent);}
+  .faq details p:has(+ ul){padding-bottom:4px;}
+  .faq details[open] p, .faq details[open] ul{animation:faqIn .35s ease;}
   @keyframes faqIn{
     from{opacity:0; transform:translateY(-4px);}
     to{opacity:1; transform:none;}
@@ -720,10 +730,11 @@ function gtag_report_conversion(url) {
   @media (max-width:400px){
     .faq summary{padding:12px; font-size:15px;}
     .faq details p{padding:0 12px 14px;}
+    .faq details ul{padding:0 12px 12px 32px;}
   }
   @media (prefers-reduced-motion: reduce){
     .faq summary, .faq summary::after{transition:none;}
-    .faq details[open] p{animation:none;}
+    .faq details[open] p, .faq details[open] ul{animation:none;}
   }
 
   /* Availability — one row per day, bars over a 上午／下午／晚上 time axis.
@@ -2246,10 +2257,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">常見問題</h2>
     <div class="section-title-en" lang="en">FAQ</div>
     <div class="faq">
-      <details><summary>要怎麼預約？</summary><p>加入 LINE 好友 @yubody.studio 傳訊息，或在「可預約時段」表點選想要的時間，用 LINE 送出預約訊息；也可以打電話 0937 453 603。選好時段不代表已經保留，以 LINE 回覆確認為準。</p></details>
+      <details><summary>要怎麼預約？</summary><p>在「<a href="#schedule">可預約時段</a>」表點選想要的時間，選好時長和開始時間，再按「用 LINE 傳送預約」送出預約訊息。用電腦瀏覽時，請用手機掃畫面上的 QR Code，LINE 會自動帶入預約訊息。選好時段不代表已經保留，以 LINE 回覆確認為準。</p></details>
       <details><summary>可以不預約直接過去嗎？</summary><p>工作室採預約制，不論時長，一天只接待兩位貴賓，請先預約再前往。</p></details>
-      <details><summary>幾點可以預約？</summary><p>可預約時間是每天 08:00–23:30。哪些時段還有空，請看「可預約時段」表，或在 LINE 詢問。</p></details>
-      <details><summary>專屬優惠可以跟試營運價一起用嗎？</summary><p>可以。當月壽星、軍警醫護、政大師生教職員優惠，每符合一項就從試營運價再折 NT$100，可以疊加。例如當月壽星預約 1 小時，是 NT$700。</p></details>
+      <details><summary>幾點可以預約？</summary><p>請看上方「<a href="#schedule">可預約時段</a>」表。</p></details>
+      <details><summary>專屬優惠可以跟試營運價一起用嗎？</summary><p>可以。當月壽星、軍警醫護、政大師生教職員優惠，每符合一項就從試營運價再折 NT$100，可以疊加。例如當月壽星預約 1 小時，是 NT$700；若為政大師生教職員，再折 NT$100，為 NT$600（試營運價 NT$800，原價 NT$1,200）。</p></details>
+      <details><summary>可以停車、淋浴嗎？</summary><p>可以。需要停車或淋浴的話，請在預約時一併告知。要淋浴的話，請提早 10 分鐘到，方便先簡單梳洗。</p></details>
+      <details><summary>按摩時要穿什麼？</summary><p>請穿輕薄的衣褲前來，也可以換上工作室提供的按摩衣褲。</p></details>
+      <details><summary>什麼情況不適合按摩？</summary><p>有下列情況時，不適合按摩：</p><ul><li>發燒、感冒，或有傳染性疾病（包括皮膚傳染病）</li><li>嚴重急性病症，或當天身體不適</li><li>正在服用抗凝血藥物</li><li>懷孕</li><li>剛受傷、骨折還沒癒合，或近期動過手術</li><li>想按摩的部位有傷口、紅腫、發炎或皮膚病變</li><li>太餓、剛吃飽或喝酒後</li></ul><p>有下列情況，請先詢問醫師，並在預約時告知：</p><ul><li>心臟病、高血壓</li><li>血栓、靜脈曲張</li><li>骨質疏鬆</li><li>癌症</li></ul></details>
     </div>
   </div>
 </section>
