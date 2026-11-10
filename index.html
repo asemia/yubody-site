@@ -660,6 +660,72 @@ function gtag_report_conversion(url) {
      to navigate don't have to read the route list first */
   .access-map{text-align:center; margin:-14px 0 26px;}
 
+  /* FAQ — one paper card like the price and availability boxes, a <details>
+     per question with hairlines between them. The chevron is drawn in CSS
+     (::after), so there is no icon element for screen readers to skip. */
+  .faq{
+    max-width:560px;
+    margin:0 auto;
+    padding:6px;
+    background:rgba(246,244,238,0.94);
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .faq details + details{border-top:1px solid var(--line);}
+  .faq summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    min-height:52px;
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:500;
+    letter-spacing:0.03em;
+    color:var(--ink);
+    cursor:pointer;
+    list-style:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:background-color .2s, color .2s;
+  }
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{
+    content:"";
+    flex:0 0 auto;
+    width:8px; height:8px;
+    margin:-4px 4px 0 0;
+    border-right:1.5px solid var(--accent-deep);
+    border-bottom:1.5px solid var(--accent-deep);
+    transform:rotate(45deg);
+    transition:transform .3s ease, margin .3s ease;
+  }
+  .faq details[open] > summary{color:var(--accent-deep);}
+  .faq details[open] > summary::after{transform:rotate(-135deg); margin-top:4px;}
+  @media (hover:hover){
+    .faq summary:hover{background:rgba(63,69,61,0.05);}
+  }
+  .faq summary:focus-visible{outline:2px solid var(--accent-deep); outline-offset:-2px;}
+  .faq details p{
+    padding:0 16px 16px;
+    font-size:15px;
+    letter-spacing:0.02em;
+    color:var(--ink-soft);
+  }
+  .faq details[open] p{animation:faqIn .35s ease;}
+  @keyframes faqIn{
+    from{opacity:0; transform:translateY(-4px);}
+    to{opacity:1; transform:none;}
+  }
+  @media (max-width:400px){
+    .faq summary{padding:12px; font-size:15px;}
+    .faq details p{padding:0 12px 14px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .faq summary, .faq summary::after{transition:none;}
+    .faq details[open] p{animation:none;}
+  }
+
   /* Availability — one row per day, bars over a 上午／下午／晚上 time axis.
      Data comes from the Apps Script endpoint (SCHEDULE_API below); tapping a
      bar opens a picker that builds the booking text for LINE. */
@@ -2167,10 +2233,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </svg>
         </div>
         <div>
-          <div class="transit-zh"><b>開車</b>　可停車</div>
-          <div class="transit-en" lang="en">Parking available</div>
+          <div class="transit-zh"><b>開車</b>　免費室內車位</div>
+          <div class="transit-en" lang="en">Free indoor parking</div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 class="section-title">常見問題</h2>
+    <div class="section-title-en" lang="en">FAQ</div>
+    <div class="faq">
+      <details><summary>要怎麼預約？</summary><p>加入 LINE 好友 @yubody.studio 傳訊息，或在「可預約時段」表點選想要的時間，用 LINE 送出預約訊息；也可以打電話 0937 453 603。選好時段不代表已經保留，以 LINE 回覆確認為準。</p></details>
+      <details><summary>可以不預約直接過去嗎？</summary><p>工作室採預約制，不論時長，一天只接待兩位貴賓，請先預約再前往。</p></details>
+      <details><summary>幾點可以預約？</summary><p>可預約時間是每天 08:00–23:30。哪些時段還有空，請看「可預約時段」表，或在 LINE 詢問。</p></details>
+      <details><summary>專屬優惠可以跟試營運價一起用嗎？</summary><p>可以。當月壽星、軍警醫護、政大師生教職員優惠，每符合一項就從試營運價再折 NT$100，可以疊加。例如當月壽星預約 1 小時，是 NT$700。</p></details>
     </div>
   </div>
 </section>
