@@ -3152,8 +3152,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             state.token = liff.getIDToken() || '';
             state.name = (liff.getDecodedIDToken() || {}).name || '';
             state.signedIn = !!state.token;
-            if(state.signedIn) store.set('yuMember', '1');
           }
+          // yuMember = "start the SDK on the next page load"
+          store.set('yuMember', state.signedIn ? '1' : null);
           flush(0);
         }, function(){ flush(1); });
       };
@@ -3253,6 +3254,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       btn.innerHTML = CHAT_ICON + '前往登入…';
       withLiff(function(){
         if(state.signedIn) return enter();
+        // LINE sends people back to https://yubody.tw/?liff.state=...&code=...,
+        // where the SDK moves on to /?go=... by itself, often before init's
+        // promise settles. That last page has no code= in it, so this flag is
+        // what makes it start the SDK and see the login (2026-11-12 bug:
+        // the top-right button stayed 「LINE 登入」 after logging in).
+        store.set('yuMember', '1');
         liff.login({ redirectUri:location.origin + '/?go=' + (back === 'schedule' ? 'schedule' : 'mine') });
       }, function(){ showSignedOut('目前無法連到 LINE 登入，請稍後再試'); });
     }
