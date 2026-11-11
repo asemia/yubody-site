@@ -2954,13 +2954,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // GA4 gets its own booking event, not line_click (the listener below
         // skips this link), so add-friend clicks and bookings stay apart.
         var params = { booking_hours:sel.d, booking_part:segName(sel.s), booking_day:day.ahead };
-        // Signed in: keep the request for 我的預約 too. It goes out alongside
-        // LINE (not before it), so a slow or failed save never holds up the
-        // booking itself; the studio still confirms everything in LINE.
+        // Signed in: the request is only noted on this device here; it's
+        // saved to 我的預約 once the visitor is back on the page. Nothing
+        // goes over the network on this tap, so it does exactly what it did
+        // before 我的預約: copy the text and open LINE.
         if(member && member.signedIn()){
           var startTxt = (sel.s < 10 ? '0' : '') + Math.floor(sel.s) + ':' + (sel.s % 1 ? '30' : '00');
           var memberEl = el.pick.querySelector('.sched-member');
-          memberEl.textContent = '正在記錄到「我的預約」…';
           member.book({ date:day.date, start:startTxt, hours:sel.d }, function(msg){
             if(memberEl.isConnected) memberEl.textContent = msg;
           });
@@ -3172,8 +3172,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return fetch(MEMBER_API, {
         method:'POST',
         headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-        body:JSON.stringify(body),
-        keepalive:body.action === 'book'
+        body:JSON.stringify(body)
       }).then(function(r){
         if(!r.ok) throw new Error(r.status);
         return r.json();
@@ -3232,7 +3231,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function enter(){
       section.hidden = false;
       setBtn();
-      load();
+      // requests noted on an earlier visit go in first
+      if(pending().length){ showText('讀取中…'); sendPending().then(load); }
+      else load();
       if(scrollOnEnter){
         scrollOnEnter = false;
         var html = document.documentElement, was = html.style.scrollBehavior;
@@ -3260,6 +3261,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       state.signedIn = false;
       state.token = state.name = '';
       store.set('yuMember', null);
+      setPending([]);
       showSignedOut();
     }
     // An old login: sign in again (inside LINE, reopening the page does it)
@@ -3328,26 +3330,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     // Called by the schedule when a signed-in customer sends a booking.
-    // done(message) gets a line to show under the send button.
+    // The tap only notes it on this device (yuPending); it's saved once the
+    // visitor is back on the page, or the next time they open the site, so
+    // nothing runs over the network while LINE is opening. The studio's
+    // calendar decides the status anyway. done(message) updates the line
+    // under the send button.
     var RECORD_MSG = {
       taken:'這個時段剛被預約了，沒有記錄到「我的預約」，請在 LINE 跟我們確認其他時間',
       too_many:'你已經有 3 筆還沒到的預約，這筆沒有記錄到「我的預約」，請在 LINE 跟我們確認',
       auth:'登入已過期，這筆沒有記錄到「我的預約」，預約請以 LINE 為準'
     };
+    var PENDING = 'yuPending', notify = null;
+    function pending(){ try{ return JSON.parse(store.get(PENDING) || '[]') || []; }catch(e){ return []; } }
+    function setPending(list){ store.set(PENDING, list.length ? JSON.stringify(list) : null); }
     function book(b, done){
       if(!state.signedIn) return;
-      api({ action:'book', date:b.date, start:b.start, hours:b.hours }).then(function(res){
-        track('booking_record', { record_result:res.ok ? (res.duplicate ? 'duplicate' : 'ok') : res.error });
-        if(res.ok){
-          done(res.duplicate ? '這個時段已經記錄在「我的預約」' : '已記錄到「我的預約」，等我們在 LINE 回覆確認');
-          load();
-        } else {
-          done(RECORD_MSG[res.error] || '沒有記錄到「我的預約」，預約請以 LINE 為準');
-        }
-      }, function(){
-        track('booking_record', { record_result:'network' });
-        done('沒有記錄到「我的預約」，預約請以 LINE 為準');
-      });
+      setPending(pending().filter(function(x){ return !(x.date === b.date && x.start === b.start); })
+        .concat([{ date:b.date, start:b.start, hours:b.hours }]));
+      notify = done;
+      done('送出後回到這裡，就會記錄在下方「我的預約」');
+    }
+    // Save the noted requests one by one; a network failure keeps them for
+    // next time, any answer from the server (saved or not) drops them
+    var sending = null;
+    function sendPending(){
+      if(sending) return sending;
+      var list = pending();
+      if(!list.length || !state.signedIn) return Promise.resolve();
+      sending = list.reduce(function(p, b){
+        return p.then(function(){
+          return api({ action:'book', date:b.date, start:b.start, hours:b.hours }).then(function(res){
+            track('booking_record', { record_result:res.ok ? (res.duplicate ? 'duplicate' : 'ok') : res.error });
+            setPending(pending().filter(function(x){ return !(x.date === b.date && x.start === b.start); }));
+            if(notify) notify(res.ok
+              ? (res.duplicate ? '這個時段已經記錄在「我的預約」' : '已記錄到「我的預約」，等我們在 LINE 回覆確認')
+              : (RECORD_MSG[res.error] || '沒有記錄到「我的預約」，預約請以 LINE 為準'));
+          }, function(){
+            track('booking_record', { record_result:'network' });
+          });
+        });
+      }, Promise.resolve()).then(function(){ sending = null; });
+      return sending;
     }
 
     // https://yubody.tw/?go=mine (and where the top-right button's login
@@ -3361,9 +3384,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } else {
       showSignedOut();
     }
-    // Back from the LINE chat: show the latest statuses
+    // Back from the LINE chat: save what was sent, then show the latest statuses
     document.addEventListener('visibilitychange', function(){
-      if(document.visibilityState === 'visible' && state.signedIn && Date.now() - state.loadedAt > 20000) load();
+      if(document.visibilityState !== 'visible' || !state.signedIn) return;
+      if(pending().length) sendPending().then(load);
+      else if(Date.now() - state.loadedAt > 20000) load();
     });
   })();
 </script>
