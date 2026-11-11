@@ -3248,7 +3248,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       box.querySelector('.mine-text-btn').addEventListener('click', load);
     }
     // back: 'mine' (the top-right button) or 'schedule' (the line under the
-    // schedule's send button) = where LINE's login page sends people back to
+    // schedule's send button). The top-right one comes back to the top of
+    // the page (?go=top: no such element, so nothing scrolls; go= also keeps
+    // the intro from playing) and just turns into 「我的預約」; the schedule
+    // one comes back to the schedule.
     function login(back){
       track('member_login_click', { login_from:back });
       btn.innerHTML = CHAT_ICON + '前往登入…';
@@ -3260,7 +3263,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // what makes it start the SDK and see the login (2026-11-12 bug:
         // the top-right button stayed 「LINE 登入」 after logging in).
         store.set('yuMember', '1');
-        liff.login({ redirectUri:location.origin + '/?go=' + (back === 'schedule' ? 'schedule' : 'mine') });
+        liff.login({ redirectUri:location.origin + '/?go=' + (back === 'schedule' ? 'schedule' : 'top') });
       }, function(){ showSignedOut('目前無法連到 LINE 登入，請稍後再試'); });
     }
     function logout(){
@@ -3382,8 +3385,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return sending;
     }
 
-    // https://yubody.tw/?go=mine (and where the top-right button's login
-    // comes back to): jump to 我的預約 once it's shown
+    // https://yubody.tw/?go=mine (a link straight to the list): jump to
+    // 我的預約 once it's shown
     var go = (location.search.match(/[?&]go=([\w-]+)/) || [])[1] || location.hash.slice(1);
     scrollOnEnter = go === 'mine';
     setBtn();
