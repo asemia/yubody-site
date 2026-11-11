@@ -3312,6 +3312,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     function key(b){ return b.date + ' ' + b.start; }
     function render(list){
+      // Cancelled ones aren't listed at all (the studio's wish, 2026-11-12)
+      list = list.filter(function(b){ return b.status !== '已取消'; });
       // Taiwan time, whatever the device's timezone
       var today = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
       var ahead = function(b){ return b.date >= today && b.status !== '已完成' && b.status !== '未成立'; };
