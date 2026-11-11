@@ -13,7 +13,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   (function(){
     var q = location.search;
     if(!/[?&]intro\b/.test(q)){
-      if(location.hash || /[?&]go=/.test(q) || /bot|crawl|spider|lighthouse|headless/i.test(navigator.userAgent)) return;
+      if(location.hash || /[?&](go|liff\.state)=/.test(q) || /bot|crawl|spider|lighthouse|headless/i.test(navigator.userAgent)) return;
       try{ if(sessionStorage.getItem('yuIntro')) return; sessionStorage.setItem('yuIntro', '1'); }catch(e){}
     }
     document.documentElement.classList.add('intro-on');
@@ -737,6 +737,61 @@ function gtag_report_conversion(url) {
     .faq details[open] p, .faq details[open] ul{animation:none;}
   }
 
+  /* 我的預約 — LINE login (LIFF) and the signed-in customer's own bookings.
+     The same paper card as the FAQ and the availability table. Customers
+     can only look: the studio confirms, changes and cancels in the sheet. */
+  .mine{
+    max-width:560px;
+    margin:0 auto;
+    padding:20px 18px 18px;
+    background:rgba(246,244,238,0.94);
+    border:1px solid var(--line);
+    border-radius:14px;
+    text-align:center;
+  }
+  .mine-lead{font-size:15px; color:var(--ink-soft); letter-spacing:0.02em;}
+  .mine-login{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    min-height:48px; margin:16px 0 4px; padding:0 26px;
+    border:0; border-radius:14px;
+    background:var(--accent-deep); color:var(--paper-soft);
+    font:inherit; font-size:16px; letter-spacing:0.08em; cursor:pointer;
+  }
+  .mine-login svg{width:20px; height:20px; flex:0 0 auto;}
+  .mine-login:hover{opacity:0.88;}
+  .mine-login:focus-visible, .mine-text-btn:focus-visible{outline:2px solid var(--accent-deep); outline-offset:3px;}
+  .mine-fine{margin-top:10px; font-size:13px; color:var(--ink-soft);}
+  .mine a, .mine-text-btn{color:var(--accent-deep); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px;}
+  .mine-text-btn{background:none; border:0; padding:0; font:inherit; cursor:pointer;}
+  .mine-who{display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:15px; color:var(--ink); text-align:left;}
+  .mine-who .mine-text-btn{font-size:13px; flex:0 0 auto;}
+  .mine-list{list-style:none; margin:12px 0 0; padding:0; text-align:left;}
+  .mine-item{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 4px; border-top:1px solid var(--line);}
+  .mine-when{font-size:15px; color:var(--ink); letter-spacing:0.02em;}
+  .mine-when b{font-weight:500; margin-right:8px;}
+  .mine-when .nw{white-space:nowrap;}
+  .mine-when small{display:block; font-size:13px; color:var(--ink-soft);}
+  .mine-st{
+    flex:0 0 auto; padding:3px 10px; border-radius:999px;
+    font-size:13px; letter-spacing:0.06em; white-space:nowrap;
+    border:1px solid var(--accent); color:var(--accent-deep); background:rgba(255,255,255,0.6);
+  }
+  .mine-st.is-ok{background:var(--accent-deep); border-color:var(--accent-deep); color:var(--paper-soft);}
+  .mine-st.is-done{border-color:var(--line); color:var(--ink-soft); background:none;}
+  .mine-st.is-off{border-color:var(--line); color:var(--ink-soft); background:none; text-decoration:line-through;}
+  .mine-empty{margin-top:12px; padding:14px 4px 4px; border-top:1px solid var(--line); font-size:14px; color:var(--ink-soft);}
+  .mine-past{margin-top:6px; text-align:left;}
+  .mine-past summary{padding:10px 4px; font-size:14px; color:var(--ink-soft); cursor:pointer;}
+  .mine-past .mine-when, .mine-past .mine-st{opacity:0.8;}
+  .mine-note{margin-top:12px; padding:10px 12px; border-radius:8px; background:rgba(107,114,99,0.08); font-size:13px; color:var(--ink-soft); text-align:left;}
+  /* the line under the schedule's send button */
+  .sched-member{margin-top:10px; font-size:13px; color:var(--ink-soft); text-align:center;}
+  .sched-member a{color:var(--accent-deep); text-decoration:underline; text-underline-offset:3px;}
+  @media (max-width:400px){
+    .mine{padding:18px 12px 14px;}
+    .mine-item{padding:12px 2px;}
+  }
+
   /* Availability — one row per day, bars over a 上午／下午／晚上 time axis.
      Data comes from the Apps Script endpoint (SCHEDULE_API below); tapping a
      bar opens a picker that builds the booking text for LINE. */
@@ -1318,6 +1373,9 @@ function gtag_report_conversion(url) {
     background:rgba(63,69,61,0.96);
     color:#a9b2a3;
   }
+  .foot-links{margin-top:10px; font-family:'Noto Serif TC', serif; letter-spacing:0.1em;}
+  .foot-links a{color:#a9b2a3; text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px;}
+  .foot-links a:hover{color:var(--paper);}
 
   @media (max-width:520px){
     .cred-list{gap:18px;}
@@ -2147,6 +2205,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<section id="mine" hidden>
+  <div class="wrap">
+    <h2 class="section-title">我的預約</h2>
+    <div class="section-title-en" lang="en">My Bookings</div>
+    <div class="mine" id="mineBox" aria-live="polite"></div>
+  </div>
+</section>
+
 <section class="cta" id="contact">
   <div class="wrap">
     <h2 class="cta-title">加入 LINE 好友預約</h2>
@@ -2270,7 +2336,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </main>
 
-<footer>YU BODY STUDIO · MUZHA · TAIPEI</footer>
+<footer>YU BODY STUDIO · MUZHA · TAIPEI<div class="foot-links"><a href="/privacy.html">隱私權說明</a></div></footer>
 
 <audio id="bgm" src="yu.mp3" loop preload="none"></audio>
 <button type="button" id="musicBtn" class="music-btn" aria-pressed="false" aria-label="播放背景音樂">
@@ -2525,7 +2591,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           cut([a, b], study).forEach(function(p){ if(p[1] - p[0] >= min) ws.push(p); });
         });
         // ahead: days from today, for GA4's booking_day
-        days.push({ md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ahead:Math.round((dt - new Date(today + 'T00:00:00Z')) / 86400000), ws:ws, study:study });
+        days.push({ date:date, md:(dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(), wd:WEEK.charAt(dt.getUTCDay()), today:date === today, ahead:Math.round((dt - new Date(today + 'T00:00:00Z')) / 86400000), ws:ws, study:study });
       });
       return { segs:segs, days:days, min:min, max:json.max || 3, nowH:nowH };
     }
@@ -2826,6 +2892,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         ? '<a class="sched-send" href="' + lineUrl + '" target="_blank" rel="noopener">' + DOVE_FLYING + '用 LINE 傳送預約' + TAP_HINT + '</a>'
         : '<button type="button" class="sched-send">' + COPY_ICON + '複製預約訊息</button>';
       html += '</div><div class="sched-status" role="status">' + sel.status + '</div>';
+      // 我的預約 (when it's switched on): signed in, the request is also kept
+      // for the customer to look up; signed out, a pointer to the login
+      var member = window.yuMember && window.yuMember.on() ? window.yuMember : null;
+      if(member) html += '<div class="sched-member">' + (member.signedIn()
+        ? '送出後會記錄在下方「我的預約」，等我們在 LINE 回覆確認'
+        : '<a href="#mine">用 LINE 登入</a>後再送出，可以在「我的預約」查看確認狀態') + '</div>';
       if(!isPhone) html += '<div class="sched-qr" hidden><div class="sched-qr-code"></div><div class="sched-qr-text"><span class="nw">手機掃 QR Code</span> <span class="nw">自動帶入預約訊息</span><span class="en"><span class="nw">Scan with your phone</span> <span class="nw">to auto-fill it in LINE</span></span></div></div>';
       el.pick.innerHTML = html;
       el.pick.hidden = false;
@@ -2861,6 +2933,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // GA4 gets its own booking event, not line_click (the listener below
         // skips this link), so add-friend clicks and bookings stay apart.
         var params = { booking_hours:sel.d, booking_part:segName(sel.s), booking_day:day.ahead };
+        // Signed in: keep the request for 我的預約 too. It goes out alongside
+        // LINE (not before it), so a slow or failed save never holds up the
+        // booking itself; the studio still confirms everything in LINE.
+        if(member && member.signedIn()){
+          var startTxt = (sel.s < 10 ? '0' : '') + Math.floor(sel.s) + ':' + (sel.s % 1 ? '30' : '00');
+          var memberEl = el.pick.querySelector('.sched-member');
+          memberEl.textContent = '正在記錄到「我的預約」…';
+          member.book({ date:day.date, start:startTxt, hours:sel.d }, function(msg){
+            if(memberEl.isConnected) memberEl.textContent = msg;
+          });
+        }
         if(isPhone){
           if(typeof gtag_report_conversion === 'function') gtag_report_conversion();
           track('booking_line_send', params);
@@ -2979,6 +3062,236 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       // unless the visitor has already started scrolling
       if(!userMoved) land();
     }).catch(fail);
+  })();
+</script>
+<script>
+  (function(){
+    // 我的預約: LINE login (LIFF) and the signed-in customer's own bookings.
+    // MEMBER_API is the Apps Script web app 「YU Body 會員」 (its source is in
+    // the local project folder, not this public repo). It checks every LINE
+    // ID token with LINE itself and only ever returns the caller's own
+    // bookings: date, time, length, status (no notes, nobody else's). A
+    // customer can send a request and look it up; only the studio confirms,
+    // changes or cancels, in the booking sheet.
+    // LIFF_ID or MEMBER_API empty = the whole feature stays hidden.
+    // PUBLIC false = shown only in a browser that has opened the site with
+    // ?member once (for trying it on a phone before it goes public).
+    var LIFF_ID = '2012558826-4YgAuhYQ';
+    var MEMBER_API = 'https://script.google.com/macros/s/AKfycbxz_LH8JWVgY3zKvErvFNnSQK_6WgwMbO8OuY3Ccf_84dnyTDrZC8ZbOWENcLL-k_pVLw/exec';
+    var PUBLIC = false;
+    // Pinned LIFF SDK. LIFF_SRI is the sha384 of that exact file (worked out
+    // 2026-11-12), so the browser refuses it if the CDN copy is ever altered.
+    var LIFF_SDK = 'https://static.line-scdn.net/liff/edge/versions/2.31.2/sdk.js';
+    var LIFF_SRI = 'sha384-1oGcmuvrrA8FN0gjWHb5JnzfrBAcRfLRUY3yykZMm79iIMHAWTxEgEmWJrN6CxLN';
+    var GA4 = 'G-6EM0KHESDS';
+    var section = document.getElementById('mine'), box = document.getElementById('mineBox');
+    var store = {
+      get:function(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+      set:function(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+    };
+    if(/[?&]member\b/.test(location.search)) store.set('yuMemberPreview', '1');
+    var on = !!(section && box && LIFF_ID && MEMBER_API && (PUBLIC || store.get('yuMemberPreview')));
+    var state = { ready:false, signedIn:false, name:'', token:'', inClient:false, loadedAt:0 };
+    // The schedule's send button asks this whether to save the request too
+    window.yuMember = {
+      on:function(){ return on; },
+      signedIn:function(){ return state.signedIn; },
+      book:book
+    };
+    if(!on) return;
+    section.hidden = false;
+
+    function track(name, params){
+      if(typeof gtag !== 'function') return;
+      params = params || {};
+      params.send_to = GA4;
+      gtag('event', name, params);
+    }
+    function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return '&#' + c.charCodeAt(0) + ';'; }); }
+
+    // The SDK is loaded only when it's needed: inside LINE (LIFF browser),
+    // coming back from the LINE login page, in a browser that signed in
+    // before, or when the login button is pressed.
+    var waiting = [];
+    function withLiff(fn, fail){
+      if(state.ready) return fn();
+      waiting.push([fn, fail]);
+      if(waiting.length > 1) return;
+      var s = document.createElement('script');
+      s.src = LIFF_SDK;
+      s.integrity = LIFF_SRI;
+      s.crossOrigin = 'anonymous';
+      s.onload = function(){
+        liff.init({ liffId:LIFF_ID }).then(function(){
+          state.ready = true;
+          state.inClient = liff.isInClient();
+          if(liff.isLoggedIn()){
+            state.token = liff.getIDToken() || '';
+            state.name = (liff.getDecodedIDToken() || {}).name || '';
+            state.signedIn = !!state.token;
+            if(state.signedIn) store.set('yuMember', '1');
+          }
+          flush(0);
+        }, function(){ flush(1); });
+      };
+      s.onerror = function(){ flush(1); };
+      document.head.appendChild(s);
+    }
+    function flush(failed){
+      var w = waiting;
+      waiting = [];
+      w.forEach(function(p){ (failed ? p[1] : p[0])(); });
+    }
+
+    function api(body){
+      body.idToken = state.token;
+      // text/plain keeps it a simple request (no CORS preflight to Apps Script)
+      return fetch(MEMBER_API, {
+        method:'POST',
+        headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+        body:JSON.stringify(body),
+        keepalive:body.action === 'book'
+      }).then(function(r){
+        if(!r.ok) throw new Error(r.status);
+        return r.json();
+      });
+    }
+
+    // Chat bubble on the login button.
+    // Lucide "message-circle" (lucide-static 0.460.0) - https://lucide.dev
+    // License - ISC, https://lucide.dev/license
+    var CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>';
+    function showText(t){ box.innerHTML = '<p class="mine-lead">' + t + '</p>'; }
+    function showSignedOut(msg){
+      box.innerHTML = '<p class="mine-lead">' + (msg || '用 LINE 登入，就能查看從官網送出的預約和確認狀態。') + '</p>' +
+        '<button type="button" class="mine-login">' + CHAT_ICON + '用 LINE 登入</button>' +
+        '<p class="mine-fine">只會取得你的 LINE 名稱和 ID，用來記錄預約，詳見<a href="/privacy.html">隱私權說明</a>。</p>';
+      box.querySelector('.mine-login').addEventListener('click', login);
+    }
+    function showError(){
+      box.innerHTML = '<p class="mine-lead">目前無法讀取預約，請稍後再試，或直接在 LINE 詢問。</p><button type="button" class="mine-text-btn">重新讀取</button>';
+      box.querySelector('.mine-text-btn').addEventListener('click', load);
+    }
+    function login(){
+      track('member_login_click');
+      showText('正在前往 LINE 登入…');
+      withLiff(function(){
+        if(state.signedIn) return load();
+        // back to this section after LINE's login page
+        liff.login({ redirectUri:location.origin + '/?go=mine' });
+      }, function(){ showSignedOut('目前無法連到 LINE 登入，請稍後再試。'); });
+    }
+    function logout(){
+      try{ liff.logout(); }catch(e){}
+      state.signedIn = false;
+      state.token = state.name = '';
+      store.set('yuMember', null);
+      showSignedOut();
+    }
+    // An old login: sign in again (inside LINE, reopening the page does it)
+    function expired(){
+      state.signedIn = false;
+      state.token = '';
+      store.set('yuMember', null);
+      if(state.inClient){
+        box.innerHTML = '<p class="mine-lead">登入已過期。</p><button type="button" class="mine-text-btn">重新整理</button>';
+        box.querySelector('.mine-text-btn').addEventListener('click', function(){ location.reload(); });
+      } else {
+        try{ liff.logout(); }catch(e){}
+        showSignedOut('登入已過期，請重新登入。');
+      }
+    }
+
+    var viewed = false;
+    function load(){
+      if(!box.querySelector('.mine-list, .mine-empty')) showText('讀取中…');
+      api({ action:'mine' }).then(function(res){
+        if(!res.ok) return res.error === 'auth' ? expired() : showError();
+        if(res.name) state.name = res.name;
+        state.loadedAt = Date.now();
+        render(res.bookings || []);
+        if(!viewed){
+          viewed = true;
+          track('mine_view', { mine_count:(res.bookings || []).length });
+        }
+      }, showError);
+    }
+
+    var WEEK = '日一二三四五六';
+    var STATUS_CLASS = { '待確認':'', '已確認':'is-ok', '已完成':'is-done', '已取消':'is-off' };
+    // 24:30 shows as 00:30
+    function hm(t){
+      var q = String(t).split(':'), h = +q[0];
+      if(h >= 24) h -= 24;
+      return (h < 10 ? '0' : '') + h + ':' + (q[1] || '00');
+    }
+    function item(b){
+      var p = String(b.date).split('-').map(Number), dt = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+      return '<li class="mine-item"><div class="mine-when"><b>' + p[1] + '/' + p[2] + '（' + WEEK.charAt(dt.getUTCDay()) + '）</b>' +
+        '<span class="nw">' + hm(b.start) + '–' + hm(b.end) + '</span><small>' + esc(b.hours) + ' 小時</small></div>' +
+        '<span class="mine-st ' + (STATUS_CLASS[b.status] || '') + '">' + esc(b.status) + '</span></li>';
+    }
+    function key(b){ return b.date + ' ' + b.start; }
+    function render(list){
+      // Taiwan time, whatever the device's timezone
+      var today = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
+      var ahead = function(b){ return b.date >= today && b.status !== '已完成'; };
+      var up = list.filter(ahead).sort(function(a, b){ return key(a) < key(b) ? -1 : 1; });
+      var past = list.filter(function(b){ return !ahead(b); }).sort(function(a, b){ return key(a) < key(b) ? 1 : -1; });
+      var html = '<div class="mine-who"><span>' + (state.name ? esc(state.name) + '，你好' : '你好') + '</span>' +
+        (state.inClient ? '' : '<button type="button" class="mine-text-btn mine-logout">登出</button>') + '</div>';
+      html += up.length
+        ? '<ul class="mine-list">' + up.map(item).join('') + '</ul>'
+        : '<div class="mine-empty">目前沒有即將到來的預約。在上方「可預約時段」選好時間送出，就會出現在這裡。</div>';
+      if(past.length) html += '<details class="mine-past"><summary>過去的預約（' + past.length + '）</summary><ul class="mine-list">' + past.map(item).join('') + '</ul></details>';
+      html += '<div class="mine-note">預約以我們在 LINE 回覆確認為準。要改期或取消，請直接在 LINE 告訴我們。</div>';
+      box.innerHTML = html;
+      var out = box.querySelector('.mine-logout');
+      if(out) out.addEventListener('click', logout);
+    }
+
+    // Called by the schedule when a signed-in customer sends a booking.
+    // done(message) gets a line to show under the send button.
+    var RECORD_MSG = {
+      taken:'這個時段剛被預約了，沒有記錄到「我的預約」，請在 LINE 跟我們確認其他時間',
+      too_many:'你已經有 3 筆還沒到的預約，這筆沒有記錄到「我的預約」，請在 LINE 跟我們確認',
+      auth:'登入已過期，這筆沒有記錄到「我的預約」，預約請以 LINE 為準'
+    };
+    function book(b, done){
+      if(!state.signedIn) return;
+      api({ action:'book', date:b.date, start:b.start, hours:b.hours }).then(function(res){
+        track('booking_record', { record_result:res.ok ? (res.duplicate ? 'duplicate' : 'ok') : res.error });
+        if(res.ok){
+          done(res.duplicate ? '這個時段已經記錄在「我的預約」' : '已記錄到「我的預約」，等我們在 LINE 回覆確認');
+          load();
+        } else {
+          done(RECORD_MSG[res.error] || '沒有記錄到「我的預約」，預約請以 LINE 為準');
+        }
+      }, function(){
+        track('booking_record', { record_result:'network' });
+        done('沒有記錄到「我的預約」，預約請以 LINE 為準');
+      });
+    }
+
+    // Start: inside LINE, back from LINE's login page, or signed in before
+    if(/LIFF/.test(navigator.userAgent) || /[?&](code|liff\.state)=/.test(location.search) || store.get('yuMember')){
+      showText('讀取中…');
+      withLiff(function(){ if(state.signedIn) load(); else showSignedOut(); }, function(){ showSignedOut(); });
+    } else {
+      showSignedOut();
+    }
+    // https://yubody.tw/?go=mine (and where LINE's login page sends people back)
+    var go = (location.search.match(/[?&]go=([\w-]+)/) || [])[1] || location.hash.slice(1);
+    if(go === 'mine'){
+      var html = document.documentElement, was = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      section.scrollIntoView();
+      html.style.scrollBehavior = was;
+    }
+    // Back from the LINE chat: show the latest statuses
+    document.addEventListener('visibilitychange', function(){
+      if(document.visibilityState === 'visible' && state.signedIn && Date.now() - state.loadedAt > 20000) load();
+    });
   })();
 </script>
 <script>
