@@ -752,10 +752,12 @@ function gtag_report_conversion(url) {
   .mine-lead{font-size:15px; color:var(--ink-soft); letter-spacing:0.02em;}
   .mine-text-btn:focus-visible{outline:2px solid var(--accent-deep); outline-offset:3px;}
   .mine a, .mine-text-btn{color:var(--accent-deep); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px;}
-  /* Top right of the page (scrolls away with it): 「LINE 登入」, or
-     「我的預約」 once signed in. 我的預約 itself only shows while signed in. */
+  /* Floating at the top right (stays put while scrolling, like the music
+     and booking buttons at the bottom): 「LINE 登入」, or 「我的預約」 once
+     signed in. 我的預約 itself only shows while signed in. */
   .member-btn{
-    position:absolute; top:14px; right:14px; z-index:6;
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + 14px); right:14px; z-index:5;
+    box-shadow:0 4px 18px rgba(43,48,43,0.12);
     display:inline-flex; align-items:center; gap:6px;
     height:40px; padding:0 14px 0 12px;
     border:1px solid var(--line); border-radius:14px;
@@ -768,7 +770,7 @@ function gtag_report_conversion(url) {
   .member-btn:hover{background:rgba(246,244,238,0.96);}
   .member-btn:focus-visible{outline:2px solid var(--accent-deep); outline-offset:3px;}
   .member-tip{
-    position:absolute; top:62px; right:14px; z-index:6;
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + 62px); right:14px; z-index:5;
     max-width:min(260px, calc(100vw - 28px)); padding:8px 12px; border-radius:10px;
     background:rgba(63,69,61,0.92); color:var(--paper-soft); font-size:13px; line-height:1.6;
   }
