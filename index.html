@@ -1842,15 +1842,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // fixed backdrop instead; desktop keeps the subtle parallax.
     if (window.innerWidth < 700) return;
     var ticking = false;
+    // The backdrop only overhangs the screen by 12vh above and below
+    // (top:-12vh; height:124vh). On a window shorter than 750px that is
+    // less than 90px, so it never slides further than its overhang:
+    // otherwise a blank strip shows above the photo once the page scrolls.
+    var room = 90;
+    function measure(){
+      room = Math.max(0, Math.min(90, Math.floor(window.innerHeight * 0.12)));
+    }
     function apply(){
       var y = window.scrollY || window.pageYOffset || 0;
-      var shift = Math.max(-90, Math.min(90, y * 0.18));
+      var shift = Math.max(-room, Math.min(room, y * 0.18));
       bg.style.transform = 'translateY(' + shift + 'px)';
       ticking = false;
     }
     window.addEventListener('scroll', function(){
       if(!ticking){ requestAnimationFrame(apply); ticking = true; }
     }, {passive:true});
+    window.addEventListener('resize', function(){ measure(); apply(); }, {passive:true});
+    measure();
     apply();
   })();
 </script>
