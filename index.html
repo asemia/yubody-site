@@ -2235,6 +2235,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function make(cls){ var d = document.createElement('div'); d.className = cls; return d; }
 
+    // Its own music instead of the regular track. Nothing is fetched until
+    // the button is pressed (the <audio> is preload="none"). Bump ?v= when
+    // the file is replaced, so nobody keeps the old one.
+    audio.src = 'yu-xmas.mp3?v=1';
+
     var sky = make('xmas-sky');
     var flight = make('xmas-flight');
     var snow = make('snow-layer is-idle');
