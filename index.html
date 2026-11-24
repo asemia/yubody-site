@@ -2246,10 +2246,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function make(cls){ var d = document.createElement('div'); d.className = cls; return d; }
 
-    // Its own music instead of the regular track. Nothing is fetched until
-    // the button is pressed (the <audio> is preload="none"). Bump ?v= when
-    // the file is replaced, so nobody keeps the old one.
-    audio.src = 'yu-xmas.mp3?v=1';
+    // The music: the Christmas track first, then the regular one, then round
+    // again (yu-xmas.mp3 -> yu.mp3 -> yu-xmas.mp3 -> ...). Nothing is fetched
+    // until the button is pressed (the <audio> is preload="none"). Bump ?v=
+    // when the Christmas file is replaced, so nobody keeps the old one.
+    var TRACKS = ['yu-xmas.mp3?v=1', audio.getAttribute('src')], track = 0, changing = false;
+    audio.loop = false;                  // each track plays once; "ended" moves on
+    audio.src = TRACKS[0];
+    // While one track hands over to the next, the rest of the page must not
+    // see the music stop and start again (the snow would fade out and back,
+    // the button would blink). These listeners are "capture" ones, so they
+    // run before the page's own, and they keep the hand-over's events to
+    // themselves.
+    audio.addEventListener('ended', function(e){
+      e.stopImmediatePropagation();
+      changing = true;
+      track = (track + 1) % TRACKS.length;
+      audio.src = TRACKS[track];
+      var p = audio.play();
+      if(p && p.catch) p.catch(function(){
+        // the next track would not start: let the page know the music stopped
+        changing = false;
+        if(audio.paused) audio.dispatchEvent(new Event('pause')); else audio.pause();
+      });
+    }, true);
+    // (a track that reaches its end sends "pause" and then "ended": that
+    // pause is the one with audio.ended true, and it is not the visitor's)
+    audio.addEventListener('pause', function(e){ if(changing || audio.ended) e.stopImmediatePropagation(); }, true);
+    audio.addEventListener('play', function(e){
+      if(changing){ changing = false; e.stopImmediatePropagation(); }
+    }, true);
 
     var sky = make('xmas-sky');
     var flight = make('xmas-flight');
