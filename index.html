@@ -1788,13 +1788,21 @@ function gtag_report_conversion(url) {
      on, or off layers that only that edition's script creates, so the
      regular page is untouched the rest of the year.
      The music button wears a pine sprig with three vermilion berries.
-     Playing the music then brings snow instead of rain (no rainbow, no
-     drops on the lens) and a dragon, far off, that keeps coming out of
-     one bank of mist and going back into another, drawn in ink with seal
-     red as the only colour. */
-  html.xmas .rain-layer,
-  html.xmas .rainbow-layer,
-  html.xmas .lens-rain{ display:none; }
+     The music is two tracks in turn. While the Christmas one plays there
+     is snow instead of rain (no rainbow, no drops on the lens) and an ink
+     dragon, far off, that keeps coming out of one bank of mist and going
+     back into another. While the regular one plays, the regular page's
+     rain, rainbow and drops are back and the snow and dragon are away. */
+  /* The regular page's rain, rainbow and drops on the lens are hidden,
+     except while the regular track is having its turn: the script puts
+     .xmas-rain on <html> for that, and the snow and dragon step aside. */
+  html.xmas:not(.xmas-rain) .rain-layer,
+  html.xmas:not(.xmas-rain) .rainbow-layer{ display:none; }
+  /* (The drops on the lens are only made invisible, not display:none:
+     each drop is taken away when its own animation ends, and inside a
+     display:none box those animations stand still, so the drops would
+     pile up unseen and all turn up at once when the layer came back.) */
+  html.xmas:not(.xmas-rain) .lens-rain{ visibility:hidden; }
 
   /* The sprig rests on the top of the round button (drawn around the
      button's centre: the 68x34 picture's bottom edge is 8px above it) */
@@ -2264,6 +2272,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       track = (track + 1) % TRACKS.length;
       audio.src = TRACKS[track];
       var p = audio.play();
+      scene();
       if(p && p.catch) p.catch(function(){
         // the next track would not start: let the page know the music stopped
         changing = false;
@@ -2276,6 +2285,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     audio.addEventListener('play', function(e){
       if(changing){ changing = false; e.stopImmediatePropagation(); }
     }, true);
+
+    // Each track has its own scene. The Christmas track: snow, the grey snow
+    // sky and the dragon. The regular track: the regular page's own rain,
+    // rainbow and drops on the lens. The regular page's scripts keep running
+    // all along (they follow the music's play and pause); this edition's CSS
+    // only hides their layers, and html.xmas-rain lets them show again.
+    var raining = false;                 // true while the regular track plays
+    var regularLayers = document.querySelectorAll('.rain-layer, .rainbow-layer, .lens-rain');
+    function eachRegular(fn){ for(var k = 0; k < regularLayers.length; k++) fn(regularLayers[k]); }
+    function showRegular(on){
+      var root = document.documentElement;
+      if(on){
+        root.classList.add('xmas-rain');
+        // they come in from nothing rather than popping up
+        eachRegular(function(el){
+          try{ el.animate([{ opacity: 0, offset: 0 }], { duration: 2400, easing: 'ease' }); }catch(err){}
+        });
+        return;
+      }
+      // ...and fade away before they are hidden again
+      var fades = [];
+      eachRegular(function(el){
+        try{ fades.push(el.animate([{ opacity: 0, offset: 1 }], { duration: 2200, easing: 'ease', fill: 'forwards' })); }catch(err){}
+      });
+      setTimeout(function(){
+        if(!raining) root.classList.remove('xmas-rain');
+        fades.forEach(function(f){ f.cancel(); });
+      }, fades.length ? 2200 : 0);
+    }
+    function scene(){
+      var rain = track !== 0;
+      if(rain === raining) return;
+      raining = rain;
+      if(rain){ stop(); showRegular(true); }
+      else { showRegular(false); if(!audio.paused) start(); }
+    }
 
     var sky = make('xmas-sky');
     var flight = make('xmas-flight');
@@ -2811,7 +2856,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if(c.parentNode) c.parentNode.removeChild(c);
           flying = false;
           // out again from somewhere else before long, for as long as the music plays
-          if(!audio.paused) scheduleFlight(7000 + Math.random() * 7000);
+          if(!audio.paused && !raining) scheduleFlight(7000 + Math.random() * 7000);
           return;
         }
         requestAnimationFrame(frame);
@@ -2821,11 +2866,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function scheduleFlight(delay){
       nextFlight = setTimeout(function(){
         nextFlight = null;
-        if(!audio.paused) fly();
+        if(!audio.paused && !raining) fly();
       }, delay);
     }
 
     function start(){
+      if(raining) return;                // the regular track's turn: its own scene
       clearTimeout(idleTimer);
       snow.classList.remove('is-idle');
       snow.classList.add('is-on');
