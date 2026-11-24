@@ -2337,8 +2337,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var N = 60;                 // points along the spine
       var LEN = 410;              // body length, in dragon units
       // px per unit at full size. Kept small: the dragon is far off, in the
-      // distance of the scene, not up close in front of the page
-      var U = o.unit || Math.max(0.52, Math.min(0.78, Math.min(W, VH) / 760));
+      // distance of the scene, not up close in front of the page. (Made
+      // smaller again, to about 65% of what it was, when the owner asked for it
+      // to look further away; the clouds below went down by the same share.)
+      var U = o.unit || Math.max(0.34, Math.min(0.5, Math.min(W, VH) / 1170));
       var SEG = LEN * U / (N - 1);
 
       // ---- where it flies -----------------------------------------------------
@@ -2428,7 +2430,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       // ---- the clouds it threads ------------------------------------------------
       // One bank where it comes out, one where it goes back in, and on a long
       // enough route one or two smaller ones it passes through on the way.
-      var RC = Math.max(50, Math.min(125, Math.min(W, VH) * 0.14));
+      var RC = Math.max(34, Math.min(82, Math.min(W, VH) * 0.092));
       var clouds = [];
       if(!o.from){
         var E = at(0), X = at(1), body = LEN * U * 0.8;
@@ -2495,7 +2497,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       // ---- state ----------------------------------------------------------------
       var head = 0, time = 0, phase = 0, out = 0, self;
-      var SPEED = 150;            // units per second at full size
+      var SPEED = 175;            // units per second at full size
       var LEAD = 3.4;             // seconds the mist takes to gather before the dragon shows
       var THIN = 3.2;             // ...and to thin out again once it has gone back in
       var sp = [];                // this frame's spine: {x,y,nx,ny,tx,ty,w,s,q}
@@ -2744,7 +2746,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, m = 70 * U;
           sp.forEach(function(a){ x0 = Math.min(x0, a.x); y0 = Math.min(y0, a.y); x1 = Math.max(x1, a.x); y1 = Math.max(y1, a.y); });
           ctx.globalCompositeOperation = 'source-atop';
-          ctx.fillStyle = 'rgba(232,230,222,0.26)';
+          ctx.fillStyle = 'rgba(232,230,222,0.34)';
           ctx.fillRect(x0 - m, y0 - m, x1 - x0 + 2 * m, y1 - y0 + 2 * m);
           ctx.globalCompositeOperation = 'source-over';
         }
