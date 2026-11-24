@@ -1494,11 +1494,22 @@ function gtag_report_conversion(url) {
     padding:0;
     box-shadow:0 4px 18px rgba(43,48,43,0.12);
   }
+  /* Each ripple is a 2px ring painted as a radial gradient, in a square box
+     1px larger all round than the button's inside (so the ring's soft outer
+     edge has room): the ring itself sits where a 2px border on inset:0 would.
+     It is deliberately NOT border + border-radius:50%. Firefox draws a round
+     border as four quarter pieces, and while the ring is being scaled the
+     joins between them flash as a thin dark cross through the button (seen
+     in Firefox 160 on Windows, graphics-card rendering, 175% display
+     scaling). A gradient is one piece, so there are no joins. */
   .music-btn .ripple{
     position:absolute;
-    inset:0;
-    border-radius:50%;
-    border:2px solid var(--accent-deep);
+    inset:-1px;
+    background:radial-gradient(circle closest-side,
+      transparent calc(100% - 3.35px),
+      var(--accent-deep) calc(100% - 2.65px),
+      var(--accent-deep) calc(100% - 1.35px),
+      transparent calc(100% - 0.65px));
     opacity:0;
   }
   .music-btn.is-playing .ripple{
