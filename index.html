@@ -3291,6 +3291,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           btn.setAttribute('aria-pressed','true');
           btn.setAttribute('aria-label','暫停背景音樂');
           window.dataLayer.push({ event: 'music_toggle', music_action: 'play' });
+          // GTM doesn't forward music_toggle to GA4, so count plays there
+          // directly: one music_play per visitor click that starts the music
+          // (the Christmas edition's automatic track changes don't count).
+          // music_track = file name without .mp3 (yu / yu-xmas).
+          if(typeof gtag === 'function'){
+            gtag('event', 'music_play', {
+              send_to: 'G-6EM0KHESDS',
+              music_track: (audio.currentSrc || audio.src).split('/').pop().split('?')[0].replace(/\.mp3$/, '')
+            });
+          }
         }).catch(function(){
           // Autoplay/permission edge case — leave button in paused state.
         });
@@ -4338,6 +4348,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if(!btn || !menu) return;
     var links = menu.querySelectorAll('a[href^="#"]');
     function target(a){ return document.getElementById(a.getAttribute('href').slice(1)); }
+    // GA4 (G-6EM0KHESDS, sent directly like line_click): nav_open each time
+    // the menu is opened, nav_click with nav_target = the chosen section's id
+    // (promo / about / service / location / schedule / access / faq)
+    function ga(name, params){
+      if(typeof gtag !== 'function') return;
+      params = params || {};
+      params.send_to = 'G-6EM0KHESDS';
+      gtag('event', name, params);
+    }
     function setOpen(open){
       if(open){
         // only list sections that are on the page right now (可預約時段
@@ -4351,10 +4370,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
     }
-    btn.addEventListener('click', function(){ setOpen(menu.hidden); });
+    btn.addEventListener('click', function(){
+      var opening = menu.hidden;
+      setOpen(opening);
+      if(opening) ga('nav_open');
+    });
     menu.addEventListener('click', function(e){
       var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
       if(!a) return;
+      ga('nav_click', { nav_target: a.getAttribute('href').slice(1) });
       var t = target(a);
       setOpen(false);
       if(!t) return;
