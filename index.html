@@ -28,15 +28,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     // class, so without it the page is exactly the regular one.
     //   XMAS_ON = false   switches the edition off, whatever the date.
     //   FROM / UNTIL      first and last day it shows (Taiwan dates).
+    //                     UNTIL = '' means no end date: it stays on until
+    //                     one is filled in here (the owner will set it).
     //   ?xmas=1 / ?xmas=0 in the address force it on / off, for checking.
     // The three blocks marked "YU xmas" (this one, one in <style>, one
     // script in <body>) are all there is to it.
-    var XMAS_ON = true, FROM = '2026-11-24', UNTIL = '2026-12-25';
+    var XMAS_ON = true, FROM = '2026-11-24', UNTIL = '';
     var m = location.search.match(/[?&]xmas=([01])\b/), on = false;
     if(m) on = m[1] === '1';
     else if(XMAS_ON){
       var today = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
-      on = today >= FROM && today <= UNTIL;
+      on = today >= FROM && (!UNTIL || today <= UNTIL);
     }
     if(on) document.documentElement.classList.add('xmas');
   })();
