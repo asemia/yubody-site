@@ -2300,7 +2300,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     //
     // This file is inlined into the page by make_xmas.js.
     function YuDragon(canvas, o){
-      var INK = '43,48,43', MOSS = '63,69,61', PAPER = '251,249,243', RED = '179,67,44';
+      var INK = '43,48,43', MOSS = '63,69,61', PAPER = '251,249,243';
       var W = o.width, H = o.height, TOP = o.top || 0, VH = H - 2 * TOP;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       if(W * H * dpr * dpr > 4.6e6) dpr = Math.max(1, Math.sqrt(4.6e6 / (W * H)));
@@ -2450,16 +2450,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       // ---- head, in units, facing +x, origin at the neck ----------------------
       function path(d){ return new Path2D(d); }
       var skull = path('M-6 -9C0 -15 10 -17.4 17 -15.4C22 -13.8 27 -10.6 33 -10.6C37 -10.6 40 -14.6 45 -14.2C49.6 -13.8 51.8 -9.6 49.8 -6.4C48.2 -4 44 -3.4 40 -3C32 -2 24 0 15 2.6L9 4.2C4 5.6 -1 7.2 -6 9.2C-8.6 3 -8.6 -3 -6 -9Z');
-      var jaw = path('M8 5C16 8 27 11.6 37 11.2C41 11 43 13.2 40.6 15.2C32 18.8 18 17.2 7 12.6C2 10.8 -2 9.8 -6 9.2C-1 7.2 4 5.9 8 5Z');
-      var teethUp = path('M42.6 -3.2L43.9 2.6L45.7 -3.6ZM34.8 -2.3L35.9 2L37.5 -2.6ZM27 -1L27.9 2.6L29.5 -1.4Z');
-      var teethLow = path('M33 11.4L34 7.6L35.5 11.4ZM26 10L27 6.6L28.5 10.2Z');
-      var tongue = path('M13 6.6C20 8.2 28 8 34 4.6C35.6 3.6 36.8 4.8 35.6 6.2C30 10.8 20 11 13 8.8Z');
-      var brow = path('M10.5 -13.6C15 -18 22.4 -17.4 27 -12.4');
+      // The mouth is shut (the owner asked for that): the lower jaw lies flush
+      // under the skull's lower edge, its top tucked up inside the skull, and a
+      // thin pale line marks the lips, turning up at the corner of the mouth
+      // with a small curl. No tongue, no teeth.
+      var jaw = path('M-6 9.2C2 5 10 2.5 16 1.2C26 -1.2 36 -3.6 44 -4.2C47.5 -4.4 48.6 -1.2 46.2 0.6C38 4.4 26 7 14 9.4C6 10.6 0 10.2 -6 9.2Z');
+      var lips = path('M47.6 -4.4C43 -2.8 36 -1.6 29 -0.9C22.6 -0.2 16.4 -1 12.6 -4.6C11.6 -5.6 10.3 -5.2 10.8 -3.8');
+      // The eye of the dragons in old paintings: long, slanting up to a point
+      // at the back, the pupil tucked under the upper lid.
+      var eye = path('M25.2 -7.6C23.4 -11.4 19.4 -13.6 11.4 -14.2C14.2 -11.2 18.6 -7.4 25.2 -7.6Z');
       var hornNear = [path('M2 -13.5C-2 -23 -10 -30 -22 -34'), path('M-4.5 -24.5C-7 -30 -6 -35 -2.6 -39'), path('M-13 -31C-16.6 -35 -17.4 -39.6 -15.6 -43.4')];
       var hornFar = [path('M8 -15.4C6 -25 0 -33.4 -11 -39.4'), path('M3.6 -27.4C4 -33 6.6 -37 10.8 -40.4')];
       // mane and cheek tufts: [from x,y, to x,y, root half-width]
       var MANE = [[-4, -9.5, -40, -24, 2.4], [-6.5, -5, -47, -10, 2.8], [-7.5, 0, -50, 3, 3], [-6.5, 5, -44, 15, 2.8], [-4, 9, -34, 24, 2.4], [2, 10.5, -19, 27, 2]];
-      var BEARD = [[33, 16.6, 17, 28, 1.6], [27, 17.4, 12, 27, 1.5], [21, 16.6, 8, 23.6, 1.3]];
+      var BEARD = [[40, 2.4, 29, 18, 1.5], [35, 3.8, 21, 21, 1.8], [29, 5.6, 14, 19, 1.6], [23, 7.2, 8, 15.5, 1.4]];
+      // flame-like eyebrows standing up over the eye
+      var BROW = [[21, -14.6, 9, -22.5, 1.7], [15.5, -15.4, 3.5, -21.5, 1.5]];
 
       // ---- state ----------------------------------------------------------------
       var head = 0, time = 0, phase = 0, out = 0, self;
@@ -2593,35 +2599,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           ctx.fillStyle = 'rgba(' + (n % 2 ? MOSS : INK) + ',' + (n % 2 ? 0.7 : 0.84) + ')';
           leaf(m[0], m[1], m[2], m[3] + sway, m[4], (n < 3 ? -3.4 : 3.4) + sway * 0.3); ctx.fill();
         });
-        // jaw (opens and closes a little) with tongue, teeth and beard
-        ctx.save();
-        ctx.translate(7, 5); ctx.rotate(0.05 + 0.08 * Math.sin(phase * 0.7)); ctx.translate(-7, -5);
-        ctx.fillStyle = 'rgba(' + RED + ',0.86)'; ctx.fill(tongue);
+        // lower jaw, shut and still, with the beard swaying under the chin
         ctx.fillStyle = 'rgba(' + INK + ',0.84)';
         BEARD.forEach(function(m, n){ leaf(m[0], m[1], m[2], m[3] + 3 * (n % 2 ? wv2 : wv), m[4], 2.2); ctx.fill(); });
-        ctx.fillStyle = 'rgba(' + INK + ',0.94)'; ctx.fill(jaw); ctx.fill(teethLow);
-        ctx.restore();
+        ctx.fillStyle = 'rgba(' + INK + ',0.94)'; ctx.fill(jaw);
         // near antler
         ctx.strokeStyle = 'rgba(' + INK + ',0.95)';
         ctx.lineWidth = 2.8; ctx.stroke(hornNear[0]);
         ctx.lineWidth = 2; ctx.stroke(hornNear[1]);
         ctx.lineWidth = 1.7; ctx.stroke(hornNear[2]);
+        // eyebrows (their roots end up under the skull)
+        ctx.fillStyle = 'rgba(' + INK + ',0.92)';
+        BROW.forEach(function(m, n){ leaf(m[0], m[1], m[2], m[3] + 1.4 * (n ? wv2 : wv), m[4], -2); ctx.fill(); });
         // skull, with the ink bleeding a little at its edge
         ctx.shadowColor = 'rgba(' + MOSS + ',0.5)'; ctx.shadowBlur = 5 * u * dpr;
         ctx.fillStyle = 'rgba(' + INK + ',0.95)'; ctx.fill(skull);
         ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
-        ctx.fill(teethUp);
-        // eye under a heavy brow, nostril
+        // the line of the closed lips
+        ctx.strokeStyle = 'rgba(' + PAPER + ',0.6)'; ctx.lineWidth = 1.1; ctx.stroke(lips);
+        // eye and nostril
         ctx.fillStyle = 'rgba(' + PAPER + ',0.97)';
-        ctx.beginPath(); ctx.ellipse(19.2, -9.2, 3.4, 2.5, -0.3, 0, 6.2832); ctx.fill();
+        ctx.fill(eye);
         ctx.beginPath(); ctx.ellipse(47, -10, 1.5, 1, -0.5, 0, 6.2832); ctx.fill();
+        ctx.save(); ctx.clip(eye);
         ctx.fillStyle = 'rgba(' + INK + ',1)';
-        ctx.beginPath(); ctx.arc(20.4, -8.9, 1.35, 0, 6.2832); ctx.fill();
-        ctx.strokeStyle = 'rgba(' + INK + ',1)'; ctx.lineWidth = 3; ctx.stroke(brow);
+        ctx.beginPath(); ctx.arc(20.8, -10.3, 1.75, 0, 6.2832); ctx.fill();
+        ctx.restore();
         // near whisker: long, from the side of the nose, trailing and curling
-        ctx.strokeStyle = 'rgba(' + INK + ',0.92)'; ctx.lineWidth = 1.7;
+        ctx.strokeStyle = 'rgba(' + INK + ',0.92)'; ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(47, -5.4);
-        ctx.bezierCurveTo(58, -12, 66, 2, 54, 12 + 2 * wv); ctx.bezierCurveTo(47, 18 + 3 * wv, 38, 20 + 4 * wv, 30, 16 + 6 * wv); ctx.stroke();
+        ctx.bezierCurveTo(58, -12, 67, 2, 55, 13 + 2 * wv); ctx.bezierCurveTo(47, 20 + 3 * wv, 36, 27 + 4 * wv, 21, 25 + 6 * wv); ctx.stroke();
         ctx.restore();
       }
 
